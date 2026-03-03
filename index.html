@@ -3,61 +3,292 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>建設シカクLAB｜合格診断</title>
+    <title>建設シカクLAB｜解体工事施工技士</title>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
-        body { font-family: 'Helvetica Neue', Arial, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; color: #333; }
-        .container { max-width: 500px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        h2 { color: #ffcc00; text-shadow: 1px 1px 0 #000; font-size: 24px; text-align: center; }
-        .step { display: none; }
-        .step.active { display: block; }
-        .btn { display: block; width: 100%; padding: 15px; margin: 10px 0; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; transition: 0.3s; }
-        .btn-primary { background: #ffcc00; color: #000; }
-        .btn-primary:hover { background: #e6b800; }
-        input, select { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
-        .loading { text-align: center; color: #666; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); color: #333; min-height: 100vh; padding-bottom: 80px; }
+        .container { max-width: 500px; margin: 0 auto; background: #fff; min-height: 100vh; display: flex; flex-direction: column; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
+        
+        /* ===== ヘッダー ===== */
+        .header { background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%); color: white; padding: 20px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .header h1 { font-size: 24px; font-weight: bold; margin-bottom: 5px; }
+        .header p { font-size: 14px; opacity: 0.95; }
+        
+        /* ===== メインコンテンツ ===== */
+        .content { flex: 1; padding: 20px; overflow-y: auto; }
+        .page { display: none; }
+        .page.active { display: block; animation: fadeIn 0.3s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* ===== ホーム画面 ===== */
+        .home-section { margin-bottom: 25px; }
+        .home-section h2 { font-size: 16px; font-weight: bold; color: #ff6b35; margin-bottom: 15px; border-bottom: 2px solid #ff6b35; padding-bottom: 8px; }
+        
+        .welcome-box { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4); }
+        .welcome-box p { font-size: 18px; margin-bottom: 5px; }
+        .welcome-box span { font-size: 22px; font-weight: bold; }
+        .welcome-box small { font-size: 12px; opacity: 0.9; display: block; margin-top: 8px; }
+        
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+        .stat-card { background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 10px; padding: 15px; text-align: center; transition: all 0.3s ease; }
+        .stat-card:hover { border-color: #ff6b35; box-shadow: 0 4px 12px rgba(255, 107, 53, 0.2); }
+        .stat-card .value { font-size: 28px; font-weight: bold; color: #ff6b35; margin-bottom: 5px; }
+        .stat-card .label { font-size: 12px; color: #666; }
+        
+        .streak-badge { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(245, 87, 108, 0.3); }
+        .streak-badge .flame { font-size: 32px; margin-bottom: 5px; }
+        .streak-badge .value { font-size: 24px; font-weight: bold; margin-bottom: 3px; }
+        .streak-badge .label { font-size: 12px; opacity: 0.95; }
+        
+        .quiz-status { background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; border-radius: 6px; margin-bottom: 20px; }
+        .quiz-status.completed { background: #d4edda; border-left-color: #28a745; }
+        .quiz-status p { font-size: 14px; margin-bottom: 5px; }
+        .quiz-status .result { font-size: 18px; font-weight: bold; }
+        
+        /* ===== クイズ画面 ===== */
+        .quiz-container { margin-bottom: 20px; }
+        .quiz-header { background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 20px; }
+        .quiz-id { font-size: 12px; color: #666; margin-bottom: 8px; }
+        
+        .difficulty { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: bold; margin-bottom: 10px; }
+        .difficulty.easy { background: #d4edda; color: #155724; }
+        .difficulty.medium { background: #fff3cd; color: #856404; }
+        .difficulty.hard { background: #f8d7da; color: #721c24; }
+        
+        .question-text { font-size: 18px; line-height: 1.6; color: #333; padding: 20px; background: #f8f9fa; border-radius: 10px; margin-bottom: 25px; border-left: 4px solid #ff6b35; }
+        
+        .options { display: flex; flex-direction: column; gap: 12px; }
+        .option-btn { padding: 18px; border: 2px solid #e9ecef; background: white; border-radius: 10px; font-size: 16px; text-align: left; cursor: pointer; transition: all 0.3s ease; font-weight: 500; color: #333; }
+        .option-btn:hover { border-color: #ff6b35; background: #fff8f5; transform: translateX(5px); }
+        .option-btn.correct { border-color: #28a745; background: #d4edda; color: #155724; }
+        .option-btn.incorrect { border-color: #dc3545; background: #f8d7da; color: #721c24; }
+        
+        /* ===== 結果画面 ===== */
+        .result-container { text-align: center; margin-bottom: 30px; }
+        .result-icon { font-size: 60px; margin-bottom: 15px; }
+        .result-text { font-size: 28px; font-weight: bold; margin-bottom: 20px; }
+        .result-text.correct { color: #28a745; }
+        .result-text.incorrect { color: #dc3545; }
+        
+        .explanation-box { background: #f8f9fa; padding: 15px; border-radius: 10px; text-align: left; margin: 20px 0; }
+        .explanation-box h4 { font-size: 14px; color: #ff6b35; margin-bottom: 10px; font-weight: bold; }
+        .explanation-box p { font-size: 14px; line-height: 1.6; color: #333; }
+        
+        /* ===== クイズ一覧 ===== */
+        .filter-bar { display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 10px; }
+        .filter-btn { padding: 8px 15px; border: 2px solid #e9ecef; background: white; border-radius: 20px; font-size: 13px; cursor: pointer; white-space: nowrap; transition: all 0.3s ease; }
+        .filter-btn.active { background: #ff6b35; color: white; border-color: #ff6b35; }
+        
+        .quiz-item { display: flex; align-items: center; padding: 15px; border: 1px solid #e9ecef; border-radius: 8px; margin-bottom: 10px; cursor: pointer; transition: all 0.3s ease; }
+        .quiz-item:hover { background: #f8f9fa; border-color: #ff6b35; }
+        .quiz-item-status { width: 24px; height: 24px; border-radius: 50%; margin-right: 12px; font-size: 12px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; }
+        .quiz-item-status.unanswered { background: #ccc; }
+        .quiz-item-status.correct { background: #28a745; }
+        .quiz-item-status.incorrect { background: #dc3545; }
+        .quiz-item-content { flex: 1; }
+        .quiz-item-title { font-size: 14px; font-weight: bold; color: #333; margin-bottom: 3px; }
+        .quiz-item-category { font-size: 12px; color: #666; }
+        
+        /* ===== マイページ ===== */
+        .profile-box { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4); }
+        .profile-name { font-size: 20px; font-weight: bold; margin-bottom: 5px; }
+        .profile-info { font-size: 13px; opacity: 0.9; margin-bottom: 3px; }
+        
+        .stats-detail { background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 15px; }
+        .stats-detail h3 { font-size: 14px; font-weight: bold; color: #ff6b35; margin-bottom: 12px; }
+        .stat-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e9ecef; font-size: 14px; }
+        .stat-row:last-child { border-bottom: none; }
+        .stat-row .label { color: #666; }
+        .stat-row .value { font-weight: bold; color: #333; }
+        
+        .progress-bar { width: 100%; height: 12px; background: #e9ecef; border-radius: 10px; overflow: hidden; margin-top: 8px; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #ff6b35 0%, #f7931e 100%); border-radius: 10px; transition: width 0.5s ease; }
+        
+        /* ===== ボタン群 ===== */
+        .btn-group { display: flex; gap: 12px; margin-top: 25px; }
+        .btn { flex: 1; padding: 16px; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; transition: all 0.3s ease; text-align: center; }
+        .btn-primary { background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%); color: white; box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3); }
+        .btn-primary:active { transform: scale(0.98); }
+        .btn-secondary { background: #f8f9fa; color: #333; border: 2px solid #e9ecef; }
+        .btn-secondary:active { background: #e9ecef; }
+        .btn-full { width: 100%; padding: 18px; font-size: 18px; margin-bottom: 12px; }
+        
+        /* ===== タブナビ ===== */
+        .tab-navigation { position: fixed; bottom: 0; left: 0; right: 0; max-width: 500px; margin: 0 auto; background: white; border-top: 2px solid #e9ecef; display: flex; justify-content: space-around; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); z-index: 100; }
+        .tab-btn { flex: 1; padding: 12px; text-align: center; cursor: pointer; border: none; background: none; border-top: 3px solid transparent; color: #999; font-size: 12px; font-weight: bold; transition: all 0.3s ease; }
+        .tab-btn.active { color: #ff6b35; border-top-color: #ff6b35; }
+        .tab-icon { font-size: 20px; display: block; margin-bottom: 3px; }
+        
+        @media (max-width: 400px) {
+            .header h1 { font-size: 20px; }
+            .question-text { font-size: 16px; }
+            .option-btn { font-size: 15px; padding: 16px; }
+            .stats-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div id="step-loading" class="step active">
-        <p class="loading">カイ先生が準備中だ...ちょっと待てよ...</p>
+    <div class="header">
+        <h1>建設シカクLAB</h1>
+        <p>解体工事施工技士合格への道</p>
     </div>
 
-    <div id="step-quiz" class="step">
-        <h2>第1問：計算の壁</h2>
-        <p>120㎡の木造解体で出る「木くず」の重量は？</p>
-        <button class="btn btn-primary" onclick="goStep('step-survey')">約12トン（正解！）</button>
-        <button class="btn btn-primary" onclick="goStep('step-survey')">約60トン</button>
+    <div class="content">
+        <!-- ホーム -->
+        <div id="home" class="page active">
+            <div class="welcome-box">
+                <p>おはようございます！</p>
+                <span id="homeName">ユーザー</span>
+                <small>今日も一問、頑張りましょう</small>
+            </div>
+
+            <div class="home-section">
+                <h2>📊 学習状況</h2>
+                <div class="quiz-status" id="todayStatus">
+                    <p>本日のクイズ:</p>
+                    <p class="result">未回答</p>
+                </div>
+            </div>
+
+            <div class="streak-badge">
+                <div class="flame">🔥</div>
+                <div class="value" id="streakDays">0</div>
+                <div class="label">連続回答日数</div>
+            </div>
+
+            <div class="home-section">
+                <h2>📈 成績</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="value" id="totalAttempts">0</div>
+                        <div class="label">累計回答数</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="value" id="correctRate">0%</div>
+                        <div class="label">正答率</div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary btn-full" onclick="goToPage('quiz')">
+                🎯 本日のクイズに挑戦
+            </button>
+            <button class="btn btn-secondary btn-full" onclick="goToPage('quizList')">
+                📋 過去のクイズ
+            </button>
+        </div>
+
+        <!-- クイズ -->
+        <div id="quiz" class="page">
+            <div class="quiz-container">
+                <div class="quiz-header">
+                    <div class="quiz-id" id="quizId">令和4年 問1</div>
+                    <span class="difficulty easy" id="quizDifficulty">易</span>
+                </div>
+                <div class="question-text" id="questionText">クイズを読み込み中...</div>
+                <div class="options" id="optionsContainer"></div>
+                <div class="btn-group" style="margin-top: 25px;">
+                    <button class="btn btn-secondary" onclick="goToPage('home')">戻る</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 結果 -->
+        <div id="result" class="page">
+            <div class="result-container">
+                <div class="result-icon" id="resultIcon">✅</div>
+                <div class="result-text correct" id="resultText">正解です！</div>
+            </div>
+            <div class="explanation-box">
+                <h4>解説</h4>
+                <p id="explanationText">解説テキスト</p>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="nextQuiz()">次の問題へ</button>
+            </div>
+            <button class="btn btn-secondary btn-full" onclick="goToPage('home')">ホームに戻る</button>
+        </div>
+
+        <!-- クイズ一覧 -->
+        <div id="quizList" class="page">
+            <div class="home-section">
+                <h2>📋 クイズ一覧</h2>
+            </div>
+            <div class="filter-bar" id="filterBar">
+                <button class="filter-btn active" onclick="filterByYear('all')">すべて</button>
+            </div>
+            <div id="quizListContainer"></div>
+            <button class="btn btn-secondary btn-full" onclick="goToPage('home')" style="margin-top: 20px;">ホームに戻る</button>
+        </div>
+
+        <!-- マイページ -->
+        <div id="mypage" class="page">
+            <div class="profile-box">
+                <div class="profile-name" id="mypageName">ユーザー</div>
+                <div class="profile-info" id="mypageExp">経験年数: -</div>
+                <div class="profile-info" id="mypageSalary">年収: -万円</div>
+            </div>
+
+            <div class="stats-detail">
+                <h3>📊 学習統計</h3>
+                <div class="stat-row">
+                    <span class="label">累計回答数</span>
+                    <span class="value" id="mypageTotal">0問</span>
+                </div>
+                <div class="stat-row">
+                    <span class="label">正答数</span>
+                    <span class="value" id="mypageCorrect">0問</span>
+                </div>
+                <div class="stat-row">
+                    <span class="label">正答率</span>
+                    <span class="value" id="mypageRate">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="rateBar" style="width: 0%;"></div>
+                </div>
+            </div>
+
+            <div class="stats-detail">
+                <h3>🔥 連続回答</h3>
+                <div class="stat-row">
+                    <span class="label">連続日数</span>
+                    <span class="value" id="mypageStreak">0日</span>
+                </div>
+                <div class="stat-row">
+                    <span class="label">学習開始から</span>
+                    <span class="value" id="mypageDaysFromStart">0日</span>
+                </div>
+            </div>
+
+            <button class="btn btn-secondary btn-full" onclick="goToPage('home')">ホームに戻る</button>
+        </div>
     </div>
 
-    <div id="step-survey" class="step">
-        <h2>戦績を保存するぞ！</h2>
-        <p>お前の現状を教えてくれ。診断結果を出すのに必要だ。</p>
-        <input type="text" id="user-name" placeholder="氏名（フルネーム）">
-        <select id="exp-years">
-            <option value="">実務経験は何年だ？</option>
-            <option value="3年未満">3年未満</option>
-            <option value="3-7年">3-7年</option>
-            <option value="8年以上">8年以上（管理職候補！）</option>
-        </select>
-        <input type="number" id="current-salary" placeholder="今の年収は？（例：450）">
-        <button class="btn btn-primary" onclick="sendData()">診断結果を見る</button>
-    </div>
-
-    <div id="step-result" class="step">
-        <h2>診断完了！</h2>
-        <p id="result-msg">お疲れさん！お前のデータは預かった。</p>
-        <p>記述試験のテンプレはLINEトークに送ったぞ！確認してくれ。</p>
-        <button class="btn btn-primary" onclick="liff.closeWindow()">LINEに戻る</button>
+    <div class="tab-navigation">
+        <button class="tab-btn active" onclick="goToPage('home')">
+            <span class="tab-icon">🏠</span>
+            <span>ホーム</span>
+        </button>
+        <button class="tab-btn" onclick="goToPage('quizList')">
+            <span class="tab-icon">📋</span>
+            <span>クイズ</span>
+        </button>
+        <button class="tab-btn" onclick="goToPage('mypage')">
+            <span class="tab-icon">👤</span>
+            <span>マイページ</span>
+        </button>
     </div>
 </div>
 
 <script>
-    // --- 初期設定 ---
-    const LIFF_ID = "2009300790-G4amrGku"; // ここに自分のLIFF IDを貼る
-    const WEBHOOK_URL = "https://hook.eu1.make.com/lgfnj52lgwbcy5c1r8u1dt2huvp95xfw"; // Make(旧Integromat)等のURL
+    const LIFF_ID = "2009300790-G4amrGku";
+    const WEBHOOK_URL = "https://hook.eu1.make.com/lgfnj52lgwbcy5c1r8u1dt2huvp95xfw";
+
+    let userProfile = null;
+    let currentQuestion = null;
 
     async function initializeLiff() {
         try {
@@ -65,37 +296,181 @@
             if (!liff.isLoggedIn()) {
                 liff.login();
             } else {
-                goStep('step-quiz');
+                userProfile = await liff.getProfile();
+                updateHomeScreen();
             }
         } catch (error) {
-            console.error("LIFFの初期化に失敗したぜ...", error);
+            console.error("LIFF初期化エラー:", error);
         }
     }
 
-    function goStep(stepId) {
-        document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-        document.getElementById(stepId).classList.add('active');
+    function goToPage(pageId) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(pageId).classList.add('active');
+
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        if (pageId === 'home') document.querySelectorAll('.tab-btn')[0].classList.add('active');
+        else if (pageId === 'quizList') document.querySelectorAll('.tab-btn')[1].classList.add('active');
+        else if (pageId === 'mypage') document.querySelectorAll('.tab-btn')[2].classList.add('active');
+
+        if (pageId === 'quiz') loadTodayQuiz();
+        else if (pageId === 'quizList') loadQuizList();
+        else if (pageId === 'mypage') updateMypageScreen();
+
+        document.querySelector('.content').scrollTop = 0;
     }
 
-    async function sendData() {
-        const profile = await liff.getProfile();
-        const data = {
-            lineName: profile.displayName,
-            lineUserId: profile.userId,
-            userName: document.getElementById('user-name').value,
-            expYears: document.getElementById('exp-years').value,
-            // 文字列を数値（整数）に変換し、空欄の場合は null を送る
-currentSalary: document.getElementById('current-salary').value ? parseInt(document.getElementById('current-salary').value, 10) : null
+    function updateHomeScreen() {
+        if (!userProfile) return;
+        document.getElementById('homeName').textContent = userProfile.displayName;
+    }
+
+    async function loadTodayQuiz() {
+        const sampleQuiz = {
+            questionId: "2012-001",
+            year: 2012,
+            questionNumber: 1,
+            difficulty: "easy",
+            questionText: "120㎡の木造解体で出る『木くず』の重量は？",
+            option1: "約12トン",
+            option2: "約60トン",
+            option3: "約100トン",
+            option4: "約150トン",
+            correctAnswer: "1",
+            explanation: "木材の密度は約0.6～0.8t/㎥です。木造建築物の場合、解体後の廃木材の発生量は床面積1㎡あたり約0.1tが目安とされています。したがって、120㎡の場合は約12トンになります。"
         };
 
-        // Make(旧Integromat)等にデータを飛ばして、Airtableに保存する
-        fetch(WEBHOOK_URL, {
-            method: 'POST',
-            body: JSON.stringify(data),
-            headers: { 'Content-Type': 'application/json' }
-        }).then(() => {
-            goStep('step-result');
+        currentQuestion = sampleQuiz;
+        renderQuizScreen(sampleQuiz);
+    }
+
+    function renderQuizScreen(quiz) {
+        document.getElementById('quizId').textContent = `令和${quiz.year}年 問${quiz.questionNumber}`;
+        
+        const difficultyEl = document.getElementById('quizDifficulty');
+        difficultyEl.textContent = quiz.difficulty === 'easy' ? '易' : (quiz.difficulty === 'medium' ? '中' : '難');
+        difficultyEl.className = `difficulty ${quiz.difficulty}`;
+
+        document.getElementById('questionText').textContent = quiz.questionText;
+
+        const optionsContainer = document.getElementById('optionsContainer');
+        optionsContainer.innerHTML = '';
+
+        ['option1', 'option2', 'option3', 'option4'].forEach((key, index) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerHTML = `<strong>${index + 1}.</strong> ${quiz[key]}`;
+            btn.onclick = () => selectOption(index + 1, quiz);
+            optionsContainer.appendChild(btn);
         });
+    }
+
+    function selectOption(selectedNum, quiz) {
+        const isCorrect = selectedNum.toString() === quiz.correctAnswer;
+        saveAnswerToAirtable(quiz.questionId, selectedNum, isCorrect);
+        showResult(isCorrect, quiz, selectedNum);
+    }
+
+    function showResult(isCorrect, quiz) {
+        const resultIcon = document.getElementById('resultIcon');
+        const resultText = document.getElementById('resultText');
+        const explanationText = document.getElementById('explanationText');
+
+        if (isCorrect) {
+            resultIcon.textContent = '✅';
+            resultText.textContent = '正解です！';
+            resultText.className = 'result-text correct';
+        } else {
+            resultIcon.textContent = '❌';
+            resultText.textContent = '残念...';
+            resultText.className = 'result-text incorrect';
+        }
+
+        explanationText.textContent = quiz.explanation;
+        goToPage('result');
+    }
+
+    function loadQuizList() {
+        const sampleQuizzes = [
+            { id: "2024-001", year: 2024, number: 1, category: "法令", status: "correct" },
+            { id: "2024-002", year: 2024, number: 2, category: "法令", status: "incorrect" },
+            { id: "2024-003", year: 2024, number: 3, category: "施工", status: "unanswered" },
+            { id: "2023-001", year: 2023, number: 1, category: "法令", status: "correct" },
+        ];
+
+        const filterBar = document.getElementById('filterBar');
+        const years = [...new Set(sampleQuizzes.map(q => q.year))].sort((a, b) => b - a);
+        
+        filterBar.innerHTML = '<button class="filter-btn active" onclick="filterByYear(\'all\')">すべて</button>';
+        years.forEach(year => {
+            const btn = document.createElement('button');
+            btn.className = 'filter-btn';
+            btn.textContent = `令和${year}年`;
+            btn.onclick = () => filterByYear(year);
+            filterBar.appendChild(btn);
+        });
+
+        renderQuizList(sampleQuizzes);
+    }
+
+    function renderQuizList(quizzes) {
+        const container = document.getElementById('quizListContainer');
+        container.innerHTML = '';
+
+        quizzes.forEach(quiz => {
+            const item = document.createElement('div');
+            item.className = 'quiz-item';
+
+            const statusEl = document.createElement('div');
+            statusEl.className = `quiz-item-status ${quiz.status}`;
+            statusEl.innerHTML = quiz.status === 'correct' ? '✓' : (quiz.status === 'incorrect' ? '✗' : '?');
+
+            const content = document.createElement('div');
+            content.className = 'quiz-item-content';
+            content.innerHTML = `
+                <div class="quiz-item-title">令和${quiz.year}年 問${quiz.number}</div>
+                <div class="quiz-item-category">${quiz.category}</div>
+            `;
+
+            item.appendChild(statusEl);
+            item.appendChild(content);
+            container.appendChild(item);
+        });
+    }
+
+    function updateMypageScreen() {
+        if (!userProfile) return;
+        document.getElementById('mypageName').textContent = userProfile.displayName;
+    }
+
+    async function saveAnswerToAirtable(questionId, userAnswer, isCorrect) {
+        const data = {
+            lineUserId: userProfile.userId,
+            lineName: userProfile.displayName,
+            questionId: questionId,
+            userAnswer: userAnswer,
+            isCorrect: isCorrect,
+            answeredDate: new Date().toISOString()
+        };
+
+        try {
+            await fetch(WEBHOOK_URL, {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: { 'Content-Type': 'application/json' }
+            });
+        } catch (error) {
+            console.error("保存エラー:", error);
+        }
+    }
+
+    function filterByYear(year) {
+        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+    }
+
+    function nextQuiz() {
+        goToPage('quiz');
     }
 
     initializeLiff();

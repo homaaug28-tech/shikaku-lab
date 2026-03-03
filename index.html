@@ -84,7 +84,8 @@
             lineUserId: profile.userId,
             userName: document.getElementById('user-name').value,
             expYears: document.getElementById('exp-years').value,
-            currentSalary: document.getElementById('current-salary').value
+            // 文字列を数値（整数）に変換し、空欄の場合は null を送る
+currentSalary: document.getElementById('current-salary').value ? parseInt(document.getElementById('current-salary').value, 10) : null
         };
 
         // Make(旧Integromat)等にデータを飛ばして、Airtableに保存する

@@ -50,6 +50,7 @@
         .quiz-container { margin-bottom: 20px; }
         .quiz-header { background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 20px; }
         .quiz-id { font-size: 12px; color: #666; margin-bottom: 8px; }
+        .quiz-progress { font-size: 12px; color: #999; margin-bottom: 10px; }
         
         .difficulty { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: bold; margin-bottom: 10px; }
         .difficulty.easy { background: #d4edda; color: #155724; }
@@ -63,6 +64,7 @@
         .option-btn:hover { border-color: #ff6b35; background: #fff8f5; transform: translateX(5px); }
         .option-btn.correct { border-color: #28a745; background: #d4edda; color: #155724; }
         .option-btn.incorrect { border-color: #dc3545; background: #f8d7da; color: #721c24; }
+        .option-btn:disabled { cursor: not-allowed; opacity: 0.7; }
         
         /* ===== 結果画面 ===== */
         .result-container { text-align: center; margin-bottom: 30px; }
@@ -185,8 +187,9 @@
         <div id="quiz" class="page">
             <div class="quiz-container">
                 <div class="quiz-header">
-                    <div class="quiz-id" id="quizId">令和4年 問1</div>
-                    <span class="difficulty easy" id="quizDifficulty">易</span>
+                    <div class="quiz-id" id="quizId">令和5年度(第31回)</div>
+                    <div class="quiz-progress" id="quizProgress">問1/650</div>
+                    <span class="difficulty easy" id="quizDifficulty">標準</span>
                 </div>
                 <div class="question-text" id="questionText">クイズを読み込み中...</div>
                 <div class="options" id="optionsContainer"></div>
@@ -287,9 +290,160 @@
     const LIFF_ID = "2009300790-G4amrGku";
     const WEBHOOK_URL = "https://hook.eu1.make.com/lgfnj52lgwbcy5c1r8u1dt2huvp95xfw";
 
+    // ===== 過去問データ（JSONで管理） =====
+    const questionDatabase = [
+        {
+            "year": "令和5年度(第31回)",
+            "question_number": 1,
+            "question_text": "鉄筋コンクリート造建築物の構造形式に関する次の記述のうち、最も不適当なものはどれか。",
+            "options": {
+                "1": "ラーメン構造は、部材の接合部を剛接合とした構造形式であり、各部材には軸力、曲げモーメント、せん断力が生じる。",
+                "2": "壁式構造は、壁と床を組み合わせて空間を構成し、耐力壁を主体とする構造形式である。",
+                "3": "フラットスラブ構造は、スラブ内に配した円筒型枠等によって中空スラブとして軽量化を図る構造形式である。",
+                "4": "シェル構造は、主体構造として曲面版を用いた構造形式であり、円筒シェルや球形シェルなどがある。"
+            },
+            "correct_answer": 3
+        },
+        {
+            "year": "令和5年度(第31回)",
+            "question_number": 2,
+            "question_text": "単純梁ABにおいて、スパン全長10m、A点から2mの位置に下向き集中荷重Pが作用したとき、A点、B点に生じる支点反力の組み合わせで、正しいものはどれか。",
+            "options": {
+                "1": "A点: 1/5 P , B点: 4/5 P",
+                "2": "A点: 4/5 P , B点: 1/5 P",
+                "3": "A点: 1/4 P , B点: 3/4 P",
+                "4": "A点: 3/4 P , B点: 1/4 P"
+            },
+            "correct_answer": 2
+        },
+        {
+            "year": "令和5年度(第31回)",
+            "question_number": 3,
+            "question_text": "次の建築材料の強度特性について、長所・短所の組合わせとして、最も不適当なものはどれか。",
+            "options": {
+                "1": "【材料】木材 【長所】比強度が大きい 【短所】強度にばらつきがある",
+                "2": "【材料】鋼材 【長所】圧縮・引張・曲げ強度が大きい 【短所】高温下での強度低下・変形が大きい",
+                "3": "【材料】コンクリート 【長所】圧縮強度が大きい 【短所】引張・曲げ強度が小さい",
+                "4": "【材料】れんが 【長所】引張・曲げ強度が大きい 【短所】圧縮強度が小さい"
+            },
+            "correct_answer": 4
+        },
+        {
+            "year": "令和5年度(第31回)",
+            "question_number": 4,
+            "question_text": "鉄骨造の柱梁接合部の部材名称として、最も不適当なものはどれか。",
+            "options": {
+                "1": "ダイアフラム",
+                "2": "スカラップ",
+                "3": "スチフナー",
+                "4": "フランジ"
+            },
+            "correct_answer": 3
+        },
+        {
+            "year": "令和5年度(第31回)",
+            "question_number": 5,
+            "question_text": "鉄筋や鉄骨として用いる鋼材の腐食に関する次の記述のうち、最も不適当なものはどれか。",
+            "options": {
+                "1": "高アルカリ環境にあると、腐食が進みやすい。",
+                "2": "塩化物イオン濃度が高い環境にあると、腐食が進みやすい。",
+                "3": "湿度が高い環境にあると、腐食が進みやすい。",
+                "4": "大気汚染物質濃度が高い環境にあると、腐食が進みやすい。"
+            },
+            "correct_answer": 1
+        },
+        {
+            "year": "令和5年度(第31回)",
+            "question_number": 6,
+            "question_text": "解体工事用機器の使用に関する次の記述のうち、最も不適当なものはどれか。",
+            "options": {
+                "1": "油圧ショベルのアタッチメントを取り替えるとき、取付けピン穴のずれの確認を目視で行った。",
+                "2": "重機を移送専用車両に積込むとき、登坂用具が15度以下になるように荷台にかけた。",
+                "3": "ハンドブレーカを使う場合、事業者は振動障害防止のため、一日当たりの使用時間の限度を定めた。",
+                "4": "移動式クレーンについて、ブームの長さや傾斜角度等に関わらず、一定の定格荷重を定めた。"
+            },
+            "correct_answer": 4
+        },
+        {
+            "year": "令和5年度(第31回)",
+            "question_number": 7,
+            "question_text": "解体工事用機器に関する次の記述のうち、最も不適当なものはどれか。",
+            "options": {
+                "1": "ガス溶断器は、アセチレンガスなどの可燃性ガスと酸素の混合ガスを燃焼させてできる高温の火炎を利用して、鉄筋や鉄骨を溶断する装置である。",
+                "2": "小割用圧砕具は、大割用圧砕具で一次破砕した構造物をさらに細かく二次破砕する場合や、鉄筋とコンクリートを分離する場合に使用する。",
+                "3": "フォークグラブには外部シリンダー式と内部シリンダー式があるが、内部シリンダー式のほうが経済的であり、機動性に富んでいる。",
+                "4": "鉄骨切断具の切断方式には、上部切断アームのみを駆動させて切断する方式と、上下の1対の切断アームを駆動させて押切る方式がある。"
+            },
+            "correct_answer": 3
+        },
+        {
+            "year": "令和5年度(第31回)",
+            "question_number": 8,
+            "question_text": "鉄筋コンクリート（RC）造の解体工法に関する次の記述のうち、最も不適当なものはどれか。",
+            "options": {
+                "1": "圧砕工法は、昭和50年頃に海外から導入された舗装コンクリート破壊機を日本の機械メーカーが横型油圧シリンダー方式のものに改良したことで、今ではRC造解体工法の主流となっている。",
+                "2": "大型ブレーカ工法は、使用する油圧ブレーカが小型から超大型まであり作業の汎用性は高いが、低騒音型・低振動型のものでも騒音・振動の抑制効果は低いため、最近は使用されなくなっている。",
+                "3": "カッタ工法は、部材別に切断・搬出ができることや、機械台数によって作業日程の調整がし易いなど利点は多いが、大きすぎる断面の部材には適さないため、RC造解体の主流ではない。",
+                "4": "ワイヤソー工法は、振動、騒音、粉じんともに少なく、安全性も高いが、高所作業時の転落・墜落や、ワイヤーの接続スリーブが外れたりワイヤーそのものが切断したりする事故には注意が必要である。"
+            },
+            "correct_answer": 2
+        },
+        {
+            "year": "令和5年度(第31回)",
+            "question_number": 9,
+            "question_text": "解体工法の長所に関する次の記述のうち、最も不適当なものはどれか。",
+            "options": {
+                "1": "カッタ工法：振動・粉じんがほとんど発生しない。",
+                "2": "ハンドブレーカ工法：大型ブレーカ等の機械作業よりも繊細な作業ができる。",
+                "3": "圧砕工法：粉じんがほとんど発生しないので、市街地での解体工事に適している。",
+                "4": "コアドリル工法：機械がポータブルで機動性があり、狭い場所でも施工できる。"
+            },
+            "correct_answer": 3
+        },
+        {
+            "year": "令和5年度(第31回)",
+            "question_number": 10,
+            "question_text": "解体工事の仮設に関する次の記述のうち、最も不適当なものはどれか。",
+            "options": {
+                "1": "作業者が墜落するおそれのある個所には、安全ネットを張る。",
+                "2": "ガス溶断器からの火花等に対応するため、建築工事用シートには防炎性が求められる。",
+                "3": "強風が予測される場合、防音パネルを足場に隙間なく取り付ける。",
+                "4": "防音シートは重いため、シート取付け作業時に墜落しないよう計画する。"
+            },
+            "correct_answer": 3
+        }
+    ];
+
     let userProfile = null;
     let currentQuestion = null;
+    let currentQuestionIndex = 0;
+    let answerHistory = {}; // { questionId: { correct, date } }
+    let userStats = { totalAttempts: 0, totalCorrect: 0 };
 
+    // ===== ローカルストレージ管理 =====
+    function loadAnswerHistory() {
+        const stored = localStorage.getItem('answerHistory');
+        if (stored) {
+            answerHistory = JSON.parse(stored);
+        }
+    }
+
+    function saveAnswerHistory() {
+        localStorage.setItem('answerHistory', JSON.stringify(answerHistory));
+    }
+
+    function loadUserStats() {
+        const stored = localStorage.getItem('userStats');
+        if (stored) {
+            userStats = JSON.parse(stored);
+        }
+    }
+
+    function saveUserStats() {
+        localStorage.setItem('userStats', JSON.stringify(userStats));
+    }
+
+    // ===== 初期化 =====
     async function initializeLiff() {
         try {
             await liff.init({ liffId: LIFF_ID });
@@ -297,6 +451,8 @@
                 liff.login();
             } else {
                 userProfile = await liff.getProfile();
+                loadAnswerHistory();
+                loadUserStats();
                 updateHomeScreen();
             }
         } catch (error) {
@@ -304,6 +460,7 @@
         }
     }
 
+    // ===== ページ遷移 =====
     function goToPage(pageId) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById(pageId).classList.add('active');
@@ -320,58 +477,73 @@
         document.querySelector('.content').scrollTop = 0;
     }
 
+    // ===== ホーム画面更新 =====
     function updateHomeScreen() {
         if (!userProfile) return;
         document.getElementById('homeName').textContent = userProfile.displayName;
-    }
-
-    async function loadTodayQuiz() {
-        const sampleQuiz = {
-            questionId: "2012-001",
-            year: 2012,
-            questionNumber: 1,
-            difficulty: "easy",
-            questionText: "120㎡の木造解体で出る『木くず』の重量は？",
-            option1: "約12トン",
-            option2: "約60トン",
-            option3: "約100トン",
-            option4: "約150トン",
-            correctAnswer: "1",
-            explanation: "木材の密度は約0.6～0.8t/㎥です。木造建築物の場合、解体後の廃木材の発生量は床面積1㎡あたり約0.1tが目安とされています。したがって、120㎡の場合は約12トンになります。"
-        };
-
-        currentQuestion = sampleQuiz;
-        renderQuizScreen(sampleQuiz);
-    }
-
-    function renderQuizScreen(quiz) {
-        document.getElementById('quizId').textContent = `令和${quiz.year}年 問${quiz.questionNumber}`;
+        document.getElementById('totalAttempts').textContent = userStats.totalAttempts;
         
-        const difficultyEl = document.getElementById('quizDifficulty');
-        difficultyEl.textContent = quiz.difficulty === 'easy' ? '易' : (quiz.difficulty === 'medium' ? '中' : '難');
-        difficultyEl.className = `difficulty ${quiz.difficulty}`;
+        const rate = userStats.totalAttempts > 0 
+            ? Math.round((userStats.totalCorrect / userStats.totalAttempts) * 100) 
+            : 0;
+        document.getElementById('correctRate').textContent = rate + '%';
+    }
 
-        document.getElementById('questionText').textContent = quiz.questionText;
+    // ===== クイズ読み込み =====
+    function loadTodayQuiz() {
+        // ランダムに問題を選択
+        currentQuestionIndex = Math.floor(Math.random() * questionDatabase.length);
+        currentQuestion = questionDatabase[currentQuestionIndex];
+        renderQuizScreen(currentQuestion);
+    }
+
+    // ===== クイズ画面レンダリング =====
+    function renderQuizScreen(quiz) {
+        document.getElementById('quizId').textContent = quiz.year;
+        document.getElementById('quizProgress').textContent = `問${quiz.question_number}/${questionDatabase.length}`;
+        document.getElementById('questionText').textContent = quiz.question_text;
 
         const optionsContainer = document.getElementById('optionsContainer');
         optionsContainer.innerHTML = '';
 
-        ['option1', 'option2', 'option3', 'option4'].forEach((key, index) => {
+        ['1', '2', '3', '4'].forEach((key) => {
             const btn = document.createElement('button');
             btn.className = 'option-btn';
-            btn.innerHTML = `<strong>${index + 1}.</strong> ${quiz[key]}`;
-            btn.onclick = () => selectOption(index + 1, quiz);
+            btn.innerHTML = `<strong>${key}.</strong> ${quiz.options[key]}`;
+            btn.onclick = () => selectOption(parseInt(key), quiz);
             optionsContainer.appendChild(btn);
         });
     }
 
+    // ===== 選択肢選択 =====
     function selectOption(selectedNum, quiz) {
-        const isCorrect = selectedNum.toString() === quiz.correctAnswer;
-        saveAnswerToAirtable(quiz.questionId, selectedNum, isCorrect);
+        const isCorrect = selectedNum === quiz.correct_answer;
+        
+        // ローカルストレージに記録
+        const questionId = `${quiz.year}_q${quiz.question_number}`;
+        answerHistory[questionId] = {
+            correct: isCorrect,
+            date: new Date().toISOString(),
+            userAnswer: selectedNum
+        };
+        saveAnswerHistory();
+
+        // 統計情報を更新
+        userStats.totalAttempts++;
+        if (isCorrect) {
+            userStats.totalCorrect++;
+        }
+        saveUserStats();
+
+        // Airtableに送信（非同期）
+        saveAnswerToAirtable(quiz.year, quiz.question_number, selectedNum, isCorrect);
+
+        // 結果画面を表示
         showResult(isCorrect, quiz, selectedNum);
     }
 
-    function showResult(isCorrect, quiz) {
+    // ===== 結果表示 =====
+    function showResult(isCorrect, quiz, selectedAnswer) {
         const resultIcon = document.getElementById('resultIcon');
         const resultText = document.getElementById('resultText');
         const explanationText = document.getElementById('explanationText');
@@ -384,35 +556,34 @@
             resultIcon.textContent = '❌';
             resultText.textContent = '残念...';
             resultText.className = 'result-text incorrect';
+
+            // 不正解時は正解を表示
+            const correctAnswer = quiz.correct_answer;
+            explanationText.innerHTML = `<strong>正解: ${correctAnswer}. ${quiz.options[correctAnswer]}</strong><br><br>もう一度確認して次回に活かしましょう。`;
         }
 
-        explanationText.textContent = quiz.explanation;
+        if (isCorrect) {
+            explanationText.textContent = '素晴らしい！この分野をマスターしています。';
+        }
+
         goToPage('result');
     }
 
+    // ===== クイズ一覧読み込み =====
     function loadQuizList() {
-        const sampleQuizzes = [
-            { id: "2024-001", year: 2024, number: 1, category: "法令", status: "correct" },
-            { id: "2024-002", year: 2024, number: 2, category: "法令", status: "incorrect" },
-            { id: "2024-003", year: 2024, number: 3, category: "施工", status: "unanswered" },
-            { id: "2023-001", year: 2023, number: 1, category: "法令", status: "correct" },
-        ];
+        const quizzes = questionDatabase.map(q => ({
+            id: `${q.year}_q${q.question_number}`,
+            year: q.year,
+            number: q.question_number,
+            status: answerHistory[`${q.year}_q${q.question_number}`] 
+                ? (answerHistory[`${q.year}_q${q.question_number}`].correct ? 'correct' : 'incorrect')
+                : 'unanswered'
+        }));
 
-        const filterBar = document.getElementById('filterBar');
-        const years = [...new Set(sampleQuizzes.map(q => q.year))].sort((a, b) => b - a);
-        
-        filterBar.innerHTML = '<button class="filter-btn active" onclick="filterByYear(\'all\')">すべて</button>';
-        years.forEach(year => {
-            const btn = document.createElement('button');
-            btn.className = 'filter-btn';
-            btn.textContent = `令和${year}年`;
-            btn.onclick = () => filterByYear(year);
-            filterBar.appendChild(btn);
-        });
-
-        renderQuizList(sampleQuizzes);
+        renderQuizList(quizzes);
     }
 
+    // ===== クイズリストレンダリング =====
     function renderQuizList(quizzes) {
         const container = document.getElementById('quizListContainer');
         container.innerHTML = '';
@@ -420,6 +591,7 @@
         quizzes.forEach(quiz => {
             const item = document.createElement('div');
             item.className = 'quiz-item';
+            item.onclick = () => retakeQuiz(quiz);
 
             const statusEl = document.createElement('div');
             statusEl.className = `quiz-item-status ${quiz.status}`;
@@ -428,8 +600,10 @@
             const content = document.createElement('div');
             content.className = 'quiz-item-content';
             content.innerHTML = `
-                <div class="quiz-item-title">令和${quiz.year}年 問${quiz.number}</div>
-                <div class="quiz-item-category">${quiz.category}</div>
+                <div class="quiz-item-title">${quiz.year} 問${quiz.number}</div>
+                <div class="quiz-item-category">
+                    ${quiz.status === 'correct' ? '✅ 正解' : (quiz.status === 'incorrect' ? '❌ 不正解' : '未回答')}
+                </div>
             `;
 
             item.appendChild(statusEl);
@@ -438,16 +612,28 @@
         });
     }
 
+    // ===== マイページ更新 =====
     function updateMypageScreen() {
         if (!userProfile) return;
         document.getElementById('mypageName').textContent = userProfile.displayName;
+        document.getElementById('mypageTotal').textContent = userStats.totalAttempts + '問';
+        document.getElementById('mypageCorrect').textContent = userStats.totalCorrect + '問';
+        
+        const rate = userStats.totalAttempts > 0 
+            ? Math.round((userStats.totalCorrect / userStats.totalAttempts) * 100) 
+            : 0;
+        document.getElementById('mypageRate').textContent = rate + '%';
+        document.getElementById('rateBar').style.width = rate + '%';
     }
 
-    async function saveAnswerToAirtable(questionId, userAnswer, isCorrect) {
+    // ===== Airtable保存 =====
+    async function saveAnswerToAirtable(year, questionNumber, userAnswer, isCorrect) {
         const data = {
             lineUserId: userProfile.userId,
             lineName: userProfile.displayName,
-            questionId: questionId,
+            questionId: `${year}_q${questionNumber}`,
+            year: year,
+            questionNumber: questionNumber,
             userAnswer: userAnswer,
             isCorrect: isCorrect,
             answeredDate: new Date().toISOString()
@@ -459,20 +645,28 @@
                 body: JSON.stringify(data),
                 headers: { 'Content-Type': 'application/json' }
             });
+            console.log("回答を保存しました:", data);
         } catch (error) {
             console.error("保存エラー:", error);
         }
     }
 
+    // ===== その他関数 =====
     function filterByYear(year) {
         document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
         event.target.classList.add('active');
+    }
+
+    function retakeQuiz(quiz) {
+        console.log("再チャレンジ:", quiz.id);
+        goToPage('quiz');
     }
 
     function nextQuiz() {
         goToPage('quiz');
     }
 
+    // ===== 初期化実行 =====
     initializeLiff();
 </script>
 

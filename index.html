@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>建設シカクLAB｜合格診断</title>
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <style>
+        body { font-family: 'Helvetica Neue', Arial, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 500px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h2 { color: #ffcc00; text-shadow: 1px 1px 0 #000; font-size: 24px; text-align: center; }
+        .step { display: none; }
+        .step.active { display: block; }
+        .btn { display: block; width: 100%; padding: 15px; margin: 10px 0; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; transition: 0.3s; }
+        .btn-primary { background: #ffcc00; color: #000; }
+        .btn-primary:hover { background: #e6b800; }
+        input, select { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        .loading { text-align: center; color: #666; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="step-loading" class="step active">
+        <p class="loading">カイ先生が準備中だ...ちょっと待てよ...</p>
+    </div>
+
+    <div id="step-quiz" class="step">
+        <h2>第1問：計算の壁</h2>
+        <p>120㎡の木造解体で出る「木くず」の重量は？</p>
+        <button class="btn btn-primary" onclick="goStep('step-survey')">約12トン（正解！）</button>
+        <button class="btn btn-primary" onclick="goStep('step-survey')">約60トン</button>
+    </div>
+
+    <div id="step-survey" class="step">
+        <h2>戦績を保存するぞ！</h2>
+        <p>お前の現状を教えてくれ。診断結果を出すのに必要だ。</p>
+        <input type="text" id="user-name" placeholder="氏名（フルネーム）">
+        <select id="exp-years">
+            <option value="">実務経験は何年だ？</option>
+            <option value="3年未満">3年未満</option>
+            <option value="3-7年">3-7年</option>
+            <option value="8年以上">8年以上（管理職候補！）</option>
+        </select>
+        <input type="number" id="current-salary" placeholder="今の年収は？（例：450）">
+        <button class="btn btn-primary" onclick="sendData()">診断結果を見る</button>
+    </div>
+
+    <div id="step-result" class="step">
+        <h2>診断完了！</h2>
+        <p id="result-msg">お疲れさん！お前のデータは預かった。</p>
+        <p>記述試験のテンプレはLINEトークに送ったぞ！確認してくれ。</p>
+        <button class="btn btn-primary" onclick="liff.closeWindow()">LINEに戻る</button>
+    </div>
+</div>
+
+<script>
+    // --- 初期設定 ---
+    const LIFF_ID = "YOUR_LIFF_ID"; // ここに自分のLIFF IDを貼る
+    const WEBHOOK_URL = "YOUR_MAKE_WEBHOOK_URL"; // Make(旧Integromat)等のURL
+
+    async function initializeLiff() {
+        try {
+            await liff.init({ liffId: LIFF_ID });
+            if (!liff.isLoggedIn()) {
+                liff.login();
+            } else {
+                goStep('step-quiz');
+            }
+        } catch (error) {
+            console.error("LIFFの初期化に失敗したぜ...", error);
+        }
+    }
+
+    function goStep(stepId) {
+        document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+        document.getElementById(stepId).classList.add('active');
+    }
+
+    async function sendData() {
+        const profile = await liff.getProfile();
+        const data = {
+            lineName: profile.displayName,
+            lineUserId: profile.userId,
+            userName: document.getElementById('user-name').value,
+            expYears: document.getElementById('exp-years').value,
+            currentSalary: document.getElementById('current-salary').value
+        };
+
+        // Make(旧Integromat)等にデータを飛ばして、Airtableに保存する
+        fetch(WEBHOOK_URL, {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: { 'Content-Type': 'application/json' }
+        }).then(() => {
+            goStep('step-result');
+        });
+    }
+
+    initializeLiff();
+</script>
+
+</body>
+</html>

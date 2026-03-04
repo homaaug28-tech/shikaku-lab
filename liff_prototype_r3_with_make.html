@@ -581,7 +581,7 @@
         let userId = null;
 
         const WEBHOOK_URL = 'https://hook.eu1.make.com/lgfnj52lgwbcy5c1r8u1dt2huvp95xfw';
-        const REPO_BASE = '/shikaku-lab/';
+        const REPO_BASE = window.location.pathname.includes('/shikaku-lab/') ? '/shikaku-lab/' : '/';
 
         function init() {
             userId = 'user_' + Date.now();

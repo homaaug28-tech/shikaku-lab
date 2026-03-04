@@ -19,39 +19,29 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: .
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .
 ```
 
-6. 下の **「Commit new file」** をクリック
-
----
-
-## ✅ **完成図**
-
-修正後のリポジトリ構造：
+### ステップ3: Commit
 ```
-📄 liff_prototype_r3_with_make.html
-📄 questions_R3.json
-📄 README.md
-📄 .gitignore
-📁 .github
-    └── 📁 workflows
-        └── 📄 deploy.yml  ✅ 正しい名前
-```
-
----
-
-## 📝 **分かりやすい画像ガイド**
-
-**GitHub ページの見方：**
-```
-┌─────────────────────────────────────┐
-│ shikaku-lab リポジトリ              │
-├─────────────────────────────────────┤
-│ ├─ liff_prototype_r3_with_make.html │
-│ ├─ questions_R3.json                │
-│ ├─ README.md                        │
-│ ├─ .gitignore                       │
-│ └─ .github/                         │
-│    └─ workflows/                    │
-│       └─ deploy.yml                 │ ← ここ！
-└─────────────────────────────────────┘
+「Commit changes」をクリック

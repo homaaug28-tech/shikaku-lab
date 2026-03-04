@@ -1,0 +1,2084 @@
+{
+  "metadata": {
+    "title": "解体工事施工技士試験 令和3年度 四択問題",
+    "version": "2.0",
+    "year": "令和3年度",
+    "year_number": "R3",
+    "total_questions": 45,
+    "questions_with_answers": 45,
+    "completion_rate": "100.0%",
+    "last_updated": "2026-03-04T01:05:13.842801"
+  },
+  "questions": [
+    {
+      "id": "令和3_003",
+      "year": "令和3年度",
+      "question_number": 3,
+      "question_text": "建築材料に関する次の記述のうち、最も不適当なものはどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "グラスウールは、短いガラス繊維を綿状にしたもので、断熱材、保温材、吸音材として使用される。",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "ALCは、普通のコンクリートより密度の小さい軽量コンクリートの一種で、軽量骨材を用いたものである。",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "マンホールの蓋、グレーチング等に使用される鋳鉄は、融点が低く、切削加工等が容易という特徴がある。",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "合わせガラスは、 2枚以上の板ガラスに合成樹脂の層を挟み全面接着したもので、破損しても破片が飛び散らないようにしたものである。",
+          "explanation": null
+        }
+      },
+      "correct_answer": 2,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.352876",
+        "modified_date": "2026-03-04T01:03:17.352892",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_004",
+      "year": "令和3年度",
+      "question_number": 4,
+      "question_text": "解体工事機器に関する次の記述のうち、最も不適当なものはどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "大割用圧砕具は、鉄筋コンクリートの壁や床版はもとより、柱や梁を挟んでかみ砕く作業に使用される。",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "小割用圧砕具は、大割りしたコンクリートと鉄筋を分離し、鉄筋を団子状にまとめる作業に使用される。",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "フォークグラブは、木材をつかむためのアタッチメントで、主に木造建築物の解体作業に使用される。",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "大型ブレーカは、振動や騒音が小さく、粉じんも少ないため、丁寧な作業に使用される。",
+          "explanation": null
+        }
+      },
+      "correct_answer": 4,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.352929",
+        "modified_date": "2026-03-04T01:03:17.352931",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_005",
+      "year": "令和3年度",
+      "question_number": 5,
+      "question_text": "解体工法に関する次の記述のうち、最も不適当なものはどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "静的破砕剤工法は、多くの削孔が必要で、削孔時の騒音や粉じんに留意しなければならない。",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "転倒工法は、騒音や粉じんの発生時間をできるだけ短くしたい場合に適している。",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "カッタ工法は、騒音・粉じんがほとんど発生せず、断面の大きい部材の切断に適している。",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "コアドリルエ法は、機械がポータブルで機動性があるが、ビットの冷却水およびノロの処理が必要である。",
+          "explanation": null
+        }
+      },
+      "correct_answer": 3,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.352953",
+        "modified_date": "2026-03-04T01:03:17.352954",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_006",
+      "year": "令和3年度",
+      "question_number": 6,
+      "question_text": "圧砕工法に関する次の記述のうち、最も不適当なものはどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "地下構造物や大型部材の解体に適している。",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "コンクリート破砕時に鉄筋切断も可能なので、全体としての作業効率が高い。",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "コンクリート塊や鉄筋の飛散に注意が必要である。",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "大型ブレーカに比べ騒音・振動が低いので、市街地での解体作業に適している。",
+          "explanation": null
+        }
+      },
+      "correct_answer": 1,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.352978",
+        "modified_date": "2026-03-04T01:03:17.352979",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_007",
+      "year": "令和3年度",
+      "question_number": 7,
+      "question_text": "解体工事の仮設に関する次の記述のうち、最も不適当なものはどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "仮囲いは、浄化槽などの地中障害物の上に設置することを避けることが望まし し） ゜",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "屋内の解体作業において、仮設照明設備を設ける場合は、光源が直接目に入らない間接照明がよい。",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "手すり先行工法は、足場の組立て作業の際に、必ず作業床上部に手すりを先行して設置する工法である。",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "脚立は、脚と水平面との角度を75度以下とし、折りたたみ式のものでは、脚と水平面との角度を保っための金具等を備えているものを使用する。",
+          "explanation": null
+        }
+      },
+      "correct_answer": 2,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.353007",
+        "modified_date": "2026-03-04T01:03:17.353008",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_008",
+      "year": "令和3年度",
+      "question_number": 8,
+      "question_text": "解体工事における掘削工法及び山留めに関する次の記述のうち、最も不適当なものは\nどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "のり切りオープンカットエ法では、大型機械が使用できるが、掘削や埋戻しの土量が多くなる。",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "山留め壁自立オープンカット工法は、地下構造物を解体する際によく利用されるが、掘削深度が深い場合には自立が困難である。",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "親杭横矢板工法は、地下水の豊富な地盤、軟弱地盤、転石などのある地盤に対して適切な工法である。",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "山留め支保工オープンカットエ法は、敷地いっぱいに建てられた構造物を撤去する際に有効である。",
+          "explanation": null
+        }
+      },
+      "correct_answer": 3,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.353029",
+        "modified_date": "2026-03-04T01:03:17.353030",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_009",
+      "year": "令和3年度",
+      "question_number": 9,
+      "question_text": "解体工事における事前調査に関する次の記述のうち、最も不適当なものはどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "近隣住民とのトラブルを防止するために、住宅地域・商業地域・工業地域等の行政上の分類のみならず、近隣住民の実態を詳細に調査した。",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "敷地内にある電気・ガス・水道・下水道・電話等の配管や配線は、建設時の設計図書や竣工図によって確認した。",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "所有者が解体工事前に処理すべき家電製品や家具等の残存物品の有無について調査した。",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "基礎および地中梁等の地中部分の躯体については、数か所露出させて形状および寸法を確認した。",
+          "explanation": null
+        }
+      },
+      "correct_answer": 2,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.353050",
+        "modified_date": "2026-03-04T01:03:17.353051",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_010",
+      "year": "令和3年度",
+      "question_number": 10,
+      "question_text": "解体工事における事前調査に関する次の記述のうち、最も不適当なものはどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "建物が増改築されている場合は、接合部等を確認する必要がある。",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "石綿含有建材の有無に関する調査は、鉄骨造建築物の場合にのみ必要である。",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "敷地内の分別作業スペースの有無、近隣道路の規制や幅員、保育園や病院の有無を確認する必要がある。",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "産業廃棄物の発生量、処理施設の所在地および処理能力を確認する必要がある。",
+          "explanation": null
+        }
+      },
+      "correct_answer": 2,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.353075",
+        "modified_date": "2026-03-04T01:03:17.353076",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_011",
+      "year": "令和3年度",
+      "question_number": 11,
+      "question_text": "解体工事における事前調査等に関する次の記述のうち、最も不適当なものはどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "産業廃棄物処理施設までの運搬所要時間は、工程管理に影響するので、道路の渋滞度、走行距離、交通規制等を事前に調査しておく。",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "交通標識が大型工事車両の通行障害となる場合は、警察署の許可を受け移設作業を行う。",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "敷地境界杭等が設置されている場合は、損傷・移動等を防止するため、標識等を事前に設置する。",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "ガス・水道は、休止または廃止の手続きをし、供給は必ず敷地内で遮断してお",
+          "explanation": null
+        }
+      },
+      "correct_answer": 4,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.353099",
+        "modified_date": "2026-03-04T01:03:17.353100",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_012",
+      "year": "令和3年度",
+      "question_number": 12,
+      "question_text": "解体工事の見積に関する次の記述のうち、最も不適当なものはどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "建設機械類の燃料費は、機械器具費のうちの損耗品費に含まれる。",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "見積書では、内訳書や明細書によって見積総額の裏付けを明示する。",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "内訳明示する法定福利費は、原則として健康保険料、厚生年金保険料および雇用保険料のうちの事業主負担分である。",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "副産物処理費は、積込み費、運搬費および処分費で構成される。",
+          "explanation": null
+        }
+      },
+      "correct_answer": 1,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.353118",
+        "modified_date": "2026-03-04T01:03:17.353119",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_013",
+      "year": "令和3年度",
+      "question_number": 13,
+      "question_text": "解体工事における歩掛・積算・見積に関する次の記述のうち、最も不適当なものはどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "見積書のうちの明細書には、内訳書の各項目の細目ごとに、単位・数量・単価・金額を記載する。",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "共通仮設費とは、各種工事に共用される仮設資材、設備等の費用で、直接工事費に算入されないものをいう。",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "現場管理費とは現場を管理するための費用で、人件費、法定福利費、労務安全管理費、保険料、福利厚生費、通信・交通費等が含まれる。",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "一般管理費とは、現場管理費、本社経費および利益を合計したものである。",
+          "explanation": null
+        }
+      },
+      "correct_answer": 4,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.353149",
+        "modified_date": "2026-03-04T01:03:17.353150",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_014",
+      "year": "令和3年度",
+      "question_number": 14,
+      "question_text": "建設リサイクル法第13条により、工事請負契約書に記載すべき項目に関する下表の説明のうち、最も不適当なものはどれか。\n項目 説明",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "分別解体の方法 施行規則第2条第2項第4号にある分別解体等の方法",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "解体工事に関する費用 受注者の見積金額（合意金額）",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "再資源化をするための施設の名称および所在地 特定建設資材廃棄物ごとの全ての施設",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "特定建設資材廃棄物の再資源化等に要する費用 産業廃棄物処分業者の見積金額（合意金額）",
+          "explanation": null
+        }
+      },
+      "correct_answer": 4,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": true,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.353178",
+        "modified_date": "2026-03-04T01:03:17.353179",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_015",
+      "year": "令和3年度",
+      "question_number": 15,
+      "question_text": "解体工事に先立つ各種届出に関する次の記述のうち、最も不適当なものはどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "ガイドレール18m以上の建設用リフト設置届は、警察署に提出する。",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "建築物除却届は、解体前に都道府県等に提出する。",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "工事排水や湧水を下水道管に流す場合の届出は、水道局等に提出する。",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "道路自費工事に関する許可は、道路管理者に申請する。",
+          "explanation": null
+        }
+      },
+      "correct_answer": 1,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.353197",
+        "modified_date": "2026-03-04T01:03:17.353198",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_016",
+      "year": "令和3年度",
+      "question_number": 16,
+      "question_text": "解体工事における施工計画・届出等に関する次の記述のうち、最も不適当なものはどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "施工計画を策定するにあたって考慮しなければならない条件には、設計条件、敷地条件、環境条件、労働条件、調達条件、処理条件等がある。",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "解体現場への車両の進入を容易にするために歩道の切下げが必要な場合は、警察署に申請して許可を受けた後でなければ作業ができない。",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "建設副産物の再利用を図るために、副産物の分別作業場所と一時保管場所、運搬車両の出入口及び作業動線を確保するように、分別解体計画を立案する。",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "解体工法の選定にあたっては、事前調査の資料に基づき、安全確保、環境保全、工期、経済性、建設副産物の処理方法等を検討して決定する。",
+          "explanation": null
+        }
+      },
+      "correct_answer": 2,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.353223",
+        "modified_date": "2026-03-04T01:03:17.353224",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_017",
+      "year": "令和3年度",
+      "question_number": 17,
+      "question_text": "解体工事における施工管理に関する次の記述のうち、最も不適当なものはどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "解体工事における主な施工管理は、作業管理、工程管理、原価管理、安全衛生管理、環境保全管理、建設副産物管理等の観点から行う。",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "建設機械は、工程に合わせて適正な機種・台数を確保し、点検・保守・管理を確実に行い、故障を少なくし稼働率を上げることに留意する。",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "原価管理においては、見積りを基準にして原価を統制及び低減し、必要があれば施工計画を再検討する。",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "工程管理では、工事の進捗状況を検討しながら、最小限の労働カ・資材・機械で、最大限の効果が得られるように最適化を図る。",
+          "explanation": null
+        }
+      },
+      "correct_answer": 3,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.353249",
+        "modified_date": "2026-03-04T01:03:17.353249",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_018",
+      "year": "令和3年度",
+      "question_number": 18,
+      "question_text": "解体工事の施工管理に関する次の記述のうち、最も不適当なものはどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "解体工事の特殊性として、解体する建築物の用途、構造種別及び工事関係者が一定でないことなどがある。",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "工期を当初の計画より延長しなければならない場合、一般的に、直接費は変わらないか増加し、間接費は増加する。",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "バーチャート式工程表は、各作業の関連性や工程の流れが把握できるので、工事途中での段取り替えに速やかに対応できる。",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "大幅な施工方法・手順・数量等の変更が発生した場合は、施工計画書を変更し、実行予算を組み直す。",
+          "explanation": null
+        }
+      },
+      "correct_answer": 3,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.353271",
+        "modified_date": "2026-03-04T01:03:17.353271",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_019",
+      "year": "令和3年度",
+      "question_number": 19,
+      "question_text": "解体工事の施工管理に関する次の記述のうち、最も不適当なものはどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "足場などの資材を点検したところ、不適格なものがあったので交換した。",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "作業内容や施工量を日報に記録し、予定通りの成果を得たか確認した。",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "解体用重機を必要な台数確保できなかったので、工程を変更した。",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "人力で体力を要する解体作業だったので、経験は浅いが体力のある若手に管理および作業を任せた。",
+          "explanation": null
+        }
+      },
+      "correct_answer": 4,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.353291",
+        "modified_date": "2026-03-04T01:03:17.353292",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_020",
+      "year": "令和3年度",
+      "question_number": 20,
+      "question_text": "労働安全衛生に関する次の記述のうち、最も不適当なものはどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "移動式足場とは、足場板を3以上の支持物に掛け渡し、作業に応じて移動させる足場をいう。",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "足場とは、建設物の高所部に対する部材の取付け等の作業において、作業者を作業箇所に接近させるために設ける仮設の作業床とこれを支持する仮設物をいう。",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "高所作業とは、一般に地上または床上から作業場所までの高さが2m以上の箇所で行う作業のことをいう。",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "作業床とは、作業者が作業を行うための平面で耐力のある床をいい、足場等の作業床については、細かい安全基準が定められている。",
+          "explanation": null
+        }
+      },
+      "correct_answer": 1,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.353322",
+        "modified_date": "2026-03-04T01:03:17.353323",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_021",
+      "year": "令和3年度",
+      "question_number": 21,
+      "question_text": "労働安全衛生に関する次の記述のうち、最も不適当なものはどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "石綿含有成形板の除去作業は、技術的に困難な場合を除いて、切断、破砕等によらないで行う。",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "吹付け石綿の除去作業では、電動ファン付き呼吸用保護具又は同等以上の呼吸用保護具を使用する。",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "石綿含有建材の除去作業場所に、石綿作業主任者の氏名と職務を掲示する。",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "石綿を取り扱う作業を常時行う場合、年1回は石綿健康診断を受診する。",
+          "explanation": null
+        }
+      },
+      "correct_answer": 4,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.353348",
+        "modified_date": "2026-03-04T01:03:17.353349",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_022",
+      "year": "令和3年度",
+      "question_number": 22,
+      "question_text": "安全衛生管理に関する次の記述のうち、最も不適当なものはどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "関係法令に規定されている基準は最低限のものであり、当該現場の特殊性に対応するためには、法令の基準以上の対策を講ずることが望ましい。",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "ツールボックス・ミーティングは、作業主任者や作業指揮者が中心となって、作業者と作業開始前の時間を使って安全作業について現場で話し合うものである。",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "現場の基本的な安全心得として「安全十訓」や「安全のしおり」等を作成.印刷し、雇入時に作業者に交付して、雇入の最初から安全上の注意を喚起する。",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "元請負人は安全衛生協議会を設置し、主たるエ種の請負人を招集して会議を定期的に開催する。",
+          "explanation": null
+        }
+      },
+      "correct_answer": 4,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.353374",
+        "modified_date": "2026-03-04T01:03:17.353375",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_024",
+      "year": "令和3年度",
+      "question_number": 24,
+      "question_text": "解体工事における環境保全対策に関する次の記述のうち、最も不適当なものはどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "粉じんの飛散防止のためには、高水圧の散水機で粉じん発生箇所へ十分な水量を散水する。",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "市街地における解体工事では、振動レベルが連続して60dB~65dBを上回ると、 近隣住民から苦情が出やすい。",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "建設機械の騒音を測定する場合は、機械から 1、3、5mの位置で測定する。",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "解体工事から発生する騒音を低減するための低騒音型建設機械は、国土交通省告示により具体的な機種・型式等が指定されている。",
+          "explanation": null
+        }
+      },
+      "correct_answer": 3,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.353414",
+        "modified_date": "2026-03-04T01:03:17.353415",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_025",
+      "year": "令和3年度",
+      "question_number": 25,
+      "question_text": "騒音規制法令で定められた特定建設作業に該当しない作業は、次のうちどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "さく岩機を使用する作業",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "くい打（くい抜）機を使用する作業",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "カッタを使用する作業",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "空気圧縮機を使用する作業",
+          "explanation": null
+        }
+      },
+      "correct_answer": 3,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.353430",
+        "modified_date": "2026-03-04T01:03:17.353431",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_026",
+      "year": "令和3年度",
+      "question_number": 26,
+      "question_text": "木造住宅の解体作業に関する次の記述のうち、最も不適当なものはどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "太陽熱温水器やソーラーパネルなど屋上設置物等の撤去作業は、「手作業による分別解体工法」により行った。",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "地中埋設物であるコンクリート造浄化槽は、現地で破砕し撤去した。",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "建物の外壁は、建物内部の解体時の騒音や粉じん抑制効果が期待できるので、最後に取り壊した。",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "CCA処理木材は、土台及び大引以外の部材には使用されていないものとして処理した。",
+          "explanation": null
+        }
+      },
+      "correct_answer": 4,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.353452",
+        "modified_date": "2026-03-04T01:03:17.353452",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_027",
+      "year": "令和3年度",
+      "question_number": 27,
+      "question_text": "木造建築物の解体作業に関する次の記述のうち、最も不適当なものはどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "外部足場は、風雨等に耐えうる十分な強度を確保するための筋かいや壁つなぎで補強し、解体する建物より1.5~2.0m程度高くして設置する。",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "金属屋根が溶接されているために、手作業による解体が困難な場合は、火花等による火災予防対策や作業者の火傷予防対策を講じて、ガス溶断器等により解体する。",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "壁材や天井材の木材は主として、製紙原料、エタノール原料および炭として再資源化される。",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "発生した廃棄物は、品目別に運搬車両に積込み、やむを得ず混載する場合は、仕切りを設置する。",
+          "explanation": null
+        }
+      },
+      "correct_answer": 3,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.353475",
+        "modified_date": "2026-03-04T01:03:17.353476",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_028",
+      "year": "令和3年度",
+      "question_number": 28,
+      "question_text": "鉄骨造建築物の解体工事に関する次の記述のうち、最も不適当なものはどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "鉄骨梁は、断面の下から上に溶断した。",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "部材を再利用するため、できるだけ部材本体に熱を加えないようにした。",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "柱は、アンカーボルトを溶断してから、柱を移動式クレーンで仮吊りした。",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "外壁は、一枚壁とならないようにL字型に残した。 10",
+          "explanation": null
+        }
+      },
+      "correct_answer": 3,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.353492",
+        "modified_date": "2026-03-04T01:03:17.353493",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_029",
+      "year": "令和3年度",
+      "question_number": 29,
+      "question_text": "鉄骨造建築物の解体作業に関する次の記述のうち、最も不適当なものはどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "ガス溶断工法は、鉄骨切断機による機械作業が困難な場合に適している。",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "ALC版は、仕上げ材を取り除いた後、接合してある鉄筋や留具を切断又は溶断して取り外す。",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "コンクリートをはつり取ったキーストン・デッキプレートは、踏み抜き等が発生しやすいので、その状態を確認する。",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "ボルトを外して解体する場合は、解体箇所以外も含めて全てのボルトを緩めてから行う。",
+          "explanation": null
+        }
+      },
+      "correct_answer": 4,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.353512",
+        "modified_date": "2026-03-04T01:03:17.353513",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_030",
+      "year": "令和3年度",
+      "question_number": 30,
+      "question_text": "鉄筋コンクリート造建築物の解体作業に関する次の記述のうち、最も不適当なものはどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "コンクリート造の工作物の解体等作業主任者は、車両系建設機械運転技能講習修了者から選任する。",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "外部仮設足場の壁つなぎは、外壁解体の直前に撤去し、外壁解体終了後直ちに自立部分を撤去する。",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "外壁を2階分以上残す場合には、控え壁を残すかラーメンの形で残すなど、安定した形状にしておく。",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "解体用重機をコンクリート塊を積み上げた上に載せる場合には、積み上げたコンクリート塊の勾配や締まり具合に十分注意する。",
+          "explanation": null
+        }
+      },
+      "correct_answer": 1,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.353543",
+        "modified_date": "2026-03-04T01:03:17.353544",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_031",
+      "year": "令和3年度",
+      "question_number": 31,
+      "question_text": "鉄筋コンクリート造建築物の階上解体工法に関する次の記述のうち、最も不適当なものはどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "揚重するベースマシンの重量や梁・床の強度に応じて、梁・床を鋼製サポート等 で補強する。",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "解体作業は、屋上から下階へ向かって、原則として1階分を一つの単位として行",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "外周の柱、壁等を解体する際は、コンクリート塊の落下防止のため、作業直下の階に安全ネットを設置する。",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "廃材を投下するための開口（ダメ穴）は、解体作業前に各階に設置する。 ゜ ぶノ 11",
+          "explanation": null
+        }
+      },
+      "correct_answer": 3,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.353565",
+        "modified_date": "2026-03-04T01:03:17.353566",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_032",
+      "year": "令和3年度",
+      "question_number": 32,
+      "question_text": "国土交通省の「建築物の解体工事における外壁の崩落等による公衆災害防止対策に関するガイドライン」に関する次の記述のうち、実際には記述されていないものはどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "発注者および施工者は、解体対象建築物の構造等を事前に調査、把握するとともに、事故防止に十分配慮した解体工法の選択、施工計画の作成を行うこと。",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "施工者は、解体工事途中段階で想定外の構造、設備等が判明した際は、工事を一時停止し施工計画の修正を検討すること。",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "施工者は、増改築部分と従前部分の接合部等の解体について、設計図書を詳細に調査し、その部分の詳細設計図を作成し、施工計画書に必ず添付すること。",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "建築物の所有者および管理者は、新築時および増改築時の設計図書や竣工図の保存、継承に努めること。",
+          "explanation": null
+        }
+      },
+      "correct_answer": 3,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.353591",
+        "modified_date": "2026-03-04T01:03:17.353591",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_033",
+      "year": "令和3年度",
+      "question_number": 33,
+      "question_text": "鉄筋コンクリート造の煙突の解体作業に関する次の記述のうち、最も不適当なものはどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "ハンドブレーカで、高さ約l.5mずつ解体し、解体作業の進捗に応じて上から外部仮設足場を順次撤去した。",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "ハンドブレーカ作業で発生したコンクリート塊は、足場に触れないように注意して煙突の外側に投下した。",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "作業中の強風や突風に対して十分安全なものとするため、ハンドブレーカ作業用の足場には堅固な壁つなぎを設置した。",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "煙突の高さが圧砕機の届く高さになった後は、地上から圧砕機で解体した。 12",
+          "explanation": null
+        }
+      },
+      "correct_answer": 2,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.353612",
+        "modified_date": "2026-03-04T01:03:17.353613",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_034",
+      "year": "令和3年度",
+      "question_number": 34,
+      "question_text": "鉄筋コンクリート造の地下構造物の解体作業に関する次の記述のうち、最も不適当なものはどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "既存杭などの既存地下工作物を残置すると、廃棄物処理法の不法投棄に該当する場合があるので、注意が必要である。",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "地山の掘削作業や土留め支保エの組立解体作業等との並行作業になる場合は、それぞれの作業主任者を選任し、施工計画の作成においても相互の意見を反映させる必要がある。",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "外周部の基礎を発破工法で解体する場合は、一定の有資格者のもとに行い、危険回避のための打ち合わせを密に行う必要がある。",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "直接土に接する部分が多いため、地盤の緩みや変形の影響を受けやすいが、騒音や振動に関しては周囲に与える影響が少ない。",
+          "explanation": null
+        }
+      },
+      "correct_answer": 4,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.353651",
+        "modified_date": "2026-03-04T01:03:17.353652",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_035",
+      "year": "令和3年度",
+      "question_number": 35,
+      "question_text": "超高層建築物の解体工事に用いられる「閉鎖作業空間を上層部に設け、上層部から順次降下させながら解体作業を行う工法」に関する次の記述うち、最も不適当なものはどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "部材の飛散・落下、粉じんの飛散、騒音・振動などの問題を改善できる。",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "解体途中の耐震性を確保するため、解体前に鉄筋コンクリート造のコアウォールを建築物の内部に設置する必要がある。",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "解体材の荷降ろしの際に生じる自由落下エネルギーを利用して、発電を行うことができる。",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "地上から最上階まで、連続的な外部仮設足場が不要である。 13",
+          "explanation": null
+        }
+      },
+      "correct_answer": 2,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.353673",
+        "modified_date": "2026-03-04T01:03:17.353673",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_036",
+      "year": "令和3年度",
+      "question_number": 36,
+      "question_text": "鉄筋コンクリート造建築物の地上解体工法に関する次の記述のうち、最も不適当なものはどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "作業効率を高めるために、アタッチメントには大型ブレーカを使用した。",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "工事用の敷地に余裕がなかったため、先行して手ごわし等で重機の作業スペースを確保した。",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "解体する建築物の高さが15m程度であったので、l.2m3クラスの重機を使用して解体した。",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "コンクリート塊等の外部への飛散防止や散水作業のために、外部仮設足場を枠組足場とする計画にした。",
+          "explanation": null
+        }
+      },
+      "correct_answer": 1,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.353707",
+        "modified_date": "2026-03-04T01:03:17.353708",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_037",
+      "year": "令和3年度",
+      "question_number": 37,
+      "question_text": "廃棄物処理における電子マニフェストに関する次の記述のうち、最も不適当なものはどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "排出事業者は、産業廃棄物を搬出した日の翌日から3日以内（土日祝日を除き）に、情報センターに登録しなければならない。",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "処理委託を受けた収集運搬業者および処分業者は、それぞれ運搬終了および処分終了後10日以内に、情報センターに報告しなければならない。",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "前々年度に特別管理産業廃棄物 (PCB廃棄物を除く）を50トン以上排出した事業者は、特別管理産業廃棄物 (PCB廃棄物を除く）の処理委託にあたり、電子マニフェストを使用しなければならない。",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "電子マニフェストを使用すれば、「産業廃棄物管理票交付状況報告書」の都道府県等への提出は不要となる。 14",
+          "explanation": null
+        }
+      },
+      "correct_answer": 2,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.353735",
+        "modified_date": "2026-03-04T01:03:17.353736",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_038",
+      "year": "令和3年度",
+      "question_number": 38,
+      "question_text": "建設資材廃棄物の再資瀕化等に関する次の記述のうち、最も不適当なものはどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "アスファルト・コンクリートの再資源化には、工事現場内で行う方法とプラントに搬入して行う方法があり、そのほとんどが再資源化されている。",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "コンクリートが廃棄物となったもののほとんどが、路盤材などの土石材料として再資源化されている。",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "プラスチック系建設資材廃棄物は、マテリアルリサイクルやサーマルリサイクルが困難なため、再資源化は進んでいない。",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "建築用板ガラスが廃棄物となったものは、不純物の混入などの問題があって再資源化は進んでいない。",
+          "explanation": null
+        }
+      },
+      "correct_answer": 3,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.353759",
+        "modified_date": "2026-03-04T01:03:17.353760",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_039",
+      "year": "令和3年度",
+      "question_number": 39,
+      "question_text": "せっこうボードに関する次の記述のうち、最も不適当なものはどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "解体工事から排出される廃せっこうボードには、ひ素やカドミウムの有害物を含有するものはあるが、石綿を含有しているものはない。",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "廃せっこうボードは、分別排出することにより、再資源化することが可能であり、せっこうボード原料や土壌改良剤等として利用することができる。",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "廃せっこうボードを最終処分する場合、条件によっては硫化水素が発生する要因となることから、安定型最終処分場では処分することはできない。",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "せっこうボードの原料には、天然せっこうや排煙脱硫装置等から生じる副産せっこうがあるが、近年副産せっこうの割合が過半となってきている。",
+          "explanation": null
+        }
+      },
+      "correct_answer": 1,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.353789",
+        "modified_date": "2026-03-04T01:03:17.353790",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_041",
+      "year": "令和3年度",
+      "question_number": 41,
+      "question_text": "建設業法に関する次の記述のうち、最も不適当なものはどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "2以上の都道府県に営業所を設置して建設業を営む場合は、国土交通大臣の許可を受けなければならない。",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "建設工事の請負契約の当事者は、契約の締結に際して請負代金の額とその支払の時期及び方法、工事着手の時期及び工事完成の時期等を書面に記載し、署名又は記名押印をして相互に交付しなければならない。",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "発注者から直接公共工事を請け負った建設業者が下請契約を締結した場合は、施工体制台帳と下請負人の施工の分担を明らかにした施工体系図を作成しなければならない。",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "発注者から直接建築ー式工事を請け負った建設業者は、その請負契約の請負代金の額に関わらず、監理技術者を配置しなければならない。",
+          "explanation": null
+        }
+      },
+      "correct_answer": 4,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.353829",
+        "modified_date": "2026-03-04T01:03:17.353829",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_042",
+      "year": "令和3年度",
+      "question_number": 42,
+      "question_text": "労働安全衛生法令に関する次の記述のうち、最も不適当なものはどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "つり上げ荷重が3tの移動式クレーンによる玉掛け業務については、「特別教育修了者」を就かせた。",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "高さが30mの建築物の解体にあたって、鉄骨部材で構成されている箇所が高さ4 mであったので「建築物等の鉄骨の組立て等作業主任者」を選任しなかった。",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "高さが20mの建築物の解体にあたって、解体の対象となるコンリート造部分の高さが5mであったため、「コンクリート造の工作物の解体等作業主任者」を選任した。",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "低圧の電路のうち充電部分が露出している開閉器の操作については、「低圧電気取り扱い業務に関する特別教育修了者」を就かせた。 16",
+          "explanation": null
+        }
+      },
+      "correct_answer": 1,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.353860",
+        "modified_date": "2026-03-04T01:03:17.353860",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_043",
+      "year": "令和3年度",
+      "question_number": 43,
+      "question_text": "労働安全衛生法令で規定する、個々の事業所における労働災害を防止するための安全\n衛生管理体制に関する次の記述のうち、最も不適当なものはどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "労働者数が常時100人以上となる建設工事で、総括安全衛生管理者が転勤で不在となったため、 7日後に新たに総括安全衛生管理者を選任し、 10日後に所轄労働碁準監督署長に届け出た。",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "労働者数が常時50人以上となる建設工事で、安全管理者と衛生管理者が転勤で不在となったため10日後に新たに安全管理者と衛生管理者を選任して関係者に周知したが、所轄労働基準監督署には届け出なかった。",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "労働者数が常時10人以上50人未満の解体工事で、安全衛生推進者が転勤で不在となったため21日後に新たに安全衛生推進者を選任して、所轄労働基準監督署に届け出た。",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "労働者数が常時50人以上となる建設工事となるため、産業医を選任し、月一回の作業所巡視や労働者との面接指導等を依頼した。",
+          "explanation": null
+        }
+      },
+      "correct_answer": 3,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.353892",
+        "modified_date": "2026-03-04T01:03:17.353893",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_044",
+      "year": "令和3年度",
+      "question_number": 44,
+      "question_text": "廃棄物処理にあたり特別管理産業廃棄物となるものは、次のうちどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "水銀が封入されている廃蛍光管",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "石綿を含有している建築用仕上塗材（吹付けパーライト、吹付けバーミキュライトを除く）を除去したもの",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "放射性同位元素を使用しているイオン化式感知器",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "廃軽油",
+          "explanation": null
+        }
+      },
+      "correct_answer": 4,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.353908",
+        "modified_date": "2026-03-04T01:03:17.353909",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_045",
+      "year": "令和3年度",
+      "question_number": 45,
+      "question_text": "廃棄物と埋め立て処分場との組合せで、最も不適当なものはどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "石綿含有スレート波板安定型最終処分場",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "本畳（稲わら床・い草畳表）安定型最終処分場",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "せっこうボード管理型最終処分場",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "紙くず管理型最終処分場 17",
+          "explanation": null
+        }
+      },
+      "correct_answer": 2,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.353924",
+        "modified_date": "2026-03-04T01:03:17.353925",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_047",
+      "year": "令和3年度",
+      "question_number": 47,
+      "question_text": "建設リサイクル法令等に関する次の記述のうち、最も不適当なものはどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "解体工事の元請業者は、発注者に対して分別解体等の計画を契約後に書面で説明した。",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "解体工事の元請業者は、廃棄物の再資源化の実施状況に関する記録を作成し、保 管した。",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "延床面積100m切建築物を、手作業分別解体工法により解体した。",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "プレキャストコンクリート版は特定建設資材に該当するので、再資源化するように計画した。 18",
+          "explanation": null
+        }
+      },
+      "correct_answer": 1,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.353960",
+        "modified_date": "2026-03-04T01:03:17.353961",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_048",
+      "year": "令和3年度",
+      "question_number": 48,
+      "question_text": "令和2年9月に公表された「建設リサイクル推進計画2020」における、 2024年度達成\n墓準値に関する次の記述のうち、最も不適当なものはどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "アスファルト・コンクリート塊の再資源化率の達成基準値は、 99％以上である。",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "建設発生木材の再資源化・縮減率の達成基準値は、 97％以上である。",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "建設混合廃棄物の再資源化・縮減率の達成基準値は、 80％以上である。",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "建設発生土の有効利用率の達成埜準値は、 80％以上である。",
+          "explanation": null
+        }
+      },
+      "correct_answer": 3,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": true,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.353984",
+        "modified_date": "2026-03-04T01:03:17.353985",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_049",
+      "year": "令和3年度",
+      "question_number": 49,
+      "question_text": "建設リサイクル法に関する次の記述のうち、最も不適当なものはどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "対象建設工事の発注者または自主施工者は、工事に着手する日の7日前までに、工事着手の時期等の必要事項を都道府県知事に届け出なければならない。",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "再資源化しなければならない特定建設資材は、コンクリート、コンクリートおよび鉄からなる建設資材、アスファルト・コンクリートの3品目である。",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "元請業者は、特定建設資材廃棄物の再資源化が完了した際、発注者に書面で報告しなければならない。",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "発注者は、分別解体等および建設資材廃棄物の再資源化等に要する費用を適正に負担しなければならない。",
+          "explanation": null
+        }
+      },
+      "correct_answer": 2,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.354007",
+        "modified_date": "2026-03-04T01:03:17.354008",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    },
+    {
+      "id": "令和3_050",
+      "year": "令和3年度",
+      "question_number": 50,
+      "question_text": "大気汚染防止法に関する次の記述のうち、最も不適当なものはどれか。",
+      "question_description": "",
+      "category": "その他",
+      "difficulty": "medium",
+      "options": {
+        "1": {
+          "number": 1,
+          "text": "吹付け石綿を除去する場合は、工事の元請業者が都道府県等に届出を行う。",
+          "explanation": null
+        },
+        "2": {
+          "number": 2,
+          "text": "工事の元請業者は、石綿含有建材の有無の調査を行い、その結果を公衆から見やすいように掲示する。",
+          "explanation": null
+        },
+        "3": {
+          "number": 3,
+          "text": "大気汚染防止法における特定建築材料とは、石綿を含む建築材料をいう。",
+          "explanation": null
+        },
+        "4": {
+          "number": 4,
+          "text": "石綿含有成形板の除去作業完了後の確認は、一定の知見を有する者が行う。 19",
+          "explanation": null
+        }
+      },
+      "correct_answer": 1,
+      "explanation": "",
+      "media": {
+        "figures": [],
+        "has_diagram": false,
+        "references": []
+      },
+      "tags": [],
+      "keywords": [],
+      "metadata": {
+        "created_date": "2026-03-04T01:03:17.354026",
+        "modified_date": "2026-03-04T01:03:17.354027",
+        "source": "四択問題",
+        "reliability": "medium"
+      }
+    }
+  ]
+}

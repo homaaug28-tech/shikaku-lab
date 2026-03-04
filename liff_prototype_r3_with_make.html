@@ -19,7 +19,7 @@
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #333; font-size: 14px; }
         .form-group input, .form-group select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
-        .btn-primary { background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%); color: white; padding: 15px; border: none; border-radius: 8px; width: 100%; font-weight: 600; cursor: pointer; font-size: 14px; }
+        .btn-primary { background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%); color: white; padding: 15px; border: none; border-radius: 8px; width: 100%; font-weight: 600; cursor: pointer; }
         .btn-secondary { background: #f0f0f0; color: #333; padding: 15px; border: none; border-radius: 8px; cursor: pointer; }
         .quiz-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 20px; }
         .question-text { font-size: 16px; font-weight: 600; margin: 15px 0; line-height: 1.6; }
@@ -95,14 +95,12 @@
                         <div class="form-group">
                             <label>出題モード</label>
                             <select id="quizMode" onchange="updateQuizModeOptions()">
-                                <option value="random">ランダム1問出題</option>
-                                <option value="category">分野別・項目別</option>
-                                <option value="year">年代別出題</option>
                                 <option value="sequential">順序通りに出題</option>
+                                <option value="category">分野別出題</option>
+                                <option value="year">年代別出題</option>
                                 <option value="unanswered">未回答問題のみ</option>
                                 <option value="wrong">間違えた問題のみ</option>
                             </select>
-                            <p class="info-text">出題方式を選択してください</p>
                         </div>
 
                         <div class="form-group" id="categoryGroup" style="display: none;">
@@ -121,10 +119,6 @@
                             <select id="yearSelect">
                                 <option value="all">全年度</option>
                                 <option value="R3">令和3年度</option>
-                                <option value="R4">令和4年度</option>
-                                <option value="R5">令和5年度</option>
-                                <option value="R6">令和6年度</option>
-                                <option value="R7">令和7年度</option>
                                 <option value="latest">最新年度のみ</option>
                             </select>
                         </div>
@@ -180,10 +174,10 @@
 
     <script>
         let questionsData = [];
-        let allAnswerHistory = {}; // 全体の回答履歴（永続化）
-        let sessionAnswers = {}; // 現在のセッション内の回答（一時）
+        let allAnswerHistory = {};
+        let sessionAnswers = {};
         let currentQuestion = null;
-        let currentMode = 'random';
+        let currentMode = 'sequential';
         let currentUser = null;
         let userId = null;
         let currentQuestionList = [];
@@ -215,14 +209,7 @@
                 return;
             }
 
-            currentUser = {
-                userId,
-                lineName,
-                expYears,
-                currentSalary,
-                registeredDate: new Date().toISOString()
-            };
-
+            currentUser = { userId, lineName, expYears, currentSalary, registeredDate: new Date().toISOString() };
             localStorage.setItem('currentUser_' + userId, JSON.stringify(currentUser));
             showMainContent();
         }
@@ -248,7 +235,6 @@
                 const data = await response.json();
                 questionsData = data.questions;
                 
-                // 全体の回答履歴を読み込み
                 const saved = localStorage.getItem('allAnswers_' + userId);
                 if (saved) allAnswerHistory = JSON.parse(saved);
                 
@@ -266,12 +252,11 @@
 
         function startQuiz() {
             currentMode = document.getElementById('quizMode').value;
-            sessionAnswers = {}; // 新しいセッションで初期化
+            sessionAnswers = {};
             isAnsweredInSession = false;
 
             let filtered = [...questionsData];
 
-            // フィルタリング処理
             if (currentMode === 'category') {
                 const category = document.getElementById('category').value;
                 if (category !== 'all') {
@@ -302,29 +287,21 @@
 
         function showQuestion() {
             if (currentQuestionList.length === 0) {
-                document.getElementById('quizContent').innerHTML = '<div class="alert alert-error">問題がありません</div>';
+                document.getElementById('quizContent').innerHTML = '<div class="alert alert-error">すべての問題が終了しました</div>';
                 return;
             }
 
-            let question;
-            if (currentMode === 'random') {
-                const idx = Math.floor(Math.random() * currentQuestionList.length);
-                question = currentQuestionList[idx];
-            } else {
-                question = currentQuestionList[0];
-            }
-
+            const question = currentQuestionList[0];
             currentQuestion = question;
             const sessionAnswered = sessionAnswers[question.id];
 
-            // セッション情報を表示
-            let sessionInfo = `出題モード: ${getModeLabel(currentMode)} | 回答: ${Object.keys(sessionAnswers).length}`;
-            document.getElementById('sessionInfo').textContent = sessionInfo;
+            let modeLabel = { 'sequential': '順序通り', 'category': '分野別', 'year': '年代別', 'unanswered': '未回答のみ', 'wrong': '間違えた問題のみ' }[currentMode];
+            document.getElementById('sessionInfo').textContent = `モード: ${modeLabel} | 残り: ${currentQuestionList.length - 1}問`;
 
             let html = `<div class="quiz-card">
                 <div style="display: flex; justify-content: space-between; border-bottom: 2px solid #f0f0f0; padding-bottom: 15px; margin-bottom: 15px;">
                     <span style="color: #ff6b35; font-weight: 600;">問題 ${question.question_number}</span>
-                    <span style="color: #999; font-size: 12px;">${Object.keys(sessionAnswers).length}/${currentQuestionList.length}</span>
+                    <span style="color: #999; font-size: 12px;">${Object.keys(sessionAnswers).length + 1}/${currentQuestionList.length + Object.keys(sessionAnswers).length}</span>
                 </div>
                 <div class="question-text">${question.question_text}</div>`;
 
@@ -351,7 +328,7 @@
 
             html += `<div class="button-group">
                 <button class="btn-secondary" onclick="switchTab('home')">ホーム</button>
-                <button class="btn-primary" onclick="nextQuestion()">${sessionAnswered ? (currentMode === 'random' ? 'クイズを終了' : '次の問題') : '答える'}</button>
+                <button class="btn-primary" onclick="nextQuestion()">${sessionAnswered ? '次の問題' : '答える'}</button>
             </div></div>`;
 
             document.getElementById('quizContent').innerHTML = html;
@@ -363,19 +340,8 @@
             const question = currentQuestion;
             const isCorrect = answer == question.correct_answer;
 
-            // セッション回答を記録
-            sessionAnswers[question.id] = {
-                answer,
-                correct: isCorrect,
-                timestamp: Date.now()
-            };
-
-            // 全体回答履歴を記録
-            allAnswerHistory[question.id] = {
-                answer,
-                correct: isCorrect,
-                timestamp: Date.now()
-            };
+            sessionAnswers[question.id] = { answer, correct: isCorrect, timestamp: Date.now() };
+            allAnswerHistory[question.id] = { answer, correct: isCorrect, timestamp: Date.now() };
             
             localStorage.setItem('allAnswers_' + userId, JSON.stringify(allAnswerHistory));
             
@@ -385,28 +351,9 @@
         }
 
         function nextQuestion() {
-            if (currentMode === 'random') {
-                // ランダムモードは1問で終了
-                switchTab('home');
-                currentQuestionList = [];
-            } else {
-                // その他のモードは次の問題へ
-                currentQuestionList.shift();
-                isAnsweredInSession = false;
-                showQuestion();
-            }
-        }
-
-        function getModeLabel(mode) {
-            const labels = {
-                'random': 'ランダム1問',
-                'category': '分野別',
-                'year': '年代別',
-                'sequential': '順序通り',
-                'unanswered': '未回答のみ',
-                'wrong': '間違えた問題のみ'
-            };
-            return labels[mode] || mode;
+            currentQuestionList.shift();
+            isAnsweredInSession = false;
+            showQuestion();
         }
 
         function switchTab(tabName) {

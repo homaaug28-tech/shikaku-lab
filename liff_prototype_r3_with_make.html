@@ -18,7 +18,8 @@
         .tab-content.active { display: block; }
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #333; font-size: 14px; }
-        .form-group input, .form-group select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+        .form-group select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+        .form-group input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
         .btn-primary { background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%); color: white; padding: 15px; border: none; border-radius: 8px; width: 100%; font-weight: 600; cursor: pointer; }
         .btn-secondary { background: #f0f0f0; color: #333; padding: 15px; border: none; border-radius: 8px; cursor: pointer; }
         .quiz-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 20px; }
@@ -39,6 +40,8 @@
         .modal-content { background: white; padding: 30px; border-radius: 12px; max-width: 90%; max-height: 80vh; overflow-y: auto; }
         .info-text { font-size: 12px; color: #999; margin-top: 4px; }
         .session-info { background: #e3f2fd; padding: 10px; border-radius: 6px; margin-bottom: 15px; font-size: 13px; color: #1565c0; }
+        .layer-section { background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 2px solid #e0e0e0; }
+        .layer-title { font-weight: 700; color: #ff6b35; margin-bottom: 10px; font-size: 14px; }
     </style>
 </head>
 <body>
@@ -89,37 +92,64 @@
                         <a href="#" onclick="logout(); return false;" style="float: right; color: #ff6b35;">ログアウト</a>
                     </div>
 
-                    <h2 style="font-size: 20px; margin: 20px 0 10px;">学習設定</h2>
+                    <h2 style="font-size: 20px; margin: 20px 0 10px;">出題設定</h2>
                     
-                    <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <!-- 第一階層 -->
+                    <div class="layer-section">
+                        <div class="layer-title">第一階層：試験回 / 分野指定</div>
+                        
                         <div class="form-group">
-                            <label>出題モード</label>
-                            <select id="quizMode" onchange="updateQuizModeOptions()">
-                                <option value="sequential">順序通りに出題</option>
-                                <option value="category">分野別出題</option>
-                                <option value="year">年代別出題</option>
-                                <option value="unanswered">未回答問題のみ</option>
-                                <option value="wrong">間違えた問題のみ</option>
+                            <label>試験回または分野を選択</label>
+                            <select id="layer1" onchange="updateQuizOptions()">
+                                <option value="year">試験回指定</option>
+                                <option value="category">分野指定</option>
                             </select>
                         </div>
 
-                        <div class="form-group" id="categoryGroup" style="display: none;">
+                        <div id="yearSelectGroup" class="form-group">
+                            <label>試験年度</label>
+                            <select id="yearSelect">
+                                <option value="R3">令和3年度</option>
+                                <option value="R4">令和4年度</option>
+                                <option value="R5">令和5年度</option>
+                                <option value="R6">令和6年度</option>
+                                <option value="R7">令和7年度</option>
+                            </select>
+                        </div>
+
+                        <div id="categorySelectGroup" class="form-group" style="display: none;">
                             <label>分野</label>
-                            <select id="category">
-                                <option value="all">全分野</option>
+                            <select id="categorySelect">
                                 <option value="施工技術">施工技術</option>
                                 <option value="法令・制度">法令・制度</option>
                                 <option value="構造・材料">構造・材料</option>
                                 <option value="その他">その他</option>
                             </select>
                         </div>
+                    </div>
 
-                        <div class="form-group" id="yearGroup" style="display: none;">
-                            <label>年度選択</label>
-                            <select id="yearSelect">
-                                <option value="all">全年度</option>
-                                <option value="R3">令和3年度</option>
-                                <option value="latest">最新年度のみ</option>
+                    <!-- 第二階層 -->
+                    <div class="layer-section">
+                        <div class="layer-title">第二階層：出題順序</div>
+                        
+                        <div class="form-group">
+                            <label>出題順序</label>
+                            <select id="layer2">
+                                <option value="sequential">順番通りに出題</option>
+                                <option value="random">ランダムに出題</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- 第三階層 -->
+                    <div class="layer-section">
+                        <div class="layer-title">第三階層：出題問題</div>
+                        
+                        <div class="form-group">
+                            <label>出題内容</label>
+                            <select id="layer3">
+                                <option value="all">全問出題</option>
+                                <option value="wrong">間違えた問題だけ出題</option>
                             </select>
                         </div>
                     </div>
@@ -177,11 +207,11 @@
         let allAnswerHistory = {};
         let sessionAnswers = {};
         let currentQuestion = null;
-        let currentMode = 'sequential';
         let currentUser = null;
         let userId = null;
         let currentQuestionList = [];
         let isAnsweredInSession = false;
+        let quizSettings = {};
 
         const REPO_BASE = window.location.pathname.includes('/shikaku-lab/') ? '/shikaku-lab/' : '/';
 
@@ -244,43 +274,50 @@
             }
         }
 
-        function updateQuizModeOptions() {
-            const mode = document.getElementById('quizMode').value;
-            document.getElementById('categoryGroup').style.display = (mode === 'category') ? 'block' : 'none';
-            document.getElementById('yearGroup').style.display = (mode === 'year') ? 'block' : 'none';
+        function updateQuizOptions() {
+            const layer1 = document.getElementById('layer1').value;
+            document.getElementById('yearSelectGroup').style.display = (layer1 === 'year') ? 'block' : 'none';
+            document.getElementById('categorySelectGroup').style.display = (layer1 === 'category') ? 'block' : 'none';
         }
 
         function startQuiz() {
-            currentMode = document.getElementById('quizMode').value;
-            sessionAnswers = {};
-            isAnsweredInSession = false;
+            const layer1 = document.getElementById('layer1').value;
+            const layer2 = document.getElementById('layer2').value;
+            const layer3 = document.getElementById('layer3').value;
 
             let filtered = [...questionsData];
 
-            if (currentMode === 'category') {
-                const category = document.getElementById('category').value;
-                if (category !== 'all') {
-                    filtered = filtered.filter(q => q.category === category);
-                }
-            } else if (currentMode === 'year') {
+            // 第一階層フィルタ
+            if (layer1 === 'year') {
                 const year = document.getElementById('yearSelect').value;
-                if (year !== 'all' && year !== 'latest') {
-                    filtered = filtered.filter(q => q.year && q.year.includes(year));
-                } else if (year === 'latest') {
-                    filtered = filtered.filter(q => q.year && q.year.includes('R3'));
-                }
-            } else if (currentMode === 'unanswered') {
-                filtered = filtered.filter(q => !allAnswerHistory[q.id]);
-            } else if (currentMode === 'wrong') {
-                filtered = filtered.filter(q => allAnswerHistory[q.id] && !allAnswerHistory[q.id].correct);
+                quizSettings.filterName = `${year}年度`;
+            } else if (layer1 === 'category') {
+                const category = document.getElementById('categorySelect').value;
+                filtered = filtered.filter(q => q.category === category);
+                quizSettings.filterName = `${category}`;
             }
 
-            if (filtered.length === 0) {
-                alert('該当する問題がありません');
-                return;
+            // 第三階層フィルタ
+            if (layer3 === 'wrong') {
+                filtered = filtered.filter(q => allAnswerHistory[q.id] && !allAnswerHistory[q.id].correct);
+                if (filtered.length === 0) {
+                    alert('間違えた問題がありません');
+                    return;
+                }
             }
+
+            // 第二階層でシャッフル
+            if (layer2 === 'random') {
+                filtered = filtered.sort(() => Math.random() - 0.5);
+            }
+
+            quizSettings.order = layer2 === 'sequential' ? '順番通り' : 'ランダム';
+            quizSettings.type = layer3 === 'all' ? '全問' : '間違えた問題のみ';
 
             currentQuestionList = filtered;
+            sessionAnswers = {};
+            isAnsweredInSession = false;
+            
             switchTab('quiz');
             showQuestion();
         }
@@ -295,8 +332,8 @@
             currentQuestion = question;
             const sessionAnswered = sessionAnswers[question.id];
 
-            let modeLabel = { 'sequential': '順序通り', 'category': '分野別', 'year': '年代別', 'unanswered': '未回答のみ', 'wrong': '間違えた問題のみ' }[currentMode];
-            document.getElementById('sessionInfo').textContent = `モード: ${modeLabel} | 残り: ${currentQuestionList.length - 1}問`;
+            document.getElementById('sessionInfo').textContent = 
+                `${quizSettings.filterName} | ${quizSettings.order} | ${quizSettings.type} | 残り: ${currentQuestionList.length - 1}問`;
 
             let html = `<div class="quiz-card">
                 <div style="display: flex; justify-content: space-between; border-bottom: 2px solid #f0f0f0; padding-bottom: 15px; margin-bottom: 15px;">

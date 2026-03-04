@@ -34,6 +34,7 @@
         .alert { padding: 15px; border-radius: 8px; margin: 15px 0; }
         .alert-success { background: #e8f5e9; color: #2e7d32; }
         .alert-error { background: #ffebee; color: #c62828; }
+        .alert-info { background: #e3f2fd; color: #1565c0; }
         .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .stat { background: white; padding: 15px; border-radius: 8px; text-align: center; }
         .stat-value { font-size: 24px; font-weight: 700; color: #ff6b35; }
@@ -46,6 +47,8 @@
         .explanation-section { background: #fff3e0; padding: 15px; border-radius: 8px; margin-top: 15px; border-left: 4px solid #ff9800; }
         .explanation-title { font-weight: 600; color: #e65100; margin-bottom: 8px; }
         .explanation-text { color: #666; font-size: 14px; line-height: 1.6; }
+        .completion-message { text-align: center; padding: 40px 20px; }
+        .completion-icon { font-size: 60px; margin: 20px 0; }
     </style>
 </head>
 <body>
@@ -319,7 +322,25 @@
 
         function showQuestion() {
             if (currentQuestionList.length === 0) {
-                document.getElementById('quizContent').innerHTML = '<div class="alert alert-error">すべての問題が終了しました</div>';
+                const correct = Object.values(sessionAnswers).filter(a => a.correct).length;
+                const total = Object.keys(sessionAnswers).length;
+                const rate = total > 0 ? Math.round(correct / total * 100) : 0;
+                
+                let html = `<div class="completion-message">
+                    <div class="completion-icon">🎉</div>
+                    <h2>すべての問題が終了しました！</h2>
+                    <div style="margin: 20px 0; font-size: 16px; color: #666;">
+                        <p style="margin: 10px 0;"><strong>このセッション</strong></p>
+                        <p style="font-size: 24px; color: #ff6b35; font-weight: 700; margin: 10px 0;">${rate}%</p>
+                        <p style="margin: 10px 0; font-size: 14px;">
+                            正解: <strong style="color: #4caf50;">${correct}問</strong> / 
+                            不正解: <strong style="color: #f44336;">${total - correct}問</strong>
+                        </p>
+                    </div>
+                    <button class="btn-primary" onclick="switchTab('home')" style="margin-top: 20px;">ホームに戻る</button>
+                </div>`;
+                
+                document.getElementById('quizContent').innerHTML = html;
                 return;
             }
 
@@ -361,10 +382,16 @@
                 </div>
                 <p style="color: #666; font-size: 13px;"><strong>正答: (${question.correct_answer})</strong></p>`;
                 
+                // 解説表示（ToComeでなければ表示）
                 if (question.explanation && question.explanation !== '【ToCome】') {
                     html += `<div class="explanation-section">
                         <div class="explanation-title">📖 解説</div>
                         <div class="explanation-text">${question.explanation}</div>
+                    </div>`;
+                } else {
+                    html += `<div class="alert alert-info">
+                        <strong>💡 解説</strong><br>
+                        この問題の解説は準備中です
                     </div>`;
                 }
             }

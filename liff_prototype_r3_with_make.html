@@ -3,570 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>建設シカクLAB - 解体工事施工技士試験</title>
+    <title>建設シカクLAB</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: #333;
-        }
-
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            background: white;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
-            color: white;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .header h1 {
-            font-size: 24px;
-            margin-bottom: 5px;
-        }
-
-        .header p {
-            font-size: 12px;
-            opacity: 0.9;
-        }
-
-        .tab-nav {
-            display: flex;
-            background: #f5f5f5;
-            border-bottom: 1px solid #ddd;
-            overflow-x: auto;
-        }
-
-        .tab-nav button {
-            flex: 1;
-            padding: 15px;
-            border: none;
-            background: transparent;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            color: #666;
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s;
-            min-width: 80px;
-        }
-
-        .tab-nav button.active {
-            color: #ff6b35;
-            border-bottom-color: #ff6b35;
-        }
-
-        .tab-nav button:hover {
-            background: white;
-        }
-
-        .content {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-            animation: fadeIn 0.3s;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .registration-form {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        .registration-form h2 {
-            margin-bottom: 20px;
-            color: #333;
-            font-size: 18px;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            font-size: 14px;
-            color: #333;
-        }
-
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 14px;
-        }
-
-        .form-group input:focus, .form-group select:focus {
-            outline: none;
-            border-color: #ff6b35;
-        }
-
-        .home-section {
-            text-align: center;
-        }
-
-        .home-section h2 {
-            font-size: 20px;
-            margin: 20px 0 10px;
-            color: #333;
-        }
-
-        .home-section p {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
-
-        .filter-section {
-            background: #f9f9f9;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
-        .filter-group {
-            margin-bottom: 15px;
-        }
-
-        .filter-group label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-            font-size: 14px;
-            color: #333;
-        }
-
-        select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-
-        .btn-primary, .btn-secondary {
-            padding: 15px 20px;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
-            color: white;
-            width: 100%;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
-        }
-
-        .btn-secondary {
-            background: #f0f0f0;
-            color: #333;
-        }
-
-        .quiz-card {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-
-        .quiz-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #f0f0f0;
-        }
-
-        .quiz-header .question-number {
-            font-weight: 600;
-            color: #ff6b35;
-        }
-
-        .quiz-header .progress {
-            font-size: 12px;
-            color: #999;
-        }
-
-        .question-text {
-            font-size: 16px;
-            font-weight: 600;
-            margin: 15px 0;
-            line-height: 1.6;
-            color: #333;
-        }
-
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin: 20px 0;
-        }
-
-        .option-btn {
-            padding: 15px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            background: white;
-            cursor: pointer;
-            text-align: left;
-            font-size: 14px;
-            transition: all 0.3s;
-        }
-
-        .option-btn:hover {
-            border-color: #ff6b35;
-            background: #fff9f5;
-        }
-
-        .option-btn.selected {
-            border-color: #ff6b35;
-            background: #fff9f5;
-        }
-
-        .option-btn.correct {
-            border-color: #4caf50;
-            background: #f1f8f4;
-            color: #2e7d32;
-        }
-
-        .option-btn.incorrect {
-            border-color: #f44336;
-            background: #feebee;
-            color: #c62828;
-        }
-
-        .button-group-center {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .button-group-center button {
-            flex: 1;
-        }
-
-        .stats-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .stats-card .value {
-            font-size: 32px;
-            font-weight: 700;
-        }
-
-        .achievement-section {
-            background: #f9f9f9;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
-        .achievement-item {
-            background: white;
-            padding: 12px;
-            border-radius: 6px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .achievement-item .label {
-            font-size: 14px;
-            color: #666;
-        }
-
-        .achievement-item .value {
-            font-weight: 600;
-            color: #ff6b35;
-        }
-
-        .alert {
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 14px;
-        }
-
-        .alert-success {
-            background: #e8f5e9;
-            color: #2e7d32;
-            border-left: 4px solid #4caf50;
-        }
-
-        .alert-error {
-            background: #ffebee;
-            color: #c62828;
-            border-left: 4px solid #f44336;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .stat-small {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        }
-
-        .stat-small .label {
-            font-size: 12px;
-            color: #999;
-            margin-bottom: 5px;
-        }
-
-        .stat-small .value {
-            font-size: 24px;
-            font-weight: 700;
-            color: #ff6b35;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            max-width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-        }
-
-        .user-info {
-            background: #f9f9f9;
-            padding: 12px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            font-size: 13px;
-            color: #666;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; color: #333; }
+        .container { max-width: 500px; margin: 0 auto; padding: 0; min-height: 100vh; display: flex; flex-direction: column; background: white; }
+        .header { background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%); color: white; padding: 20px; text-align: center; }
+        .header h1 { font-size: 24px; margin-bottom: 5px; }
+        .tab-nav { display: flex; background: #f5f5f5; border-bottom: 1px solid #ddd; }
+        .tab-nav button { flex: 1; padding: 15px; border: none; background: transparent; cursor: pointer; font-size: 14px; font-weight: 500; color: #666; border-bottom: 3px solid transparent; }
+        .tab-nav button.active { color: #ff6b35; border-bottom-color: #ff6b35; }
+        .content { flex: 1; overflow-y: auto; padding: 20px; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #333; }
+        .form-group input, .form-group select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+        .btn-primary { background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%); color: white; padding: 15px; border: none; border-radius: 8px; width: 100%; font-weight: 600; cursor: pointer; }
+        .btn-secondary { background: #f0f0f0; color: #333; padding: 15px; border: none; border-radius: 8px; cursor: pointer; }
+        .quiz-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .question-text { font-size: 16px; font-weight: 600; margin: 15px 0; }
+        .option-btn { padding: 15px; border: 2px solid #ddd; border-radius: 8px; background: white; cursor: pointer; text-align: left; font-size: 14px; margin: 10px 0; width: 100%; }
+        .option-btn:hover { border-color: #ff6b35; background: #fff9f5; }
+        .option-btn.correct { border-color: #4caf50; background: #f1f8f4; color: #2e7d32; }
+        .option-btn.incorrect { border-color: #f44336; background: #feebee; color: #c62828; }
+        .button-group { display: flex; gap: 10px; margin-top: 20px; }
+        .button-group button { flex: 1; }
+        .alert { padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+        .alert-success { background: #e8f5e9; color: #2e7d32; }
+        .alert-error { background: #ffebee; color: #c62828; }
+        .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .stat { background: white; padding: 15px; border-radius: 8px; text-align: center; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <h1>建設シカクLAB</h1>
-            <p>解体工事施工技士試験対策</p>
+            <p style="font-size: 12px; opacity: 0.9;">解体工事施工技士試験対策</p>
         </div>
 
-        <!-- ユーザー登録モーダル -->
-        <div id="registrationModal" class="modal active">
-            <div class="modal-content">
-                <div class="registration-form">
-                    <h2>初回登録</h2>
-                    <p style="color: #666; margin-bottom: 20px; font-size: 14px;">
-                        学習を開始する前に、プロフィールを入力してください
-                    </p>
-
-                    <div class="form-group">
-                        <label>LINE 表示名</label>
-                        <input type="text" id="lineName" placeholder="例：山田太郎" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label>業界経験年数</label>
-                        <select id="expYears" required>
-                            <option value="">選択してください</option>
-                            <option value="0">未経験</option>
-                            <option value="1">1年未満</option>
-                            <option value="1-3">1～3年</option>
-                            <option value="3-5">3～5年</option>
-                            <option value="5-10">5～10年</option>
-                            <option value="10">10年以上</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>現在の給与（万円/年）</label>
-                        <input type="number" id="currentSalary" placeholder="例：400" min="0">
-                    </div>
-
-                    <button class="btn-primary" onclick="registerUser()" style="margin-top: 20px;">
-                        登録して開始
-                    </button>
+        <div id="registrationModal" style="display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 1000;" id="modal">
+            <div style="background: white; padding: 30px; border-radius: 12px; max-width: 90%;">
+                <h2>初回登録</h2>
+                <div class="form-group">
+                    <label>LINE 表示名</label>
+                    <input type="text" id="lineName" placeholder="例：山田太郎" required>
                 </div>
+                <div class="form-group">
+                    <label>業界経験年数</label>
+                    <select id="expYears" required>
+                        <option value="">選択してください</option>
+                        <option value="0">未経験</option>
+                        <option value="1">1年未満</option>
+                        <option value="1-3">1～3年</option>
+                        <option value="3-5">3～5年</option>
+                        <option value="5-10">5～10年</option>
+                        <option value="10">10年以上</option>
+                    </select>
+                </div>
+                <button class="btn-primary" onclick="registerUser()">登録して開始</button>
             </div>
         </div>
 
-        <!-- メインコンテンツ -->
         <div id="mainContent" style="display: none; flex: 1; display: flex; flex-direction: column;">
             <div class="tab-nav">
-                <button class="tab-btn active" data-tab="home">ホーム</button>
-                <button class="tab-btn" data-tab="quiz">クイズ</button>
-                <button class="tab-btn" data-tab="mypage">マイページ</button>
+                <button class="tab-btn active" data-tab="home" onclick="switchTab('home')">ホーム</button>
+                <button class="tab-btn" data-tab="quiz" onclick="switchTab('quiz')">クイズ</button>
+                <button class="tab-btn" data-tab="mypage" onclick="switchTab('mypage')">マイページ</button>
             </div>
 
             <div class="content">
-                <!-- ホーム -->
                 <div id="home" class="tab-content active">
-                    <div class="home-section">
-                        <div class="user-info">
-                            <strong id="displayUserName"></strong> でログイン中
-                            <a href="#" onclick="logout()" style="float: right; color: #ff6b35; text-decoration: none; font-size: 12px;">ログアウト</a>
-                        </div>
-
-                        <h2>令和3年度 四択問題</h2>
-                        <p>全45問で実際の試験に近い体験を！</p>
-                        
-                        <div class="filter-section">
-                            <div class="filter-group">
-                                <label>出題方式</label>
-                                <select id="quizMode">
-                                    <option value="random">ランダムに1問出題</option>
-                                    <option value="sequential">順序通りに出題</option>
-                                    <option value="wrong">間違えた問題を出題</option>
-                                </select>
-                            </div>
-
-                            <div class="filter-group">
-                                <label>難易度</label>
-                                <select id="difficulty">
-                                    <option value="all">すべて</option>
-                                    <option value="easy">易</option>
-                                    <option value="medium">中</option>
-                                    <option value="hard">難</option>
-                                </select>
-                            </div>
-
-                            <div class="filter-group">
-                                <label>分野</label>
-                                <select id="category">
-                                    <option value="all">全分野</option>
-                                    <option value="施工技術">施工技術</option>
-                                    <option value="法令・制度">法令・制度</option>
-                                    <option value="構造・材料">構造・材料</option>
-                                    <option value="その他">その他</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <button class="btn-primary" onclick="startQuiz()">クイズを開始</button>
-
-                        <div style="margin-top: 30px;">
-                            <h3 style="margin-bottom: 15px;">学習進度</h3>
-                            <div class="stats-grid">
-                                <div class="stat-small">
-                                    <div class="label">回答済み</div>
-                                    <div class="value" id="answered">0</div>
-                                </div>
-                                <div class="stat-small">
-                                    <div class="label">正答率</div>
-                                    <div class="value" id="correctRate">0%</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- クイズ -->
-                <div id="quiz" class="tab-content">
-                    <div id="quizContent">
-                        <p>クイズを読み込み中...</p>
-                    </div>
-                </div>
-
-                <!-- マイページ -->
-                <div id="mypage" class="tab-content">
-                    <h2 style="margin-bottom: 20px;">学習成績</h2>
+                    <h2>令和3年度 四択問題</h2>
+                    <p>全45問で実際の試験に近い体験を！</p>
                     
-                    <div class="stats-card">
-                        <h3>正答率</h3>
-                        <div class="value" id="myCorrectRate">0%</div>
+                    <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                        <div class="form-group">
+                            <label>出題方式</label>
+                            <select id="quizMode">
+                                <option value="random">ランダムに1問出題</option>
+                                <option value="sequential">順序通りに出題</option>
+                            </select>
+                        </div>
                     </div>
 
-                    <div class="achievement-section">
+                    <button class="btn-primary" onclick="startQuiz()">クイズを開始</button>
+
+                    <div style="margin-top: 30px;">
+                        <h3>学習進度</h3>
+                        <div class="stats">
+                            <div class="stat">
+                                <div style="font-size: 12px; color: #999;">回答済み</div>
+                                <div style="font-size: 24px; font-weight: 700; color: #ff6b35;" id="answered">0</div>
+                            </div>
+                            <div class="stat">
+                                <div style="font-size: 12px; color: #999;">正答率</div>
+                                <div style="font-size: 24px; font-weight: 700; color: #ff6b35;" id="correctRate">0%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="quiz" class="tab-content">
+                    <div id="quizContent">クイズを読み込み中...</div>
+                </div>
+
+                <div id="mypage" class="tab-content">
+                    <h2>学習成績</h2>
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 12px; text-align: center; margin-bottom: 20px;">
+                        <div>正答率</div>
+                        <div style="font-size: 32px; font-weight: 700;" id="myCorrectRate">0%</div>
+                    </div>
+                    <div style="background: #f9f9f9; padding: 15px; border-radius: 8px;">
                         <h3>統計情報</h3>
-                        <div class="achievement-item">
-                            <span class="label">総問題数</span>
-                            <span class="value">45問</span>
+                        <div style="padding: 12px; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between;">
+                            <span>回答済み</span>
+                            <span id="myAnswered" style="font-weight: 600;">0問</span>
                         </div>
-                        <div class="achievement-item">
-                            <span class="label">回答済み</span>
-                            <span class="value" id="myAnswered">0問</span>
+                        <div style="padding: 12px; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between;">
+                            <span>正解</span>
+                            <span id="myCorrect" style="font-weight: 600;">0問</span>
                         </div>
-                        <div class="achievement-item">
-                            <span class="label">正解</span>
-                            <span class="value" id="myCorrect">0問</span>
-                        </div>
-                        <div class="achievement-item">
-                            <span class="label">不正解</span>
-                            <span class="value" id="myWrong">0問</span>
+                        <div style="padding: 12px; display: flex; justify-content: space-between;">
+                            <span>不正解</span>
+                            <span id="myWrong" style="font-weight: 600;">0問</span>
                         </div>
                     </div>
-
-                    <button class="btn-primary" onclick="clearData()" style="margin-top: 20px;">
-                        データをリセット
-                    </button>
                 </div>
             </div>
         </div>
@@ -579,8 +142,8 @@
         let currentMode = 'random';
         let currentUser = null;
         let userId = null;
+        let allQuestionsList = [];
 
-        const WEBHOOK_URL = 'https://hook.eu1.make.com/lgfnj52lgwbcy5c1r8u1dt2huvp95xfw';
         const REPO_BASE = window.location.pathname.includes('/shikaku-lab/') ? '/shikaku-lab/' : '/';
 
         function init() {
@@ -594,81 +157,49 @@
             if (saved) {
                 currentUser = JSON.parse(saved);
                 showMainContent();
-            } else {
-                showRegistrationForm();
             }
         }
 
         function registerUser() {
             const lineName = document.getElementById('lineName').value.trim();
             const expYears = document.getElementById('expYears').value;
-            const currentSalary = document.getElementById('currentSalary').value || '';
 
             if (!lineName || !expYears) {
                 alert('必須項目を入力してください');
                 return;
             }
 
-            currentUser = {
-                userId: userId,
-                lineName: lineName,
-                expYears: expYears,
-                currentSalary: currentSalary,
-                registeredDate: new Date().toISOString()
-            };
-
+            currentUser = { userId, lineName, expYears };
             localStorage.setItem('currentUser_' + userId, JSON.stringify(currentUser));
-
-            sendToMake({
-                action: 'register_user',
-                userId: userId,
-                lineName: lineName,
-                expYears: expYears,
-                currentSalary: currentSalary
-            });
-
             showMainContent();
         }
 
-        function showRegistrationForm() {
-            document.getElementById('registrationModal').classList.add('active');
-            document.getElementById('mainContent').style.display = 'none';
-        }
-
         function showMainContent() {
-            document.getElementById('registrationModal').classList.remove('active');
+            document.getElementById('registrationModal').style.display = 'none';
             document.getElementById('mainContent').style.display = 'flex';
-            document.getElementById('displayUserName').textContent = currentUser.lineName;
         }
 
         async function loadQuestions() {
             try {
                 const url = REPO_BASE + 'questions_R3.json';
-                console.log('Loading from:', url);
-                
                 const response = await fetch(url);
-                if (!response.ok) {
-                    throw new Error('HTTP ' + response.status);
-                }
+                if (!response.ok) throw new Error('HTTP ' + response.status);
                 
                 const data = await response.json();
                 questionsData = data.questions;
+                allQuestionsList = [...questionsData];
                 console.log('Loaded ' + questionsData.length + ' questions');
                 
                 loadAnswerHistory();
                 updateStats();
             } catch (err) {
                 console.error('Load error:', err);
-                document.getElementById('quizContent').innerHTML = 
-                    '<div class="alert alert-error">データ読み込みエラー: ' + err.message + '</div>';
             }
         }
 
         function loadAnswerHistory() {
             const saved = localStorage.getItem('userAnswers_' + userId);
-            if (saved) {
-                userAnswers = JSON.parse(saved);
-            }
+            if (saved) userAnswers = JSON.parse(saved);
         }
 
         function saveAnswerHistory() {
@@ -676,103 +207,60 @@
             updateStats();
         }
 
-        async function sendToMake(data) {
-            try {
-                await fetch(WEBHOOK_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        ...data,
-                        timestamp: new Date().toISOString()
-                    })
-                });
-            } catch (err) {
-                console.error('Webhook error:', err);
-            }
-        }
-
         function startQuiz() {
             currentMode = document.getElementById('quizMode').value;
-            const difficulty = document.getElementById('difficulty').value;
-            const category = document.getElementById('category').value;
-
-            let filtered = questionsData;
-
-            if (category !== 'all') {
-                filtered = filtered.filter(q => q.category === category);
-            }
-
-            if (currentMode === 'wrong') {
-                filtered = filtered.filter(q => {
-                    const ans = userAnswers[q.id];
-                    return ans && !ans.correct;
-                });
-                
-                if (filtered.length === 0) {
-                    alert('間違えた問題がありません！');
-                    return;
-                }
-            }
-
+            allQuestionsList = [...questionsData];
             switchTab('quiz');
-            showQuestion(filtered);
+            showQuestion();
         }
 
-        function showQuestion(questionList) {
-            if (questionList.length === 0) {
-                document.getElementById('quizContent').innerHTML = 
-                    '<div class="alert alert-error">問題がありません</div>';
+        function showQuestion() {
+            if (allQuestionsList.length === 0) {
+                document.getElementById('quizContent').innerHTML = '<div class="alert alert-error">問題がありません</div>';
                 return;
             }
 
-            const question = currentMode === 'random' 
-                ? questionList[Math.floor(Math.random() * questionList.length)]
-                : questionList[0];
+            let question;
+            if (currentMode === 'random') {
+                const idx = Math.floor(Math.random() * allQuestionsList.length);
+                question = allQuestionsList[idx];
+                allQuestionsList.splice(idx, 1);
+            } else {
+                question = allQuestionsList.shift();
+            }
 
-            currentQuestion = { ...question, questionList };
+            currentQuestion = question;
 
             const answered = userAnswers[question.id];
-            let html = `
-                <div class="quiz-card">
-                    <div class="quiz-header">
-                        <span class="question-number">問題 ${question.question_number}</span>
-                        <span class="progress">${Object.keys(userAnswers).length}/${questionsData.length}</span>
-                    </div>
-                    <div class="question-text">${question.question_text}</div>
-                    <div class="options">
-            `;
+            let html = `<div class="quiz-card">
+                <div style="display: flex; justify-content: space-between; border-bottom: 2px solid #f0f0f0; padding-bottom: 15px; margin-bottom: 15px;">
+                    <span style="color: #ff6b35; font-weight: 600;">問題 ${question.question_number}</span>
+                    <span style="color: #999; font-size: 12px;">${Object.keys(userAnswers).length}/${questionsData.length}</span>
+                </div>
+                <div class="question-text">${question.question_text}</div>`;
 
             Object.keys(question.options).forEach(num => {
                 const option = question.options[num];
                 let className = 'option-btn';
-                
                 if (answered) {
                     if (num == answered.answer) className += ' selected';
                     if (num == question.correct_answer) className += ' correct';
                     if (num == answered.answer && !answered.correct) className += ' incorrect';
                 }
-
                 html += `<button class="${className}" onclick="selectAnswer('${num}', ${!answered})">(${num}) ${option.text}</button>`;
             });
 
-            html += `</div>`;
-
             if (answered) {
-                html += `
-                    <div class="alert ${answered.correct ? 'alert-success' : 'alert-error'}">
-                        ${answered.correct ? '✓ 正解です！' : '✗ 不正解です'}
-                    </div>
-                    <p style="color: #666; font-size: 13px;">正答: (${question.correct_answer})</p>
-                `;
+                html += `<div class="alert ${answered.correct ? 'alert-success' : 'alert-error'}">
+                    ${answered.correct ? '✓ 正解です！' : '✗ 不正解です'}
+                </div>
+                <p style="color: #666; font-size: 13px;">正答: (${question.correct_answer})</p>`;
             }
 
-            html += `
-                    <div class="button-group-center">
-                        <button class="btn-secondary" onclick="switchTab('home')">ホームに戻る</button>
-                        <button class="btn-primary" onclick="nextQuestion()">${answered ? '次の問題' : '答える'}</button>
-                    </div>
-                </div>
-            `;
+            html += `<div class="button-group">
+                <button class="btn-secondary" onclick="switchTab('home')">ホーム</button>
+                <button class="btn-primary" onclick="nextQuestion()">${answered ? '次の問題' : '答える'}</button>
+            </div></div>`;
 
             document.getElementById('quizContent').innerHTML = html;
         }
@@ -783,27 +271,13 @@
             const question = currentQuestion;
             const isCorrect = answer == question.correct_answer;
 
-            userAnswers[question.id] = {
-                answer: answer,
-                correct: isCorrect,
-                timestamp: new Date().getTime()
-            };
-
+            userAnswers[question.id] = { answer, correct: isCorrect, timestamp: Date.now() };
             saveAnswerHistory();
-
-            sendToMake({
-                action: 'answer_question',
-                userId: userId,
-                questionId: question.id,
-                userAnswer: answer,
-                isCorrect: isCorrect
-            });
-
-            showQuestion([question]);
+            showQuestion();
         }
 
         function nextQuestion() {
-            showQuestion(currentQuestion.questionList);
+            showQuestion();
         }
 
         function switchTab(tabName) {
@@ -827,52 +301,11 @@
             const correct = Object.values(userAnswers).filter(a => a.correct).length;
             const wrong = answered - correct;
             const rate = answered > 0 ? Math.round(correct / answered * 100) : 0;
-
             document.getElementById('myCorrectRate').textContent = rate + '%';
             document.getElementById('myAnswered').textContent = answered + '問';
             document.getElementById('myCorrect').textContent = correct + '問';
             document.getElementById('myWrong').textContent = wrong + '問';
-
-            const categoryStats = {};
-            questionsData.forEach(q => {
-                if (!categoryStats[q.category]) {
-                    categoryStats[q.category] = { total: 0, correct: 0 };
-                }
-                categoryStats[q.category].total++;
-                const ans = userAnswers[q.id];
-                if (ans && ans.correct) categoryStats[q.category].correct++;
-            });
-
-            let html = '';
-            Object.entries(categoryStats).forEach(([cat, stats]) => {
-                const r = stats.total > 0 ? Math.round(stats.correct / stats.total * 100) : 0;
-                html += `<div class="achievement-item"><span class="label">${cat}</span><span class="value">${stats.correct}/${stats.total} (${r}%)</span></div>`;
-            });
-            document.getElementById('categoryStats').innerHTML = html;
         }
-
-        function clearData() {
-            if (confirm('すべてのデータを削除しますか？')) {
-                userAnswers = {};
-                localStorage.removeItem('userAnswers_' + userId);
-                updateStats();
-                updateMypageStats();
-                alert('リセットしました');
-            }
-        }
-
-        function logout() {
-            if (confirm('ログアウトしますか？')) {
-                currentUser = null;
-                localStorage.removeItem('currentUser_' + userId);
-                localStorage.removeItem('userAnswers_' + userId);
-                showRegistrationForm();
-            }
-        }
-
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', () => switchTab(btn.dataset.tab));
-        });
 
         window.addEventListener('DOMContentLoaded', init);
     </script>

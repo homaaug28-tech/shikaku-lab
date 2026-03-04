@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>建設シカクLAB</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; color: #333; }
+        .container { max-width: 500px; margin: 0 auto; padding: 0; min-height: 100vh; display: flex; flex-direction: column; background: white; }
+        .header { background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%); color: white; padding: 20px; text-align: center; }
+        .header h1 { font-size: 24px; margin-bottom: 5px; }
+        .tab-nav { display: flex; background: #f5f5f5; border-bottom: 1px solid #ddd; }
+        .tab-nav button { flex: 1; padding: 15px; border: none; background: transparent; cursor: pointer; font-size: 14px; font-weight: 500; color: #666; border-bottom: 3px solid transparent; }
+        .tab-nav button.active { color: #ff6b35; border-bottom-color: #ff6b35; }
+        .content { flex: 1; overflow-y: auto; padding: 20px; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #333; font-size: 14px; }
+        .form-group select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+        .form-group input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+        .btn-primary { background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%); color: white; padding: 15px; border: none; border-radius: 8px; width: 100%; font-weight: 600; cursor: pointer; }
+        .btn-secondary { background: #f0f0f0; color: #333; padding: 15px; border: none; border-radius: 8px; cursor: pointer; }
+        .quiz-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .question-text { font-size: 16px; font-weight: 600; margin: 15px 0; line-height: 1.6; }
+        .question-image { width: 100%; max-width: 100%; margin: 15px 0; border-radius: 8px; border: 1px solid #ddd; }
+        .option-btn { padding: 15px; border: 2px solid #ddd; border-radius: 8px; background: white; cursor: pointer; text-align: left; font-size: 14px; margin: 10px 0; width: 100%; }
+        .option-btn:hover { border-color: #ff6b35; background: #fff9f5; }
+        .option-btn.correct { border-color: #4caf50; background: #f1f8f4; color: #2e7d32; }
+        .option-btn.incorrect { border-color: #f44336; background: #feebee; color: #c62828; }
+        .button-group { display: flex; gap: 10px; margin-top: 20px; }
+        .button-group button { flex: 1; }
+        .alert { padding: 15px; border-radius: 8px; margin: 15px 0; }
+        .alert-success { background: #e8f5e9; color: #2e7d32; }
+        .alert-error { background: #ffebee; color: #c62828; }
+        .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .stat { background: white; padding: 15px; border-radius: 8px; text-align: center; }
+        .stat-value { font-size: 24px; font-weight: 700; color: #ff6b35; }
+        .modal { display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 1000; }
+        .modal-content { background: white; padding: 30px; border-radius: 12px; max-width: 90%; max-height: 80vh; overflow-y: auto; }
+        .info-text { font-size: 12px; color: #999; margin-top: 4px; }
+        .session-info { background: #e3f2fd; padding: 10px; border-radius: 6px; margin-bottom: 15px; font-size: 13px; color: #1565c0; }
+        .layer-section { background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 2px solid #e0e0e0; }
+        .layer-title { font-weight: 700; color: #ff6b35; margin-bottom: 10px; font-size: 14px; }
+        .explanation-section { background: #fff3e0; padding: 15px; border-radius: 8px; margin-top: 15px; border-left: 4px solid #ff9800; }
+        .explanation-title { font-weight: 600; color: #e65100; margin-bottom: 8px; }
+        .explanation-text { color: #666; font-size: 14px; line-height: 1.6; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>建設シカクLAB</h1>
+            <p style="font-size: 12px; opacity: 0.9;">解体工事施工技士試験対策（R6年度）</p>
+        </div>
+
+        <div id="registrationModal" class="modal" style="display: flex;">
+            <div class="modal-content">
+                <h2 style="margin-bottom: 20px;">初回登録</h2>
+                <div class="form-group">
+                    <label>LINE 表示名 <span style="color: #f44336;">*</span></label>
+                    <input type="text" id="lineName" placeholder="例：山田太郎" required>
+                </div>
+                <div class="form-group">
+                    <label>業界経験年数 <span style="color: #f44336;">*</span></label>
+                    <select id="expYears" required>
+                        <option value="">選択してください</option>
+                        <option value="0">未経験</option>
+                        <option value="1">1年未満</option>
+                        <option value="1-3">1～3年</option>
+                        <option value="3-5">3～5年</option>
+                        <option value="5-10">5～10年</option>
+                        <option value="10">10年以上</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>現在の給与（万円/年）</label>
+                    <input type="number" id="currentSalary" placeholder="例：400" min="0">
+                </div>
+                <button class="btn-primary" onclick="registerUser()" style="margin-top: 20px;">登録して開始</button>
+            </div>
+        </div>
+
+        <div id="mainContent" style="display: none; flex: 1; display: flex; flex-direction: column;">
+            <div class="tab-nav">
+                <button class="tab-btn active" data-tab="home" onclick="switchTab('home')">ホーム</button>
+                <button class="tab-btn" data-tab="quiz" onclick="switchTab('quiz')">クイズ</button>
+                <button class="tab-btn" data-tab="mypage" onclick="switchTab('mypage')">マイページ</button>
+            </div>
+
+            <div class="content">
+                <div id="home" class="tab-content active">
+                    <div style="background: #f9f9f9; padding: 12px; border-radius: 6px; margin-bottom: 15px; font-size: 13px;">
+                        <strong id="displayUserName"></strong> でログイン中
+                        <a href="#" onclick="logout(); return false;" style="float: right; color: #ff6b35;">ログアウト</a>
+                    </div>
+
+                    <h2 style="font-size: 20px; margin: 20px 0 10px;">出題設定</h2>
+                    
+                    <!-- 第一階層 -->
+                    <div class="layer-section">
+                        <div class="layer-title">第一階層：試験回 / 分野指定</div>
+                        
+                        <div class="form-group">
+                            <label>試験回または分野を選択</label>
+                            <select id="layer1" onchange="updateQuizOptions()">
+                                <option value="year">試験回指定（R6年度）</option>
+                                <option value="category">分野指定</option>
+                            </select>
+                        </div>
+
+                        <div id="categorySelectGroup" class="form-group" style="display: none;">
+                            <label>分野</label>
+                            <select id="categorySelect">
+                                <option value="全て">全て</option>
+                                <option value="施工技術">施工技術</option>
+                                <option value="法令・制度">法令・制度</option>
+                                <option value="構造・材料">構造・材料</option>
+                                <option value="その他">その他</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- 第二階層 -->
+                    <div class="layer-section">
+                        <div class="layer-title">第二階層：出題順序</div>
+                        
+                        <div class="form-group">
+                            <label>出題順序</label>
+                            <select id="layer2">
+                                <option value="sequential">順番通りに出題</option>
+                                <option value="random">ランダムに出題</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- 第三階層 -->
+                    <div class="layer-section">
+                        <div class="layer-title">第三階層：出題問題</div>
+                        
+                        <div class="form-group">
+                            <label>出題内容</label>
+                            <select id="layer3">
+                                <option value="all">全問出題</option>
+                                <option value="wrong">間違えた問題だけ出題</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button class="btn-primary" onclick="startQuiz()">クイズを開始</button>
+
+                    <div style="margin-top: 30px;">
+                        <h3 style="margin-bottom: 15px;">学習進度</h3>
+                        <div class="stats">
+                            <div class="stat">
+                                <div style="font-size: 12px; color: #999;">回答済み</div>
+                                <div class="stat-value" id="answered">0</div>
+                            </div>
+                            <div class="stat">
+                                <div style="font-size: 12px; color: #999;">正答率</div>
+                                <div class="stat-value" id="correctRate">0%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="quiz" class="tab-content">
+                    <div class="session-info" id="sessionInfo"></div>
+                    <div id="quizContent">クイズを読み込み中...</div>
+                </div>
+
+                <div id="mypage" class="tab-content">
+                    <h2 style="margin-bottom: 20px;">学習成績</h2>
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 12px; text-align: center; margin-bottom: 20px;">
+                        <div style="font-size: 14px; opacity: 0.9;">正答率</div>
+                        <div style="font-size: 32px; font-weight: 700;" id="myCorrectRate">0%</div>
+                    </div>
+                    <div style="background: #f9f9f9; padding: 15px; border-radius: 8px;">
+                        <h3 style="margin-bottom: 12px;">統計情報</h3>
+                        <div style="padding: 12px; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; font-size: 14px;">
+                            <span>回答済み</span>
+                            <span style="font-weight: 600;" id="myAnswered">0問</span>
+                        </div>
+                        <div style="padding: 12px; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; font-size: 14px;">
+                            <span>正解</span>
+                            <span style="font-weight: 600;" id="myCorrect">0問</span>
+                        </div>
+                        <div style="padding: 12px; display: flex; justify-content: space-between; font-size: 14px;">
+                            <span>不正解</span>
+                            <span style="font-weight: 600;" id="myWrong">0問</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let questionsData = [];
+        let allAnswerHistory = {};
+        let sessionAnswers = {};
+        let currentQuestion = null;
+        let currentUser = null;
+        let userId = null;
+        let currentQuestionList = [];
+        let isAnsweredInSession = false;
+        let quizSettings = {};
+
+        const REPO_BASE = window.location.pathname.includes('/shikaku-lab/') ? '/shikaku-lab/' : '/';
+
+        function init() {
+            userId = 'user_' + Date.now();
+            checkUser();
+            loadQuestions();
+        }
+
+        function checkUser() {
+            const saved = localStorage.getItem('currentUser_' + userId);
+            if (saved) {
+                currentUser = JSON.parse(saved);
+                showMainContent();
+            }
+        }
+
+        function registerUser() {
+            const lineName = document.getElementById('lineName').value.trim();
+            const expYears = document.getElementById('expYears').value;
+            const currentSalary = document.getElementById('currentSalary').value || '';
+
+            if (!lineName || !expYears) {
+                alert('必須項目を入力してください');
+                return;
+            }
+
+            currentUser = { userId, lineName, expYears, currentSalary, registeredDate: new Date().toISOString() };
+            localStorage.setItem('currentUser_' + userId, JSON.stringify(currentUser));
+            showMainContent();
+        }
+
+        function showMainContent() {
+            document.getElementById('registrationModal').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'flex';
+            document.getElementById('displayUserName').textContent = currentUser.lineName;
+        }
+
+        function logout() {
+            if (confirm('ログアウトしますか？')) {
+                location.reload();
+            }
+        }
+
+        async function loadQuestions() {
+            try {
+                const url = REPO_BASE + 'questions_R6.json';
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('HTTP ' + response.status);
+                
+                const data = await response.json();
+                questionsData = data.questions;
+                console.log('Loaded ' + questionsData.length + ' questions');
+                
+                const saved = localStorage.getItem('allAnswers_' + userId);
+                if (saved) allAnswerHistory = JSON.parse(saved);
+                
+                updateStats();
+            } catch (err) {
+                console.error('Load error:', err);
+                document.getElementById('quizContent').innerHTML = '<div class="alert alert-error">データ読込エラー: ' + err.message + '</div>';
+            }
+        }
+
+        function updateQuizOptions() {
+            const layer1 = document.getElementById('layer1').value;
+            document.getElementById('categorySelectGroup').style.display = (layer1 === 'category') ? 'block' : 'none';
+        }
+
+        function startQuiz() {
+            const layer1 = document.getElementById('layer1').value;
+            const layer2 = document.getElementById('layer2').value;
+            const layer3 = document.getElementById('layer3').value;
+
+            let filtered = [...questionsData];
+
+            if (layer1 === 'category') {
+                const category = document.getElementById('categorySelect').value;
+                if (category !== '全て') {
+                    filtered = filtered.filter(q => q.category === category);
+                    quizSettings.filterName = category;
+                } else {
+                    quizSettings.filterName = '全分野';
+                }
+            } else {
+                quizSettings.filterName = 'R6年度';
+            }
+
+            if (layer3 === 'wrong') {
+                filtered = filtered.filter(q => allAnswerHistory[q.id] && !allAnswerHistory[q.id].correct);
+                if (filtered.length === 0) {
+                    alert('間違えた問題がありません');
+                    return;
+                }
+            }
+
+            if (layer2 === 'random') {
+                filtered = filtered.sort(() => Math.random() - 0.5);
+            }
+
+            quizSettings.order = layer2 === 'sequential' ? '順番通り' : 'ランダム';
+            quizSettings.type = layer3 === 'all' ? '全問' : '間違えた問題のみ';
+
+            currentQuestionList = filtered;
+            sessionAnswers = {};
+            isAnsweredInSession = false;
+            
+            switchTab('quiz');
+            showQuestion();
+        }
+
+        function showQuestion() {
+            if (currentQuestionList.length === 0) {
+                document.getElementById('quizContent').innerHTML = '<div class="alert alert-error">すべての問題が終了しました</div>';
+                return;
+            }
+
+            const question = currentQuestionList[0];
+            currentQuestion = question;
+            const sessionAnswered = sessionAnswers[question.id];
+
+            document.getElementById('sessionInfo').textContent = 
+                `${quizSettings.filterName} | ${quizSettings.order} | ${quizSettings.type} | 残り: ${currentQuestionList.length - 1}問`;
+
+            let html = `<div class="quiz-card">
+                <div style="display: flex; justify-content: space-between; border-bottom: 2px solid #f0f0f0; padding-bottom: 15px; margin-bottom: 15px;">
+                    <span style="color: #ff6b35; font-weight: 600;">問題 ${question.question_number}</span>
+                    <span style="color: #999; font-size: 12px;">${Object.keys(sessionAnswers).length + 1}/${currentQuestionList.length + Object.keys(sessionAnswers).length}</span>
+                </div>
+                <div class="question-text">${question.question_text}</div>`;
+
+            if (question.has_image && question.image) {
+                html += `<img src="data:image/png;base64,${question.image}" class="question-image" alt="問題図">`;
+            }
+
+            Object.keys(question.options).forEach(num => {
+                const option = question.options[num];
+                let className = 'option-btn';
+                
+                if (sessionAnswered) {
+                    if (num == sessionAnswered.answer) className += ' selected';
+                    if (num == question.correct_answer) className += ' correct';
+                    if (num == sessionAnswered.answer && !sessionAnswered.correct) className += ' incorrect';
+                }
+
+                const disabled = sessionAnswered ? ' disabled' : '';
+                html += `<button class="${className}" onclick="selectAnswer('${num}')" ${disabled}>(${num}) ${option.text}</button>`;
+            });
+
+            if (sessionAnswered) {
+                html += `<div class="alert ${sessionAnswered.correct ? 'alert-success' : 'alert-error'}">
+                    <strong>${sessionAnswered.correct ? '✓ 正解です！' : '✗ 不正解です'}</strong>
+                </div>
+                <p style="color: #666; font-size: 13px;"><strong>正答: (${question.correct_answer})</strong></p>`;
+                
+                if (question.explanation && question.explanation !== '【ToCome】') {
+                    html += `<div class="explanation-section">
+                        <div class="explanation-title">📖 解説</div>
+                        <div class="explanation-text">${question.explanation}</div>
+                    </div>`;
+                }
+            }
+
+            html += `<div class="button-group">
+                <button class="btn-secondary" onclick="switchTab('home')">ホーム</button>
+                <button class="btn-primary" onclick="nextQuestion()">${sessionAnswered ? '次の問題' : '答える'}</button>
+            </div></div>`;
+
+            document.getElementById('quizContent').innerHTML = html;
+        }
+
+        function selectAnswer(answer) {
+            if (isAnsweredInSession) return;
+
+            const question = currentQuestion;
+            const isCorrect = answer == question.correct_answer;
+
+            sessionAnswers[question.id] = { answer, correct: isCorrect, timestamp: Date.now() };
+            allAnswerHistory[question.id] = { answer, correct: isCorrect, timestamp: Date.now() };
+            
+            localStorage.setItem('allAnswers_' + userId, JSON.stringify(allAnswerHistory));
+            
+            isAnsweredInSession = true;
+            updateStats();
+            showQuestion();
+        }
+
+        function nextQuestion() {
+            currentQuestionList.shift();
+            isAnsweredInSession = false;
+            showQuestion();
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+            if (tabName === 'mypage') updateMypageStats();
+        }
+
+        function updateStats() {
+            const answered = Object.keys(allAnswerHistory).length;
+            const correct = Object.values(allAnswerHistory).filter(a => a.correct).length;
+            const rate = answered > 0 ? Math.round(correct / answered * 100) : 0;
+            document.getElementById('answered').textContent = answered;
+            document.getElementById('correctRate').textContent = rate + '%';
+        }
+
+        function updateMypageStats() {
+            const answered = Object.keys(allAnswerHistory).length;
+            const correct = Object.values(allAnswerHistory).filter(a => a.correct).length;
+            const wrong = answered - correct;
+            const rate = answered > 0 ? Math.round(correct / answered * 100) : 0;
+            document.getElementById('myCorrectRate').textContent = rate + '%';
+            document.getElementById('myAnswered').textContent = answered + '問';
+            document.getElementById('myCorrect').textContent = correct + '問';
+            document.getElementById('myWrong').textContent = wrong + '問';
+        }
+
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>建設シカクLAB - 解体工事施工技士試験</title>
+    <script src="https://d.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: white;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .tab-nav {
+            display: flex;
+            background: #f5f5f5;
+            border-bottom: 1px solid #ddd;
+            overflow-x: auto;
+        }
+
+        .tab-nav button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            min-width: 80px;
+        }
+
+        .tab-nav button.active {
+            color: #ff6b35;
+            border-bottom-color: #ff6b35;
+        }
+
+        .tab-nav button:hover {
+            background: white;
+        }
+
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* ホーム画面 */
+        .home-section {
+            text-align: center;
+        }
+
+        .home-section h2 {
+            font-size: 20px;
+            margin: 20px 0 10px;
+            color: #333;
+        }
+
+        .home-section p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .btn-primary, .btn-secondary {
+            padding: 15px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            color: white;
+            grid-column: 1 / -1;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        /* フィルター */
+        .filter-section {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .filter-group {
+            margin-bottom: 15px;
+        }
+
+        .filter-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        /* クイズ画面 */
+        .quiz-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .quiz-header .question-number {
+            font-weight: 600;
+            color: #ff6b35;
+        }
+
+        .quiz-header .progress {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .question-text {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 15px 0;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .option-btn {
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            text-align: left;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .option-btn:hover {
+            border-color: #ff6b35;
+            background: #fff9f5;
+        }
+
+        .option-btn.selected {
+            border-color: #ff6b35;
+            background: #fff9f5;
+        }
+
+        .option-btn.correct {
+            border-color: #4caf50;
+            background: #f1f8f4;
+            color: #2e7d32;
+        }
+
+        .option-btn.incorrect {
+            border-color: #f44336;
+            background: #feebee;
+            color: #c62828;
+        }
+
+        .button-group-center {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .button-group-center button {
+            flex: 1;
+        }
+
+        /* マイページ */
+        .stats-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .stats-card h3 {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+
+        .stats-card .value {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .achievement-section {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .achievement-section h3 {
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #333;
+        }
+
+        .achievement-item {
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .achievement-item .label {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .achievement-item .value {
+            font-weight: 600;
+            color: #ff6b35;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #ff6b35;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .alert-success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border-left: 4px solid #4caf50;
+        }
+
+        .alert-error {
+            background: #ffebee;
+            color: #c62828;
+            border-left: 4px solid #f44336;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .stat-small {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .stat-small .label {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 5px;
+        }
+
+        .stat-small .value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ff6b35;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>建設シカクLAB</h1>
+            <p>解体工事施工技士試験対策</p>
+        </div>
+
+        <div class="tab-nav">
+            <button class="tab-btn active" data-tab="home">ホーム</button>
+            <button class="tab-btn" data-tab="quiz">クイズ</button>
+            <button class="tab-btn" data-tab="mypage">マイページ</button>
+        </div>
+
+        <div class="content">
+            <!-- ホーム -->
+            <div id="home" class="tab-content active">
+                <div class="home-section">
+                    <h2>令和3年度 四択問題</h2>
+                    <p>全45問で実際の試験に近い体験を！</p>
+                    
+                    <div class="filter-section">
+                        <div class="filter-group">
+                            <label>出題方式</label>
+                            <select id="quizMode">
+                                <option value="random">ランダムに1問出題</option>
+                                <option value="sequential">順序通りに出題</option>
+                                <option value="wrong">間違えた問題を出題</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <label>難易度</label>
+                            <select id="difficulty">
+                                <option value="all">すべて</option>
+                                <option value="easy">易</option>
+                                <option value="medium">中</option>
+                                <option value="hard">難</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <label>分野</label>
+                            <select id="category">
+                                <option value="all">全分野</option>
+                                <option value="施工技術">施工技術</option>
+                                <option value="法令・制度">法令・制度</option>
+                                <option value="構造・材料">構造・材料</option>
+                                <option value="安全衛生">安全衛生</option>
+                                <option value="その他">その他</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button class="btn-primary" onclick="startQuiz()">クイズを開始</button>
+
+                    <div style="margin-top: 30px;">
+                        <h3 style="margin-bottom: 15px;">学習進度</h3>
+                        <div class="stats-grid">
+                            <div class="stat-small">
+                                <div class="label">回答済み</div>
+                                <div class="value" id="answered">0</div>
+                            </div>
+                            <div class="stat-small">
+                                <div class="label">正答率</div>
+                                <div class="value" id="correctRate">0%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- クイズ -->
+            <div id="quiz" class="tab-content">
+                <div id="quizContent">
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                        <p>クイズを読み込み中...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- マイページ -->
+            <div id="mypage" class="tab-content">
+                <h2 style="margin-bottom: 20px;">学習成績</h2>
+                
+                <div class="stats-card">
+                    <h3>正答率</h3>
+                    <div class="value" id="myCorrectRate">0%</div>
+                </div>
+
+                <div class="achievement-section">
+                    <h3>統計情報</h3>
+                    <div class="achievement-item">
+                        <span class="label">総問題数</span>
+                        <span class="value">45問</span>
+                    </div>
+                    <div class="achievement-item">
+                        <span class="label">回答済み</span>
+                        <span class="value" id="myAnswered">0問</span>
+                    </div>
+                    <div class="achievement-item">
+                        <span class="label">正解</span>
+                        <span class="value" id="myCorrect">0問</span>
+                    </div>
+                    <div class="achievement-item">
+                        <span class="label">不正解</span>
+                        <span class="value" id="myWrong">0問</span>
+                    </div>
+                </div>
+
+                <div class="achievement-section">
+                    <h3>分野別成績</h3>
+                    <div id="categoryStats"></div>
+                </div>
+
+                <button class="btn-primary" onclick="clearData()" style="margin-top: 20px;">
+                    データをリセット
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // グローバル変数
+        let questionsData = [];
+        let userAnswers = {};
+        let currentQuestion = null;
+        let currentMode = 'random';
+
+        // LIFF初期化
+        async function initLiff() {
+            try {
+                await liff.init({ liffId: '2009300790-G4amrGku' });
+                
+                if (!liff.isLoggedIn()) {
+                    liff.login();
+                }
+            } catch (err) {
+                console.log('LIFF初期化エラー（ローカルテスト）:', err);
+            }
+        }
+
+        // R3データを読み込み
+        async function loadQuestions() {
+            try {
+                const response = await fetch('questions_R3.json');
+                const data = await response.json();
+                questionsData = data.questions;
+                loadAnswerHistory();
+                updateStats();
+            } catch (err) {
+                console.error('データ読み込みエラー:', err);
+                document.getElementById('quizContent').innerHTML = 
+                    '<div class="alert alert-error">データの読み込みに失敗しました</div>';
+            }
+        }
+
+        // ローカルストレージから回答履歴を読み込み
+        function loadAnswerHistory() {
+            const saved = localStorage.getItem('userAnswers_R3');
+            if (saved) {
+                userAnswers = JSON.parse(saved);
+            }
+        }
+
+        // 回答履歴を保存
+        function saveAnswerHistory() {
+            localStorage.setItem('userAnswers_R3', JSON.stringify(userAnswers));
+            updateStats();
+        }
+
+        // クイズ開始
+        function startQuiz() {
+            currentMode = document.getElementById('quizMode').value;
+            const difficulty = document.getElementById('difficulty').value;
+            const category = document.getElementById('category').value;
+
+            let filtered = questionsData;
+
+            // 分野でフィルタ
+            if (category !== 'all') {
+                filtered = filtered.filter(q => q.category === category);
+            }
+
+            // 難易度でフィルタ
+            if (difficulty !== 'all') {
+                filtered = filtered.filter(q => q.difficulty === difficulty);
+            }
+
+            // モードに応じて絞込
+            if (currentMode === 'wrong') {
+                filtered = filtered.filter(q => {
+                    const answered = userAnswers[q.id];
+                    return answered && answered.answer !== q.correct_answer;
+                });
+                
+                if (filtered.length === 0) {
+                    alert('間違えた問題がありません！');
+                    return;
+                }
+            }
+
+            // クイズ画面に切り替え
+            switchTab('quiz');
+
+            // 最初の問題を表示
+            showQuestion(filtered);
+        }
+
+        // 問題を表示
+        function showQuestion(questionList) {
+            if (questionList.length === 0) {
+                document.getElementById('quizContent').innerHTML = 
+                    '<div class="alert alert-error">該当する問題がありません</div>';
+                return;
+            }
+
+            let question;
+            if (currentMode === 'random') {
+                question = questionList[Math.floor(Math.random() * questionList.length)];
+            } else {
+                question = questionList[0];
+            }
+
+            currentQuestion = { ...question, questionList };
+
+            const answered = userAnswers[question.id];
+            let html = `
+                <div class="quiz-card">
+                    <div class="quiz-header">
+                        <span class="question-number">問題 ${question.question_number}</span>
+                        <span class="progress">${Object.keys(userAnswers).length}/${questionsData.length}</span>
+                    </div>
+                    
+                    <div class="question-text">${question.question_text}</div>
+                    
+                    <div class="options">
+            `;
+
+            Object.keys(question.options).forEach(num => {
+                const option = question.options[num];
+                let className = 'option-btn';
+                
+                if (answered) {
+                    if (num == answered.answer) {
+                        className += ' selected';
+                    }
+                    if (num == question.correct_answer) {
+                        className += ' correct';
+                    }
+                    if (num == answered.answer && answered.answer !== question.correct_answer) {
+                        className += ' incorrect';
+                    }
+                }
+
+                html += `
+                    <button class="${className}" onclick="selectAnswer('${num}', ${!answered})">
+                        (${num}) ${option.text}
+                    </button>
+                `;
+            });
+
+            html += `</div>`;
+
+            if (answered) {
+                const isCorrect = answered.answer == question.correct_answer;
+                html += `
+                    <div class="alert ${isCorrect ? 'alert-success' : 'alert-error'}">
+                        ${isCorrect ? '✓ 正解です！' : '✗ 不正解です'}
+                    </div>
+                    <p style="margin: 10px 0; color: #666; font-size: 13px;">
+                        正答: (${question.correct_answer})
+                    </p>
+                `;
+            }
+
+            html += `
+                    <div class="button-group-center">
+                        <button class="btn-secondary" onclick="switchTab('home')">ホームに戻る</button>
+                        <button class="btn-primary" onclick="nextQuestion()">${answered ? '次の問題' : '答える'}</button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('quizContent').innerHTML = html;
+        }
+
+        // 回答を選択
+        function selectAnswer(answer, canAnswer) {
+            if (!canAnswer) return;
+
+            const question = currentQuestion;
+            const isCorrect = answer == question.correct_answer;
+
+            userAnswers[question.id] = {
+                answer: answer,
+                correct: isCorrect,
+                timestamp: new Date().getTime()
+            };
+
+            saveAnswerHistory();
+            showQuestion([question]);
+        }
+
+        // 次の問題へ
+        function nextQuestion() {
+            showQuestion(currentQuestion.questionList);
+        }
+
+        // タブを切り替え
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('active');
+            });
+
+            document.getElementById(tabName).classList.add('active');
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+
+            if (tabName === 'mypage') {
+                updateMypageStats();
+            }
+        }
+
+        // 統計情報を更新
+        function updateStats() {
+            const answered = Object.keys(userAnswers).length;
+            const correct = Object.values(userAnswers).filter(a => a.correct).length;
+            const rate = answered > 0 ? Math.round(correct / answered * 100) : 0;
+
+            document.getElementById('answered').textContent = answered;
+            document.getElementById('correctRate').textContent = rate + '%';
+        }
+
+        // マイページ統計を更新
+        function updateMypageStats() {
+            const answered = Object.keys(userAnswers).length;
+            const correct = Object.values(userAnswers).filter(a => a.correct).length;
+            const wrong = answered - correct;
+            const rate = answered > 0 ? Math.round(correct / answered * 100) : 0;
+
+            document.getElementById('myCorrectRate').textContent = rate + '%';
+            document.getElementById('myAnswered').textContent = answered + '問';
+            document.getElementById('myCorrect').textContent = correct + '問';
+            document.getElementById('myWrong').textContent = wrong + '問';
+
+            // 分野別統計
+            const categoryStats = {};
+            questionsData.forEach(q => {
+                if (!categoryStats[q.category]) {
+                    categoryStats[q.category] = { total: 0, correct: 0 };
+                }
+                categoryStats[q.category].total++;
+
+                const answered = userAnswers[q.id];
+                if (answered && answered.correct) {
+                    categoryStats[q.category].correct++;
+                }
+            });
+
+            let categoryHtml = '';
+            Object.entries(categoryStats).forEach(([category, stats]) => {
+                const rate = stats.total > 0 ? Math.round(stats.correct / stats.total * 100) : 0;
+                categoryHtml += `
+                    <div class="achievement-item">
+                        <span class="label">${category}</span>
+                        <span class="value">${stats.correct}/${stats.total} (${rate}%)</span>
+                    </div>
+                `;
+            });
+
+            document.getElementById('categoryStats').innerHTML = categoryHtml;
+        }
+
+        // データをリセット
+        function clearData() {
+            if (confirm('すべてのデータを削除してよろしいですか？')) {
+                userAnswers = {};
+                localStorage.removeItem('userAnswers_R3');
+                updateStats();
+                updateMypageStats();
+                alert('データをリセットしました');
+            }
+        }
+
+        // タブボタンのイベント
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                switchTab(btn.dataset.tab);
+            });
+        });
+
+        // 初期化
+        window.addEventListener('DOMContentLoaded', () => {
+            initLiff();
+            loadQuestions();
+        });
+    </script>
+</body>
+</html>

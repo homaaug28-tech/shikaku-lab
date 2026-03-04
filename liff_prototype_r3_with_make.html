@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>建設シカクLAB - 解体工事施工技士試験</title>
-    <script src="https://d.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
         * {
             margin: 0;
@@ -97,7 +96,6 @@
             to { opacity: 1; }
         }
 
-        /* ユーザー登録フォーム */
         .registration-form {
             background: white;
             padding: 20px;
@@ -129,22 +127,13 @@
             border: 1px solid #ddd;
             border-radius: 6px;
             font-size: 14px;
-            transition: border-color 0.3s;
         }
 
         .form-group input:focus, .form-group select:focus {
             outline: none;
             border-color: #ff6b35;
-            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
         }
 
-        .info-text {
-            font-size: 12px;
-            color: #999;
-            margin-top: 4px;
-        }
-
-        /* ホーム画面 */
         .home-section {
             text-align: center;
         }
@@ -214,11 +203,6 @@
             color: #333;
         }
 
-        .btn-secondary:hover {
-            background: #e0e0e0;
-        }
-
-        /* クイズ画面 */
         .quiz-card {
             background: white;
             border-radius: 12px;
@@ -304,7 +288,6 @@
             flex: 1;
         }
 
-        /* マイページ */
         .stats-card {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -312,12 +295,6 @@
             border-radius: 12px;
             margin-bottom: 20px;
             text-align: center;
-        }
-
-        .stats-card h3 {
-            font-size: 14px;
-            opacity: 0.9;
-            margin-bottom: 8px;
         }
 
         .stats-card .value {
@@ -330,12 +307,6 @@
             padding: 15px;
             border-radius: 8px;
             margin-bottom: 20px;
-        }
-
-        .achievement-section h3 {
-            font-weight: 600;
-            margin-bottom: 12px;
-            color: #333;
         }
 
         .achievement-item {
@@ -358,27 +329,6 @@
             color: #ff6b35;
         }
 
-        .loading {
-            text-align: center;
-            padding: 40px 20px;
-            color: #999;
-        }
-
-        .loading-spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #ff6b35;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
         .alert {
             padding: 15px;
             border-radius: 8px;
@@ -396,12 +346,6 @@
             background: #ffebee;
             color: #c62828;
             border-left: 4px solid #f44336;
-        }
-
-        .alert-info {
-            background: #e3f2fd;
-            color: #1565c0;
-            border-left: 4px solid #2196f3;
         }
 
         .stats-grid {
@@ -458,11 +402,6 @@
             box-shadow: 0 10px 40px rgba(0,0,0,0.3);
         }
 
-        .modal-content h2 {
-            margin-bottom: 20px;
-            color: #333;
-        }
-
         .user-info {
             background: #f9f9f9;
             padding: 12px;
@@ -492,7 +431,6 @@
                     <div class="form-group">
                         <label>LINE 表示名</label>
                         <input type="text" id="lineName" placeholder="例：山田太郎" required>
-                        <p class="info-text">LINE で表示されている名前を入力してください</p>
                     </div>
 
                     <div class="form-group">
@@ -511,7 +449,6 @@
                     <div class="form-group">
                         <label>現在の給与（万円/年）</label>
                         <input type="number" id="currentSalary" placeholder="例：400" min="0">
-                        <p class="info-text">※任意項目</p>
                     </div>
 
                     <button class="btn-primary" onclick="registerUser()" style="margin-top: 20px;">
@@ -521,7 +458,7 @@
             </div>
         </div>
 
-        <!-- メインコンテンツ（登録後） -->
+        <!-- メインコンテンツ -->
         <div id="mainContent" style="display: none; flex: 1; display: flex; flex-direction: column;">
             <div class="tab-nav">
                 <button class="tab-btn active" data-tab="home">ホーム</button>
@@ -568,7 +505,6 @@
                                     <option value="施工技術">施工技術</option>
                                     <option value="法令・制度">法令・制度</option>
                                     <option value="構造・材料">構造・材料</option>
-                                    <option value="安全衛生">安全衛生</option>
                                     <option value="その他">その他</option>
                                 </select>
                             </div>
@@ -595,10 +531,7 @@
                 <!-- クイズ -->
                 <div id="quiz" class="tab-content">
                     <div id="quizContent">
-                        <div class="loading">
-                            <div class="loading-spinner"></div>
-                            <p>クイズを読み込み中...</p>
-                        </div>
+                        <p>クイズを読み込み中...</p>
                     </div>
                 </div>
 
@@ -631,11 +564,6 @@
                         </div>
                     </div>
 
-                    <div class="achievement-section">
-                        <h3>分野別成績</h3>
-                        <div id="categoryStats"></div>
-                    </div>
-
                     <button class="btn-primary" onclick="clearData()" style="margin-top: 20px;">
                         データをリセット
                     </button>
@@ -645,50 +573,33 @@
     </div>
 
     <script>
-        // グローバル変数
         let questionsData = [];
         let userAnswers = {};
         let currentQuestion = null;
         let currentMode = 'random';
         let currentUser = null;
-        let liffUserId = null;
+        let userId = null;
 
         const WEBHOOK_URL = 'https://hook.eu1.make.com/lgfnj52lgwbcy5c1r8u1dt2huvp95xfw';
+        const REPO_BASE = '/shikaku-lab/';
 
-        // LIFF初期化
-        async function initLiff() {
-            try {
-                await liff.init({ liffId: '2009300790-G4amrGku' });
-                
-                if (liff.isLoggedIn()) {
-                    const profile = await liff.getProfile();
-                    liffUserId = profile.userId;
-                    checkUser();
-                } else {
-                    liff.login();
-                }
-            } catch (err) {
-                console.log('LIFF初期化エラー:', err);
-                // ローカルテスト用
-                liffUserId = 'test_user_' + Math.random().toString(36).substr(2, 9);
-                checkUser();
-            }
+        function init() {
+            userId = 'user_' + Date.now();
+            checkUser();
+            loadQuestions();
         }
 
-        // ユーザー情報をチェック
         function checkUser() {
-            const saved = localStorage.getItem('currentUser_' + liffUserId);
+            const saved = localStorage.getItem('currentUser_' + userId);
             if (saved) {
                 currentUser = JSON.parse(saved);
                 showMainContent();
-                loadQuestions();
             } else {
                 showRegistrationForm();
             }
         }
 
-        // ユーザー登録
-        async function registerUser() {
+        function registerUser() {
             const lineName = document.getElementById('lineName').value.trim();
             const expYears = document.getElementById('expYears').value;
             const currentSalary = document.getElementById('currentSalary').value || '';
@@ -699,98 +610,87 @@
             }
 
             currentUser = {
-                lineUserId: liffUserId,
+                userId: userId,
                 lineName: lineName,
                 expYears: expYears,
                 currentSalary: currentSalary,
                 registeredDate: new Date().toISOString()
             };
 
-            // ローカルストレージに保存
-            localStorage.setItem('currentUser_' + liffUserId, JSON.stringify(currentUser));
+            localStorage.setItem('currentUser_' + userId, JSON.stringify(currentUser));
 
-            // Makeに送信（ユーザー登録）
-            await sendToMake({
+            sendToMake({
                 action: 'register_user',
-                lineUserId: liffUserId,
-                userName: lineName,
-                expYears: expYears,
-                currentSalary: currentSalary,
+                userId: userId,
                 lineName: lineName,
-                registeredDate: new Date().toISOString()
+                expYears: expYears,
+                currentSalary: currentSalary
             });
 
             showMainContent();
-            loadQuestions();
         }
 
-        // ユーザー登録フォームを表示
         function showRegistrationForm() {
             document.getElementById('registrationModal').classList.add('active');
             document.getElementById('mainContent').style.display = 'none';
         }
 
-        // メインコンテンツを表示
         function showMainContent() {
             document.getElementById('registrationModal').classList.remove('active');
             document.getElementById('mainContent').style.display = 'flex';
             document.getElementById('displayUserName').textContent = currentUser.lineName;
         }
 
-        // R3データを読み込み
         async function loadQuestions() {
             try {
-                const response = await fetch('questions_R3.json');
+                const url = REPO_BASE + 'questions_R3.json';
+                console.log('Loading from:', url);
+                
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error('HTTP ' + response.status);
+                }
+                
                 const data = await response.json();
                 questionsData = data.questions;
+                console.log('Loaded ' + questionsData.length + ' questions');
+                
                 loadAnswerHistory();
                 updateStats();
             } catch (err) {
-                console.error('データ読み込みエラー:', err);
+                console.error('Load error:', err);
                 document.getElementById('quizContent').innerHTML = 
-                    '<div class="alert alert-error">データの読み込みに失敗しました</div>';
+                    '<div class="alert alert-error">データ読み込みエラー: ' + err.message + '</div>';
             }
         }
 
-        // ローカルストレージから回答履歴を読み込み
         function loadAnswerHistory() {
-            const saved = localStorage.getItem('userAnswers_' + liffUserId);
+            const saved = localStorage.getItem('userAnswers_' + userId);
             if (saved) {
                 userAnswers = JSON.parse(saved);
             }
         }
 
-        // 回答履歴を保存
         function saveAnswerHistory() {
-            localStorage.setItem('userAnswers_' + liffUserId, JSON.stringify(userAnswers));
+            localStorage.setItem('userAnswers_' + userId, JSON.stringify(userAnswers));
             updateStats();
         }
 
-        // Makeにデータを送信
         async function sendToMake(data) {
             try {
-                const payload = {
-                    ...data,
-                    timestamp: new Date().toISOString()
-                };
-
-                const response = await fetch(WEBHOOK_URL, {
+                await fetch(WEBHOOK_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify({
+                        ...data,
+                        timestamp: new Date().toISOString()
+                    })
                 });
-
-                if (response.ok) {
-                    console.log('Makeへの送信成功:', data);
-                } else {
-                    console.error('Makeへの送信失敗:', response.statusText);
-                }
             } catch (err) {
-                console.error('Makeへの送信エラー:', err);
+                console.error('Webhook error:', err);
             }
         }
 
-        // クイズ開始
         function startQuiz() {
             currentMode = document.getElementById('quizMode').value;
             const difficulty = document.getElementById('difficulty').value;
@@ -798,21 +698,14 @@
 
             let filtered = questionsData;
 
-            // 分野でフィルタ
             if (category !== 'all') {
                 filtered = filtered.filter(q => q.category === category);
             }
 
-            // 難易度でフィルタ
-            if (difficulty !== 'all') {
-                filtered = filtered.filter(q => q.difficulty === difficulty);
-            }
-
-            // モードに応じて絞込
             if (currentMode === 'wrong') {
                 filtered = filtered.filter(q => {
-                    const answered = userAnswers[q.id];
-                    return answered && !answered.correct;
+                    const ans = userAnswers[q.id];
+                    return ans && !ans.correct;
                 });
                 
                 if (filtered.length === 0) {
@@ -821,27 +714,20 @@
                 }
             }
 
-            // クイズ画面に切り替え
             switchTab('quiz');
-
-            // 最初の問題を表示
             showQuestion(filtered);
         }
 
-        // 問題を表示
         function showQuestion(questionList) {
             if (questionList.length === 0) {
                 document.getElementById('quizContent').innerHTML = 
-                    '<div class="alert alert-error">該当する問題がありません</div>';
+                    '<div class="alert alert-error">問題がありません</div>';
                 return;
             }
 
-            let question;
-            if (currentMode === 'random') {
-                question = questionList[Math.floor(Math.random() * questionList.length)];
-            } else {
-                question = questionList[0];
-            }
+            const question = currentMode === 'random' 
+                ? questionList[Math.floor(Math.random() * questionList.length)]
+                : questionList[0];
 
             currentQuestion = { ...question, questionList };
 
@@ -852,9 +738,7 @@
                         <span class="question-number">問題 ${question.question_number}</span>
                         <span class="progress">${Object.keys(userAnswers).length}/${questionsData.length}</span>
                     </div>
-                    
                     <div class="question-text">${question.question_text}</div>
-                    
                     <div class="options">
             `;
 
@@ -863,22 +747,12 @@
                 let className = 'option-btn';
                 
                 if (answered) {
-                    if (num == answered.answer) {
-                        className += ' selected';
-                    }
-                    if (num == question.correct_answer) {
-                        className += ' correct';
-                    }
-                    if (num == answered.answer && !answered.correct) {
-                        className += ' incorrect';
-                    }
+                    if (num == answered.answer) className += ' selected';
+                    if (num == question.correct_answer) className += ' correct';
+                    if (num == answered.answer && !answered.correct) className += ' incorrect';
                 }
 
-                html += `
-                    <button class="${className}" onclick="selectAnswer('${num}', ${!answered})">
-                        (${num}) ${option.text}
-                    </button>
-                `;
+                html += `<button class="${className}" onclick="selectAnswer('${num}', ${!answered})">(${num}) ${option.text}</button>`;
             });
 
             html += `</div>`;
@@ -888,9 +762,7 @@
                     <div class="alert ${answered.correct ? 'alert-success' : 'alert-error'}">
                         ${answered.correct ? '✓ 正解です！' : '✗ 不正解です'}
                     </div>
-                    <p style="margin: 10px 0; color: #666; font-size: 13px;">
-                        正答: (${question.correct_answer})
-                    </p>
+                    <p style="color: #666; font-size: 13px;">正答: (${question.correct_answer})</p>
                 `;
             }
 
@@ -905,7 +777,6 @@
             document.getElementById('quizContent').innerHTML = html;
         }
 
-        // 回答を選択
         function selectAnswer(answer, canAnswer) {
             if (!canAnswer) return;
 
@@ -920,53 +791,37 @@
 
             saveAnswerHistory();
 
-            // Makeに回答を送信
             sendToMake({
                 action: 'answer_question',
-                lineUserId: liffUserId,
+                userId: userId,
                 questionId: question.id,
-                year: question.year,
                 userAnswer: answer,
-                isCorrect: isCorrect,
-                answeredDate: new Date().toISOString()
+                isCorrect: isCorrect
             });
 
             showQuestion([question]);
         }
 
-        // 次の問題へ
         function nextQuestion() {
             showQuestion(currentQuestion.questionList);
         }
 
-        // タブを切り替え
         function switchTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(el => {
-                el.classList.remove('active');
-            });
-            document.querySelectorAll('.tab-btn').forEach(el => {
-                el.classList.remove('active');
-            });
-
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
             document.getElementById(tabName).classList.add('active');
             document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
-
-            if (tabName === 'mypage') {
-                updateMypageStats();
-            }
+            if (tabName === 'mypage') updateMypageStats();
         }
 
-        // 統計情報を更新
         function updateStats() {
             const answered = Object.keys(userAnswers).length;
             const correct = Object.values(userAnswers).filter(a => a.correct).length;
             const rate = answered > 0 ? Math.round(correct / answered * 100) : 0;
-
             document.getElementById('answered').textContent = answered;
             document.getElementById('correctRate').textContent = rate + '%';
         }
 
-        // マイページ統計を更新
         function updateMypageStats() {
             const answered = Object.keys(userAnswers).length;
             const correct = Object.values(userAnswers).filter(a => a.correct).length;
@@ -978,67 +833,48 @@
             document.getElementById('myCorrect').textContent = correct + '問';
             document.getElementById('myWrong').textContent = wrong + '問';
 
-            // 分野別統計
             const categoryStats = {};
             questionsData.forEach(q => {
                 if (!categoryStats[q.category]) {
                     categoryStats[q.category] = { total: 0, correct: 0 };
                 }
                 categoryStats[q.category].total++;
-
-                const answered = userAnswers[q.id];
-                if (answered && answered.correct) {
-                    categoryStats[q.category].correct++;
-                }
+                const ans = userAnswers[q.id];
+                if (ans && ans.correct) categoryStats[q.category].correct++;
             });
 
-            let categoryHtml = '';
-            Object.entries(categoryStats).forEach(([category, stats]) => {
-                const rate = stats.total > 0 ? Math.round(stats.correct / stats.total * 100) : 0;
-                categoryHtml += `
-                    <div class="achievement-item">
-                        <span class="label">${category}</span>
-                        <span class="value">${stats.correct}/${stats.total} (${rate}%)</span>
-                    </div>
-                `;
+            let html = '';
+            Object.entries(categoryStats).forEach(([cat, stats]) => {
+                const r = stats.total > 0 ? Math.round(stats.correct / stats.total * 100) : 0;
+                html += `<div class="achievement-item"><span class="label">${cat}</span><span class="value">${stats.correct}/${stats.total} (${r}%)</span></div>`;
             });
-
-            document.getElementById('categoryStats').innerHTML = categoryHtml;
+            document.getElementById('categoryStats').innerHTML = html;
         }
 
-        // データをリセット
         function clearData() {
-            if (confirm('すべてのデータを削除してよろしいですか？')) {
+            if (confirm('すべてのデータを削除しますか？')) {
                 userAnswers = {};
-                localStorage.removeItem('userAnswers_' + liffUserId);
+                localStorage.removeItem('userAnswers_' + userId);
                 updateStats();
                 updateMypageStats();
-                alert('データをリセットしました');
+                alert('リセットしました');
             }
         }
 
-        // ログアウト
         function logout() {
             if (confirm('ログアウトしますか？')) {
                 currentUser = null;
-                userAnswers = {};
-                localStorage.removeItem('currentUser_' + liffUserId);
-                localStorage.removeItem('userAnswers_' + liffUserId);
+                localStorage.removeItem('currentUser_' + userId);
+                localStorage.removeItem('userAnswers_' + userId);
                 showRegistrationForm();
             }
         }
 
-        // タブボタンのイベント
         document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                switchTab(btn.dataset.tab);
-            });
+            btn.addEventListener('click', () => switchTab(btn.dataset.tab));
         });
 
-        // 初期化
-        window.addEventListener('DOMContentLoaded', () => {
-            initLiff();
-        });
+        window.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>

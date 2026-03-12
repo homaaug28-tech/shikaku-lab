@@ -49,6 +49,8 @@
         .explanation-text { color: #666; font-size: 14px; line-height: 1.6; }
         .completion-message { text-align: center; padding: 40px 20px; }
         .completion-icon { font-size: 60px; margin: 20px 0; }
+        .category-stats { background: white; padding: 12px; border-radius: 6px; margin-bottom: 10px; display: flex; justify-content: space-between; font-size: 14px; border-left: 4px solid #ff6b35; }
+        .sync-indicator { font-size: 12px; color: #999; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -194,6 +196,13 @@
                             <span style="font-weight: 600;" id="myWrong">0問</span>
                         </div>
                     </div>
+
+                    <div style="margin-top: 20px;">
+                        <h3 style="margin-bottom: 12px;">分野別正解率</h3>
+                        <div id="categoryStatsContainer"></div>
+                    </div>
+
+                    <div class="sync-indicator" id="syncStatus">✓ データは自動的に保存されています</div>
                 </div>
             </div>
         </div>
@@ -206,11 +215,14 @@
         let currentQuestion = null;
         let currentUser = null;
         let userId = null;
+        let lineUserId = null;
         let currentQuestionList = [];
         let isAnsweredInSession = false;
         let quizSettings = {};
+        let wrongQuestionIds = [];
 
         const REPO_BASE = window.location.pathname.includes('/shikaku-lab/') ? '/shikaku-lab/' : '/';
+        const WEBHOOK_URL = 'https://hook.eu1.make.com/4i8ovi6kunvugp2w4u59kgjgr1quq2is';
 
         function init() {
             userId = 'user_' + Date.now();
@@ -222,7 +234,9 @@
             const saved = localStorage.getItem('currentUser_' + userId);
             if (saved) {
                 currentUser = JSON.parse(saved);
+                lineUserId = currentUser.userId;
                 showMainContent();
+                loadWrongQuestionIds();
             }
         }
 
@@ -236,8 +250,27 @@
                 return;
             }
 
-            currentUser = { userId, lineName, expYears, currentSalary, registeredDate: new Date().toISOString() };
+            // ユーザーID を生成（実装では LIFF から取得）
+            lineUserId = 'U' + Math.random().toString(36).substr(2, 9).toUpperCase();
+
+            currentUser = {
+                userId: lineUserId,
+                lineName,
+                expYears,
+                currentSalary,
+                registeredDate: new Date().toISOString()
+            };
+
             localStorage.setItem('currentUser_' + userId, JSON.stringify(currentUser));
+
+            // Webhook でユーザー登録を送信
+            sendWebhook({
+                action: 'register_user',
+                lineUserId: lineUserId,
+                lineName: lineName,
+                registeredDate: new Date().toISOString()
+            });
+
             showMainContent();
         }
 
@@ -273,6 +306,14 @@
             }
         }
 
+        function loadWrongQuestionIds() {
+            // ローカルストレージから間違えた問題リストを読み込む
+            const saved = localStorage.getItem('wrongQuestions_' + userId);
+            if (saved) {
+                wrongQuestionIds = JSON.parse(saved);
+            }
+        }
+
         function updateQuizOptions() {
             const layer1 = document.getElementById('layer1').value;
             document.getElementById('categorySelectGroup').style.display = (layer1 === 'category') ? 'block' : 'none';
@@ -298,7 +339,8 @@
             }
 
             if (layer3 === 'wrong') {
-                filtered = filtered.filter(q => allAnswerHistory[q.id] && !allAnswerHistory[q.id].correct);
+                // ローカルストレージから取得した wrongQuestionIds を使用
+                filtered = filtered.filter(q => wrongQuestionIds.includes(q.id));
                 if (filtered.length === 0) {
                     alert('間違えた問題がありません');
                     return;
@@ -309,6 +351,9 @@
                 filtered = filtered.sort(() => Math.random() - 0.5);
             }
 
+            quizSettings.layer1 = layer1;
+            quizSettings.layer2 = layer2;
+            quizSettings.layer3 = layer3;
             quizSettings.order = layer2 === 'sequential' ? '順番通り' : 'ランダム';
             quizSettings.type = layer3 === 'all' ? '全問' : '間違えた問題のみ';
 
@@ -382,7 +427,6 @@
                 </div>
                 <p style="color: #666; font-size: 13px;"><strong>正答: (${question.correct_answer})</strong></p>`;
                 
-                // 解説表示（ToComeでなければ表示）
                 if (question.explanation && question.explanation !== '【ToCome】') {
                     html += `<div class="explanation-section">
                         <div class="explanation-title">📖 解説</div>
@@ -415,7 +459,30 @@
             
             localStorage.setItem('allAnswers_' + userId, JSON.stringify(allAnswerHistory));
             
+            // 間違えた問題をリストに追加
+            if (!isCorrect && !wrongQuestionIds.includes(question.id)) {
+                wrongQuestionIds.push(question.id);
+            } else if (isCorrect && wrongQuestionIds.includes(question.id)) {
+                wrongQuestionIds = wrongQuestionIds.filter(id => id !== question.id);
+            }
+            localStorage.setItem('wrongQuestions_' + userId, JSON.stringify(wrongQuestionIds));
+            
             isAnsweredInSession = true;
+
+            // Webhook で回答を送信（API Key なし）
+            sendWebhook({
+                action: 'answer_question',
+                lineUserId: lineUserId,
+                questionId: question.id,
+                year: question.year,
+                category: question.category,
+                questionNumber: question.question_number,
+                userAnswer: parseInt(answer),
+                isCorrect: isCorrect,
+                quizMode: quizSettings,
+                answeredDate: new Date().toISOString()
+            });
+
             updateStats();
             showQuestion();
         }
@@ -451,6 +518,39 @@
             document.getElementById('myAnswered').textContent = answered + '問';
             document.getElementById('myCorrect').textContent = correct + '問';
             document.getElementById('myWrong').textContent = wrong + '問';
+
+            // 分野別正解率を表示
+            const categoryStatsHtml = [];
+            const categories = ['施工技術', '法令・制度', '構造・材料', 'その他'];
+            categories.forEach(cat => {
+                const questionsInCat = questionsData.filter(q => q.category === cat);
+                const answeredInCat = questionsInCat.filter(q => allAnswerHistory[q.id]);
+                const correctInCat = answeredInCat.filter(q => allAnswerHistory[q.id].correct);
+                const rateInCat = answeredInCat.length > 0 ? Math.round(correctInCat.length / answeredInCat.length * 100) : 0;
+                
+                if (answeredInCat.length > 0) {
+                    categoryStatsHtml.push(`
+                        <div class="category-stats">
+                            <span>${cat}</span>
+                            <span>${correctInCat.length}/${answeredInCat.length} (${rateInCat}%)</span>
+                        </div>
+                    `);
+                }
+            });
+            document.getElementById('categoryStatsContainer').innerHTML = categoryStatsHtml.length > 0 ? categoryStatsHtml.join('') : '<div style="color: #999; font-size: 14px;">分野別のデータはまだありません</div>';
+        }
+
+        async function sendWebhook(data) {
+            try {
+                await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                console.log('Webhook sent:', data.action);
+            } catch (err) {
+                console.error('Webhook error:', err);
+            }
         }
 
         window.addEventListener('DOMContentLoaded', init);

@@ -45,6 +45,12 @@
             opacity: 0.9;
         }
         
+        .header .user-info {
+            font-size: 12px;
+            margin-top: 10px;
+            opacity: 0.8;
+        }
+        
         .content {
             padding: 30px 20px;
         }
@@ -134,6 +140,43 @@
         
         .btn-secondary:hover {
             background: #e0e0e0;
+        }
+        
+        /* ホーム画面 */
+        .home-content {
+            text-align: center;
+        }
+        
+        .home-welcome {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        
+        .home-button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .home-button {
+            padding: 20px;
+            border-radius: 8px;
+            border: none;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .home-btn-start {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .home-btn-start:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
         
         /* 年度・フィルタ選択 */
@@ -407,16 +450,6 @@
             margin-bottom: 20px;
             font-size: 14px;
         }
-        
-        .info {
-            background: #f3f9ff;
-            border: 2px solid #667eea;
-            color: #667eea;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 14px;
-        }
     </style>
 </head>
 <body>
@@ -424,11 +457,12 @@
         <div class="header">
             <h1>建設シカクLAB</h1>
             <p>解体工事施工技士試験対策</p>
+            <div class="user-info" id="userInfoDisplay"></div>
         </div>
         
         <div class="content">
-            <!-- スタート画面 -->
-            <div class="screen active" id="startScreen">
+            <!-- 登録画面 -->
+            <div class="screen active" id="registerScreen">
                 <h2>ようこそ！</h2>
                 
                 <div class="input-group">
@@ -459,6 +493,20 @@
                 </div>
             </div>
             
+            <!-- ホーム画面 -->
+            <div class="screen" id="homeScreen">
+                <div class="home-content">
+                    <div class="home-welcome">
+                        こんにちは！<br>
+                        <span id="userGreeting"></span>さん
+                    </div>
+                    
+                    <div class="home-button-group">
+                        <button class="home-button home-btn-start" onclick="goToSetting()">クイズを開始</button>
+                    </div>
+                </div>
+            </div>
+            
             <!-- 出題設定画面 -->
             <div class="screen" id="settingScreen">
                 <h2>出題設定</h2>
@@ -480,24 +528,7 @@
                     
                     <div class="selector-item">
                         <label>分野を選択</label>
-                        <div class="checkbox-group">
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="cat-施工技術" value="施工技術" onchange="updateCategories()" checked>
-                                <label for="cat-施工技術">施工技術</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="cat-法令・制度" value="法令・制度" onchange="updateCategories()" checked>
-                                <label for="cat-法令・制度">法令・制度</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="cat-構造・材料" value="構造・材料" onchange="updateCategories()" checked>
-                                <label for="cat-構造・材料">構造・材料</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="cat-その他" value="その他" onchange="updateCategories()" checked>
-                                <label for="cat-その他">その他</label>
-                            </div>
-                        </div>
+                        <div class="checkbox-group" id="categoryCheckboxes"></div>
                     </div>
                 </div>
                 
@@ -531,7 +562,7 @@
                 
                 <div class="button-group">
                     <button class="btn-primary" onclick="startQuiz()">クイズを開始</button>
-                    <button class="btn-secondary" onclick="goBackToStart()">戻る</button>
+                    <button class="btn-secondary" onclick="goToHome()">ホームに戻る</button>
                 </div>
             </div>
             
@@ -587,8 +618,8 @@
                 </div>
                 
                 <div class="button-group">
-                    <button class="btn-primary" onclick="goBackToSetting()">もう一度チャレンジ</button>
-                    <button class="btn-secondary" onclick="goBackToStart()">ホームに戻る</button>
+                    <button class="btn-primary" onclick="goToSetting()">もう一度チャレンジ</button>
+                    <button class="btn-secondary" onclick="goToHome()">ホームに戻る</button>
                 </div>
             </div>
         </div>
@@ -604,10 +635,12 @@
         let correctCount = 0;
         let categoryStats = {};
         let wrongQuestionIds = [];
+        let isRegistered = false;
+        let availableCategories = [];
         
         let settings = {
             year: 'R6',
-            categories: ['施工技術', '法令・制度', '構造・材料', 'その他'],
+            categories: [],
             mode: 'sequential',
             scope: 'all'
         };
@@ -617,6 +650,32 @@
         
         // リポジトリパス
         const REPO_BASE = window.location.pathname.includes('/shikaku-lab/') ? '/shikaku-lab/' : '/';
+        
+        // 初期化
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log('Page loaded');
+            loadUserData();
+        });
+        
+        // ローカルストレージからユーザーデータを読み込み
+        function loadUserData() {
+            const stored = localStorage.getItem('shikakuLabUser');
+            if (stored) {
+                userData = JSON.parse(stored);
+                userId = userData.lineUserId;
+                isRegistered = true;
+                displayUserInfo();
+                showScreen('homeScreen');
+            } else {
+                showScreen('registerScreen');
+            }
+        }
+        
+        // ユーザー情報を表示
+        function displayUserInfo() {
+            document.getElementById('userGreeting').textContent = userData.lineName;
+            document.getElementById('userInfoDisplay').textContent = `ユーザー: ${userData.lineName}`;
+        }
         
         // JSON を読み込み
         async function loadQuestions(year) {
@@ -656,19 +715,45 @@
                 registeredDate: new Date().toISOString()
             };
             
+            // ローカルストレージに保存
+            localStorage.setItem('shikakuLabUser', JSON.stringify(userData));
+            isRegistered = true;
+            
             // Webhook に送信
             await sendWebhook({
                 action: 'register_user',
                 ...userData
             });
             
-            // 出題設定画面に遷移
-            showScreen('settingScreen');
+            // ホーム画面に遷移
+            displayUserInfo();
+            showScreen('homeScreen');
         }
         
         // 年度更新
-        function updateYear(year) {
+        async function updateYear(year) {
             settings.year = year;
+            // 年度が変更されたとき、カテゴリーチェックボックスを動的に生成
+            const questions = await loadQuestions(year);
+            availableCategories = [...new Set(questions.map(q => q.category))];
+            generateCategoryCheckboxes();
+        }
+        
+        // カテゴリーチェックボックスを動的生成
+        function generateCategoryCheckboxes() {
+            const container = document.getElementById('categoryCheckboxes');
+            container.innerHTML = '';
+            availableCategories.forEach((category, index) => {
+                const checkboxDiv = document.createElement('div');
+                checkboxDiv.className = 'checkbox-item';
+                checkboxDiv.innerHTML = `
+                    <input type="checkbox" id="cat-${index}" value="${category}" onchange="updateCategories()" checked>
+                    <label for="cat-${index}">${category}</label>
+                `;
+                container.appendChild(checkboxDiv);
+            });
+            // カテゴリーの初期化
+            settings.categories = availableCategories.slice();
         }
         
         // 分野更新
@@ -922,6 +1007,19 @@
             document.getElementById(screenId).classList.add('active');
         }
         
+        // ナビゲーション
+        function goToHome() {
+            showScreen('homeScreen');
+        }
+        
+        async function goToSetting() {
+            // 出題設定画面に移る前に、R6 のカテゴリーを初期化
+            const questions = await loadQuestions('R6');
+            availableCategories = [...new Set(questions.map(q => q.category))];
+            generateCategoryCheckboxes();
+            showScreen('settingScreen');
+        }
+        
         // エラー表示
         function showError(message) {
             const errorDiv = document.createElement('div');
@@ -929,15 +1027,6 @@
             errorDiv.textContent = message;
             document.querySelector('.content').insertBefore(errorDiv, document.querySelector('.content').firstChild);
             setTimeout(() => errorDiv.remove(), 5000);
-        }
-        
-        // 戻る処理
-        function goBackToSetting() {
-            showScreen('settingScreen');
-        }
-        
-        function goBackToStart() {
-            showScreen('startScreen');
         }
         
         // 配列をシャッフル

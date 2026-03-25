@@ -627,9 +627,6 @@
         </div>
         
         <div class="home-button-group">
-            <button class="btn-danger" onclick="localStorage.clear(); location.reload();" style="width: 100%; margin-bottom: 20px;">
-                【テスト用】登録情報を消して初期化する
-            </button>
             <button class="home-button home-btn-start" onclick="goToSetting()">クイズを開始</button>
             <button class="home-button home-btn-start" style="background: #4caf50;" onclick="goToUserStats()">学習記録</button>
         </div>
@@ -940,19 +937,33 @@
             }
         }
         
-        // ユーザー登録
+// ユーザー登録
         async function registerUser() {
+            // --- ここから連打防止の追加コード ---
+            const registerBtn = event.target; // 押されたボタンを取得
+            const originalText = registerBtn.textContent; // 元のテキスト（「登録して開始」）を保存
+            
+            registerBtn.disabled = true; // ボタンを無効化
+            registerBtn.textContent = '登録中...'; // テキストを「登録中...」に変更
+            // --- ここまで ---
+
             const lineName = document.getElementById('lineName').value.trim();
             const expYears = document.getElementById('expYears').value;
             const currentSalary = parseInt(document.getElementById('currentSalary').value) || 0;
             
             if (!lineName) {
                 showError('LINE 表示名を入力してください');
+                // エラー時はボタンを元に戻す
+                registerBtn.disabled = false;
+                registerBtn.textContent = originalText;
                 return;
             }
             
             if (!expYears) {
                 showError('業界経験年数を選択してください');
+                // エラー時はボタンを元に戻す
+                registerBtn.disabled = false;
+                registerBtn.textContent = originalText;
                 return;
             }
             
@@ -964,19 +975,27 @@
                 registeredDate: new Date().toISOString()
             };
             
-            // ローカルストレージに保存
-            localStorage.setItem('shikakuLabUser', JSON.stringify(userData));
-            isRegistered = true;
-            
-            // Webhook に送信
-            await sendWebhook({
-                action: 'register_user',
-                ...userData
-            });
-            
-            // ホーム画面に遷移
-            displayUserInfo();
-            showScreen('homeScreen');
+            try {
+                // ローカルストレージに保存
+                localStorage.setItem('shikakuLabUser', JSON.stringify(userData));
+                isRegistered = true;
+                
+                // Webhook に送信
+                await sendWebhook({
+                    action: 'register_user',
+                    ...userData
+                });
+                
+                // ホーム画面に遷移
+                displayUserInfo();
+                showScreen('homeScreen');
+            } catch (error) {
+                console.error('Registration error:', error);
+                showError('登録に失敗しました。もう一度お試しください。');
+                // 通信エラー時もボタンを元に戻す
+                registerBtn.disabled = false;
+                registerBtn.textContent = originalText;
+            }
         }
         
         // 年度更新

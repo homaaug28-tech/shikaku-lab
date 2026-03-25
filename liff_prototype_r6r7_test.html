@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>建設シカクLAB - R6・R7完全版</title>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://liff.line.me/sdk/web/liff.js"></script>
     <style>
         * {
             margin: 0;
@@ -647,10 +648,6 @@
                         <span class="info-label">経験年数:</span>
                         <span class="info-value" id="statsExpYears"></span>
                     </div>
-                    <div class="info-row">
-                        <span class="info-label">給与:</span>
-                        <span class="info-value" id="statsSalary"></span>
-                    </div>
                 </div>
                 
                 <!-- 累計学習統計 -->
@@ -862,11 +859,49 @@
         // リポジトリパス
         const REPO_BASE = window.location.pathname.includes('/shikaku-lab/') ? '/shikaku-lab/' : '/';
         
+        // LINE LIFF ID（本番環境用）
+        const LIFF_ID = '2009300790-G4amrGku';
+        
         // 初期化
         window.addEventListener('DOMContentLoaded', () => {
             console.log('Page loaded');
-            loadUserData();
+            initializeLiff();
         });
+        
+        // LINE LIFF を初期化して LINE ユーザー ID を取得
+        async function initializeLiff() {
+            try {
+                // LIFF SDK を初期化
+                await liff.init({ liffId: LIFF_ID });
+                console.log('LIFF initialized');
+                
+                // ユーザーがログインしているか確認
+                if (liff.isLoggedIn()) {
+                    console.log('User is logged in');
+                    // LINE ユーザープロフィールを取得
+                    const profile = await liff.getProfile();
+                    console.log('Profile:', profile);
+                    
+                    // グローバル userId を LINE ユーザー ID に設定
+                    userId = profile.userId;
+                    console.log('LINE User ID:', userId);
+                } else {
+                    console.log('User is not logged in, redirecting to login');
+                    // ユーザーがログインしていない場合は LINE ログインにリダイレクト
+                    liff.login();
+                    return;
+                }
+                
+                // ユーザーデータを読み込み
+                loadUserData();
+            } catch (error) {
+                console.error('LIFF Error:', error);
+                // LIFF が利用できない場合（テスト環境など）はテスト ID を使用
+                console.log('Using test ID');
+                userId = 'test_' + Date.now();
+                loadUserData();
+            }
+        };
         
         // ローカルストレージからユーザーデータを読み込み
         function loadUserData() {
@@ -1299,7 +1334,6 @@
             // ユーザー情報を表示
             document.getElementById('statsUserName').textContent = userData.lineName || '-';
             document.getElementById('statsExpYears').textContent = userData.expYears || '-';
-            document.getElementById('statsSalary').textContent = userData.currentSalary ? `${userData.currentSalary}万円` : '-';
             
             // ローカルストレージから統計データを取得
             const statsKey = `shikakuLabStats_${userId}`;

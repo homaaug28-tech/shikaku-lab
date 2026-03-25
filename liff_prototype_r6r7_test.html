@@ -619,19 +619,22 @@
             </div>
             
             <!-- ホーム画面 -->
-            <div class="screen" id="homeScreen">
-                <div class="home-content">
-                    <div class="home-welcome">
-                        こんにちは！<br>
-                        <span id="userGreeting"></span>さん
-                    </div>
-                    
-                    <div class="home-button-group">
-                        <button class="home-button home-btn-start" onclick="goToSetting()">クイズを開始</button>
-                        <button class="home-button home-btn-start" style="background: #4caf50;" onclick="goToUserStats()">学習記録</button>
-                    </div>
-                </div>
-            </div>
+<div class="screen" id="homeScreen">
+    <div class="home-content">
+        <div class="home-welcome">
+            こんにちは！<br>
+            <span id="userGreeting"></span>さん
+        </div>
+        
+        <div class="home-button-group">
+            <button class="btn-danger" onclick="localStorage.clear(); location.reload();" style="width: 100%; margin-bottom: 20px;">
+                【テスト用】登録情報を消して初期化する
+            </button>
+            <button class="home-button home-btn-start" onclick="goToSetting()">クイズを開始</button>
+            <button class="home-button home-btn-start" style="background: #4caf50;" onclick="goToUserStats()">学習記録</button>
+        </div>
+    </div>
+</div>
             
             <!-- ユーザー統計画面 -->
             <div class="screen" id="userStatsScreen">

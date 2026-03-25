@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>建設シカクLAB - R6・R7 テスト版</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 30px 20px;
+        }
+        
+        .screen {
+            display: none;
+        }
+        
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* スタート画面 */
+        .start-screen h2 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+        }
+        
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        
+        button {
+            flex: 1;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        
+        /* 出題画面 */
+        .progress-bar {
+            background: #f0f0f0;
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            height: 100%;
+            transition: width 0.3s;
+        }
+        
+        .question-info {
+            color: #999;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        
+        .question-text {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            color: #333;
+            line-height: 1.6;
+            font-size: 16px;
+        }
+        
+        .question-image {
+            width: 100%;
+            max-height: 300px;
+            object-fit: contain;
+            margin: 20px 0;
+            border-radius: 8px;
+            background: #f0f0f0;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .option {
+            padding: 16px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+        }
+        
+        .option:hover {
+            border-color: #667eea;
+            background: #f9f9f9;
+        }
+        
+        .option.selected {
+            border-color: #667eea;
+            background: #e8eaf6;
+        }
+        
+        .option.correct {
+            border-color: #4caf50;
+            background: #f1f8f4;
+            color: #4caf50;
+            font-weight: 600;
+        }
+        
+        .option.incorrect {
+            border-color: #f44336;
+            background: #fdf3f2;
+            color: #f44336;
+            font-weight: 600;
+        }
+        
+        /* 結果画面 */
+        .result-screen h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .result-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-box {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-box .number {
+            font-size: 32px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+        
+        .stat-box .label {
+            font-size: 14px;
+            color: #999;
+        }
+        
+        .explanation-section {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .explanation-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .explanation-text {
+            color: #666;
+            line-height: 1.6;
+            font-size: 14px;
+            white-space: pre-wrap;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error {
+            background: #fdf3f2;
+            border: 2px solid #f44336;
+            color: #f44336;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .year-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .year-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .year-btn.active {
+            border-color: #667eea;
+            background: #e8eaf6;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>建設シカクLAB</h1>
+            <p>解体工事施工技士試験対策</p>
+        </div>
+        
+        <div class="content">
+            <!-- スタート画面 -->
+            <div class="screen active" id="startScreen">
+                <div class="start-screen">
+                    <h2>ようこそ！</h2>
+                    
+                    <div class="input-group">
+                        <label>LINE 表示名</label>
+                        <input type="text" id="lineName" placeholder="山田太郎" value="テストユーザー">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>業界経験年数</label>
+                        <select id="expYears">
+                            <option value="">選択してください</option>
+                            <option value="未経験">未経験</option>
+                            <option value="1年未満">1年未満</option>
+                            <option value="1-3">1～3年</option>
+                            <option value="3-5">3～5年</option>
+                            <option value="5-10">5～10年</option>
+                            <option value="10以上">10年以上</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>現在の給与（万円）</label>
+                        <input type="number" id="currentSalary" placeholder="400" value="400">
+                    </div>
+                    
+                    <div class="button-group">
+                        <button class="btn-primary" onclick="registerUser()">登録して開始</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 年度選択画面 -->
+            <div class="screen" id="yearSelectScreen">
+                <h2>年度を選択</h2>
+                <div class="year-selector">
+                    <button class="year-btn active" onclick="selectYear('R6')">R6年度</button>
+                    <button class="year-btn" onclick="selectYear('R7')">R7年度</button>
+                </div>
+                <div class="button-group">
+                    <button class="btn-primary" onclick="startQuiz()">クイズを開始</button>
+                    <button class="btn-secondary" onclick="goBackToStart()">戻る</button>
+                </div>
+            </div>
+            
+            <!-- 出題画面 -->
+            <div class="screen" id="quizScreen">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                
+                <div class="question-info">
+                    <span id="questionCount"></span> / <span id="totalCount"></span>
+                </div>
+                
+                <div class="question-text" id="questionText"></div>
+                
+                <img id="questionImage" class="question-image" style="display: none;">
+                
+                <div class="options" id="optionsContainer"></div>
+                
+                <div class="button-group">
+                    <button class="btn-primary" id="nextBtn" onclick="nextQuestion()" style="display: none;">次へ</button>
+                    <button class="btn-secondary" onclick="skipQuestion()" style="display: none;" id="skipBtn">スキップ</button>
+                </div>
+            </div>
+            
+            <!-- 結果画面 -->
+            <div class="screen" id="resultScreen">
+                <h2>クイズ完了！</h2>
+                
+                <div class="result-stats">
+                    <div class="stat-box">
+                        <div class="number" id="correctCount">0</div>
+                        <div class="label">正解数</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="number" id="correctRate">0%</div>
+                        <div class="label">正解率</div>
+                    </div>
+                </div>
+                
+                <div id="resultExplanation"></div>
+                
+                <div class="button-group">
+                    <button class="btn-primary" onclick="goBackToStart()">ホームに戻る</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let questions = [];
+        let currentQuestionIndex = 0;
+        let selectedAnswer = null;
+        let answered = false;
+        let correctCount = 0;
+        let selectedYear = 'R6';
+        let userId = 'test_' + Date.now();
+        let userData = {
+            lineUserId: userId,
+            lineName: '',
+            expYears: '',
+            currentSalary: 0
+        };
+        
+        // リポジトリの基本パス
+        const REPO_BASE = window.location.pathname.includes('/shikaku-lab/') ? '/shikaku-lab/' : '/';
+        
+        // JSON ファイルを読み込み
+        async function loadQuestions(year) {
+            try {
+                const url = REPO_BASE + `questions_${year}.json`;
+                console.log('Loading:', url);
+                const response = await axios.get(url);
+                questions = response.data.questions;
+                currentQuestionIndex = 0;
+                selectedAnswer = null;
+                answered = false;
+                correctCount = 0;
+                return true;
+            } catch (error) {
+                console.error('Error loading questions:', error);
+                showError(`問題データの読み込みに失敗しました: ${error.message}`);
+                return false;
+            }
+        }
+        
+        // ユーザー登録
+        async function registerUser() {
+            const lineName = document.getElementById('lineName').value.trim();
+            const expYears = document.getElementById('expYears').value;
+            const currentSalary = parseInt(document.getElementById('currentSalary').value) || 0;
+            
+            if (!lineName) {
+                showError('LINE 表示名を入力してください');
+                return;
+            }
+            
+            if (!expYears) {
+                showError('業界経験年数を選択してください');
+                return;
+            }
+            
+            userData = {
+                lineUserId: userId,
+                lineName: lineName,
+                expYears: expYears,
+                currentSalary: currentSalary,
+                registeredDate: new Date().toISOString()
+            };
+            
+            // Webhook に送信（Make に連携）
+            await sendWebhook({
+                action: 'register_user',
+                ...userData
+            });
+            
+            // 年度選択画面に遷移
+            showScreen('yearSelectScreen');
+        }
+        
+        // 年度を選択
+        function selectYear(year) {
+            selectedYear = year;
+            document.querySelectorAll('.year-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+        
+        // クイズ開始
+        async function startQuiz() {
+            const success = await loadQuestions(selectedYear);
+            if (!success) return;
+            
+            if (questions.length === 0) {
+                showError('問題が見つかりませんでした');
+                return;
+            }
+            
+            currentQuestionIndex = 0;
+            correctCount = 0;
+            showScreen('quizScreen');
+            displayQuestion();
+        }
+        
+        // 問題を表示
+        function displayQuestion() {
+            if (currentQuestionIndex >= questions.length) {
+                showResults();
+                return;
+            }
+            
+            const question = questions[currentQuestionIndex];
+            selectedAnswer = null;
+            answered = false;
+            
+            // 進捗バー
+            const progress = ((currentQuestionIndex) / questions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            
+            // 問題情報
+            document.getElementById('questionCount').textContent = currentQuestionIndex + 1;
+            document.getElementById('totalCount').textContent = questions.length;
+            
+            // 問題文
+            document.getElementById('questionText').textContent = question.question_text;
+            
+            // 画像
+            const imgElement = document.getElementById('questionImage');
+            if (question.has_image && question.image) {
+                imgElement.src = `data:image/png;base64,${question.image}`;
+                imgElement.style.display = 'block';
+            } else {
+                imgElement.style.display = 'none';
+            }
+            
+            // 選択肢
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+            
+            for (let i = 1; i <= 4; i++) {
+                const option = question.options[i.toString()];
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.textContent = `${i}. ${option.text}`;
+                optionDiv.onclick = () => selectOption(i.toString(), optionDiv);
+                optionsContainer.appendChild(optionDiv);
+            }
+            
+            // ボタン
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('skipBtn').style.display = 'block';
+        }
+        
+        // 選択肢を選択
+        function selectOption(answerNum, element) {
+            if (answered) return;
+            
+            selectedAnswer = answerNum;
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            const question = questions[currentQuestionIndex];
+            const isCorrect = answerNum === question.correct_answer;
+            
+            element.classList.add(isCorrect ? 'correct' : 'incorrect');
+            
+            // 正解を表示
+            document.querySelectorAll('.option').forEach((opt, idx) => {
+                if (question.correct_answer === (idx + 1).toString()) {
+                    opt.classList.add('correct');
+                }
+            });
+            
+            answered = true;
+            if (isCorrect) {
+                correctCount++;
+            }
+            
+            // 結果を表示
+            const resultDiv = document.createElement('div');
+            resultDiv.className = 'explanation-section';
+            resultDiv.innerHTML = `
+                <div class="explanation-title">${isCorrect ? '✓ 正解' : '✗ 不正解'}</div>
+                <div class="explanation-text">${question.explanation}</div>
+            `;
+            document.getElementById('quizScreen').insertBefore(resultDiv, document.getElementById('nextBtn'));
+            
+            // Webhook に送信
+            sendWebhook({
+                action: 'answer_question',
+                lineUserId: userId,
+                questionId: question.id,
+                year: question.year,
+                category: question.category,
+                questionNumber: question.question_number,
+                userAnswer: parseInt(answerNum),
+                isCorrect: isCorrect,
+                quizMode: {
+                    layer1: 'year',
+                    layer2: 'sequential',
+                    layer3: 'all',
+                    filterName: selectedYear + '年度'
+                },
+                answeredDate: new Date().toISOString()
+            });
+            
+            document.getElementById('skipBtn').style.display = 'none';
+            document.getElementById('nextBtn').style.display = 'block';
+        }
+        
+        // 次の問題へ
+        function nextQuestion() {
+            const resultDiv = document.querySelector('.explanation-section');
+            if (resultDiv) resultDiv.remove();
+            currentQuestionIndex++;
+            displayQuestion();
+        }
+        
+        // スキップ
+        function skipQuestion() {
+            const resultDiv = document.querySelector('.explanation-section');
+            if (resultDiv) resultDiv.remove();
+            nextQuestion();
+        }
+        
+        // 結果を表示
+        function showResults() {
+            document.getElementById('correctCount').textContent = correctCount;
+            const rate = Math.round((correctCount / questions.length) * 100);
+            document.getElementById('correctRate').textContent = rate + '%';
+            
+            const resultExplanation = document.getElementById('resultExplanation');
+            resultExplanation.innerHTML = `
+                <div class="stat-box">
+                    <p style="color: #333; font-weight: 600; margin-bottom: 10px;">学習内容</p>
+                    <p style="color: #666; font-size: 14px; line-height: 1.6;">
+                        ${selectedYear}年度の問題にチャレンジしていただきありがとうございます。<br>
+                        ${correctCount}問正解されました。<br>
+                        復習を通じて、さらに知識を深めていきましょう！
+                    </p>
+                </div>
+            `;
+            
+            showScreen('resultScreen');
+        }
+        
+        // Webhook に送信
+        async function sendWebhook(data) {
+            try {
+                const webhookUrl = 'https://hook.eu1.make.com/4i8ovi6kunvugp2w4u59kgjgr1quq2is';
+                await axios.post(webhookUrl, data);
+                console.log('Webhook sent:', data);
+            } catch (error) {
+                console.error('Webhook error:', error);
+            }
+        }
+        
+        // 画面を切り替え
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+        }
+        
+        // エラーを表示
+        function showError(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error';
+            errorDiv.textContent = message;
+            document.querySelector('.content').insertBefore(errorDiv, document.querySelector('.content').firstChild);
+            setTimeout(() => errorDiv.remove(), 5000);
+        }
+        
+        // ホームに戻る
+        function goBackToStart() {
+            showScreen('startScreen');
+        }
+        
+        // 初期化
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log('Page loaded');
+            console.log('Repo base:', REPO_BASE);
+        });
+    </script>
+</body>
+</html>

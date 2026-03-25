@@ -459,6 +459,121 @@
             margin-bottom: 20px;
             font-size: 14px;
         }
+        
+        /* ユーザー統計画面 */
+        .user-info-card {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .user-info-card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .info-value {
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .stats-card {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .stats-card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .stat-item {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+            border: 2px solid #f0f0f0;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #667eea;
+        }
+        
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+        
+        .stats-table thead {
+            background: #f0f0f0;
+        }
+        
+        .stats-table th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+            border-bottom: 2px solid #ddd;
+        }
+        
+        .stats-table td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .stats-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .stats-table tbody tr:hover {
+            background: #fafafa;
+        }
     </style>
 </head>
 <body>
@@ -512,7 +627,91 @@
                     
                     <div class="home-button-group">
                         <button class="home-button home-btn-start" onclick="goToSetting()">クイズを開始</button>
+                        <button class="home-button home-btn-start" style="background: #4caf50;" onclick="goToUserStats()">学習記録</button>
                     </div>
+                </div>
+            </div>
+            
+            <!-- ユーザー統計画面 -->
+            <div class="screen" id="userStatsScreen">
+                <h2>学習記録</h2>
+                
+                <!-- ユーザー情報 -->
+                <div class="user-info-card">
+                    <h3>ユーザー情報</h3>
+                    <div class="info-row">
+                        <span class="info-label">名前:</span>
+                        <span class="info-value" id="statsUserName"></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">経験年数:</span>
+                        <span class="info-value" id="statsExpYears"></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">給与:</span>
+                        <span class="info-value" id="statsSalary"></span>
+                    </div>
+                </div>
+                
+                <!-- 累計学習統計 -->
+                <div class="stats-card">
+                    <h3>累計学習統計</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-label">累計解答数</div>
+                            <div class="stat-value" id="totalAnswered">0</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">累計正解数</div>
+                            <div class="stat-value" id="totalCorrect">0</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">全体正解率</div>
+                            <div class="stat-value" id="overallRate">0%</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 分野別統計 -->
+                <div class="stats-card">
+                    <h3>分野別統計</h3>
+                    <table class="stats-table">
+                        <thead>
+                            <tr>
+                                <th>分野</th>
+                                <th>正解数/総数</th>
+                                <th>正解率</th>
+                            </tr>
+                        </thead>
+                        <tbody id="categoryStatsTable">
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- 年度別統計 -->
+                <div class="stats-card">
+                    <h3>年度別統計</h3>
+                    <table class="stats-table">
+                        <thead>
+                            <tr>
+                                <th>年度</th>
+                                <th>正解数/総数</th>
+                                <th>正解率</th>
+                            </tr>
+                        </thead>
+                        <tbody id="yearStatsTable">
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- 最終学習日時 -->
+                <div class="stats-card">
+                    <h3>最終学習日時</h3>
+                    <div class="info-value" id="lastStudyTime">記録なし</div>
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="goToHome()">ホームに戻る</button>
                 </div>
             </div>
             
@@ -975,10 +1174,10 @@
             nextQuestion();
         }
         
-        // クイズを途中で終了（ホームに戻る確認）
+        // クイズを途中で終了（結果画面に遷移）
         function confirmExitQuiz() {
-            if (confirm('クイズを中断してホームに戻りますか？')) {
-                goToHome();
+            if (confirm('クイズを中断して結果を確認しますか？')) {
+                showResults();
             }
         }
         
@@ -988,6 +1187,9 @@
             document.getElementById('totalQuestionsCount').textContent = filteredQuestions.length;
             const rate = filteredQuestions.length > 0 ? Math.round((correctCount / filteredQuestions.length) * 100) : 0;
             document.getElementById('correctRate').textContent = rate + '%';
+            
+            // 統計データを保存
+            saveStatistics();
             
             // 分野別統計
             if (Object.keys(categoryStats).length > 0) {
@@ -1009,6 +1211,49 @@
             }
             
             showScreen('resultScreen');
+        }
+        
+        // 統計データを保存
+        function saveStatistics() {
+            const statsKey = `shikakuLabStats_${userId}`;
+            let stats = {
+                totalAnswers: 0,
+                totalCorrect: 0,
+                categoryStats: {},
+                yearStats: {},
+                lastStudyDate: new Date().toISOString()
+            };
+            
+            // 既存の統計データを取得
+            const stored = localStorage.getItem(statsKey);
+            if (stored) {
+                stats = JSON.parse(stored);
+            }
+            
+            // 統計を更新
+            stats.totalAnswers += filteredQuestions.length;
+            stats.totalCorrect += correctCount;
+            stats.lastStudyDate = new Date().toISOString();
+            
+            // 分野別統計を更新
+            for (const [category, catStats] of Object.entries(categoryStats)) {
+                if (!stats.categoryStats[category]) {
+                    stats.categoryStats[category] = { correct: 0, total: 0 };
+                }
+                stats.categoryStats[category].correct += catStats.correct;
+                stats.categoryStats[category].total += catStats.total;
+            }
+            
+            // 年度別統計を更新
+            if (!stats.yearStats[settings.year]) {
+                stats.yearStats[settings.year] = { correct: 0, total: 0 };
+            }
+            stats.yearStats[settings.year].correct += correctCount;
+            stats.yearStats[settings.year].total += filteredQuestions.length;
+            
+            // ローカルストレージに保存
+            localStorage.setItem(statsKey, JSON.stringify(stats));
+            console.log('Statistics saved:', stats);
         }
         
         // Webhook に送信
@@ -1041,6 +1286,80 @@
             availableCategories = [...new Set(questions.map(q => q.category))];
             generateCategoryCheckboxes();
             showScreen('settingScreen');
+        }
+        
+        // ユーザー統計画面を表示
+        function goToUserStats() {
+            loadUserStats();
+            showScreen('userStatsScreen');
+        }
+        
+        // ユーザー統計を読み込み
+        function loadUserStats() {
+            // ユーザー情報を表示
+            document.getElementById('statsUserName').textContent = userData.lineName || '-';
+            document.getElementById('statsExpYears').textContent = userData.expYears || '-';
+            document.getElementById('statsSalary').textContent = userData.currentSalary ? `${userData.currentSalary}万円` : '-';
+            
+            // ローカルストレージから統計データを取得
+            const statsKey = `shikakuLabStats_${userId}`;
+            const statsData = localStorage.getItem(statsKey);
+            
+            if (statsData) {
+                const stats = JSON.parse(statsData);
+                
+                // 累計学習統計
+                document.getElementById('totalAnswered').textContent = stats.totalAnswers || 0;
+                document.getElementById('totalCorrect').textContent = stats.totalCorrect || 0;
+                const rate = stats.totalAnswers > 0 ? Math.round((stats.totalCorrect / stats.totalAnswers) * 100) : 0;
+                document.getElementById('overallRate').textContent = rate + '%';
+                
+                // 分野別統計
+                const categoryTable = document.getElementById('categoryStatsTable');
+                categoryTable.innerHTML = '';
+                
+                const categoryStats = stats.categoryStats || {};
+                for (const [category, catData] of Object.entries(categoryStats)) {
+                    const catRate = catData.total > 0 ? Math.round((catData.correct / catData.total) * 100) : 0;
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${category}</td>
+                        <td>${catData.correct}/${catData.total}</td>
+                        <td>${catRate}%</td>
+                    `;
+                    categoryTable.appendChild(row);
+                }
+                
+                // 年度別統計
+                const yearTable = document.getElementById('yearStatsTable');
+                yearTable.innerHTML = '';
+                
+                const yearStats = stats.yearStats || {};
+                for (const [year, yearData] of Object.entries(yearStats)) {
+                    const yearRate = yearData.total > 0 ? Math.round((yearData.correct / yearData.total) * 100) : 0;
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${year}年度</td>
+                        <td>${yearData.correct}/${yearData.total}</td>
+                        <td>${yearRate}%</td>
+                    `;
+                    yearTable.appendChild(row);
+                }
+                
+                // 最終学習日時
+                if (stats.lastStudyDate) {
+                    const lastDate = new Date(stats.lastStudyDate);
+                    const formattedDate = lastDate.toLocaleString('ja-JP');
+                    document.getElementById('lastStudyTime').textContent = formattedDate;
+                }
+            } else {
+                // 統計データが存在しない場合
+                document.getElementById('totalAnswered').textContent = 0;
+                document.getElementById('totalCorrect').textContent = 0;
+                document.getElementById('overallRate').textContent = '0%';
+                document.getElementById('categoryStatsTable').innerHTML = '<tr><td colspan="3" style="text-align: center; color: #999;">まだ学習記録がありません</td></tr>';
+                document.getElementById('yearStatsTable').innerHTML = '<tr><td colspan="3" style="text-align: center; color: #999;">まだ学習記録がありません</td></tr>';
+            }
         }
         
         // エラー表示

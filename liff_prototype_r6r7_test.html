@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>建設シカクLAB - R6・R7 テスト版</title>
+    <title>建設シカクLAB - R6・R7完全版</title>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <style>
         * {
@@ -20,7 +20,7 @@
         }
         
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             background: white;
             border-radius: 15px;
@@ -63,11 +63,11 @@
             to { opacity: 1; }
         }
         
-        /* スタート画面 */
-        .start-screen h2 {
-            font-size: 20px;
-            margin-bottom: 20px;
+        /* 共通 */
+        h2 {
             color: #333;
+            margin-bottom: 20px;
+            font-size: 22px;
         }
         
         .input-group {
@@ -79,6 +79,7 @@
             margin-bottom: 8px;
             color: #555;
             font-weight: 600;
+            font-size: 14px;
         }
         
         .input-group input,
@@ -101,10 +102,12 @@
             display: flex;
             gap: 10px;
             margin-top: 30px;
+            flex-wrap: wrap;
         }
         
         button {
             flex: 1;
+            min-width: 120px;
             padding: 14px 20px;
             border: none;
             border-radius: 8px;
@@ -133,6 +136,81 @@
             background: #e0e0e0;
         }
         
+        /* 年度・フィルタ選択 */
+        .selector-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .selector-item label {
+            display: block;
+            margin-bottom: 10px;
+            color: #555;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+        }
+        
+        .checkbox-item input[type="checkbox"] {
+            width: auto;
+            margin-right: 8px;
+            cursor: pointer;
+        }
+        
+        .checkbox-item label {
+            margin: 0;
+            font-weight: normal;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .radio-item {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .radio-item:hover {
+            border-color: #667eea;
+            background: #f9f9f9;
+        }
+        
+        .radio-item input[type="radio"] {
+            width: auto;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        
+        .radio-item label {
+            margin: 0;
+            font-weight: normal;
+            font-size: 14px;
+            cursor: pointer;
+            flex: 1;
+        }
+        
         /* 出題画面 */
         .progress-bar {
             background: #f0f0f0;
@@ -149,9 +227,20 @@
         }
         
         .question-info {
-            color: #999;
-            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 15px;
+            font-size: 14px;
+            color: #999;
+        }
+        
+        .question-meta {
+            background: #f9f9f9;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #666;
         }
         
         .question-text {
@@ -160,17 +249,19 @@
             border-radius: 8px;
             margin-bottom: 20px;
             color: #333;
-            line-height: 1.6;
+            line-height: 1.8;
             font-size: 16px;
+            border-left: 4px solid #667eea;
         }
         
         .question-image {
             width: 100%;
-            max-height: 300px;
+            max-height: 400px;
             object-fit: contain;
             margin: 20px 0;
             border-radius: 8px;
             background: #f0f0f0;
+            border: 2px solid #eee;
         }
         
         .options {
@@ -187,9 +278,10 @@
             cursor: pointer;
             transition: all 0.3s;
             background: white;
+            line-height: 1.6;
         }
         
-        .option:hover {
+        .option:hover:not(.disabled) {
             border-color: #667eea;
             background: #f9f9f9;
         }
@@ -213,16 +305,37 @@
             font-weight: 600;
         }
         
-        /* 結果画面 */
-        .result-screen h2 {
-            font-size: 24px;
-            margin-bottom: 20px;
-            color: #333;
+        .option.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
         }
         
+        .explanation-section {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .explanation-title {
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .explanation-text {
+            color: #555;
+            line-height: 1.8;
+            font-size: 14px;
+            white-space: pre-wrap;
+        }
+        
+        /* 結果画面 */
         .result-stats {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr 1fr 1fr;
             gap: 15px;
             margin-bottom: 30px;
         }
@@ -232,60 +345,57 @@
             padding: 20px;
             border-radius: 8px;
             text-align: center;
+            border: 2px solid #f0f0f0;
         }
         
         .stat-box .number {
-            font-size: 32px;
+            font-size: 36px;
             font-weight: 700;
             color: #667eea;
             margin-bottom: 5px;
         }
         
         .stat-box .label {
-            font-size: 14px;
+            font-size: 13px;
             color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
         
-        .explanation-section {
+        .category-stats {
             background: #f9f9f9;
-            padding: 15px;
+            padding: 20px;
             border-radius: 8px;
-            margin-top: 10px;
-            border-left: 4px solid #667eea;
+            margin-bottom: 20px;
         }
         
-        .explanation-title {
+        .category-stats h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        .category-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 10px;
+            background: white;
+            border-radius: 6px;
+            border-left: 3px solid #667eea;
+        }
+        
+        .category-name {
             font-weight: 600;
             color: #333;
-            margin-bottom: 10px;
-        }
-        
-        .explanation-text {
-            color: #666;
-            line-height: 1.6;
             font-size: 14px;
-            white-space: pre-wrap;
         }
         
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #999;
-        }
-        
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .category-rate {
+            color: #667eea;
+            font-weight: 700;
+            font-size: 14px;
         }
         
         .error {
@@ -295,29 +405,17 @@
             padding: 15px;
             border-radius: 8px;
             margin-bottom: 20px;
+            font-size: 14px;
         }
         
-        .year-selector {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        
-        .year-btn {
-            flex: 1;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            background: white;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-        
-        .year-btn.active {
-            border-color: #667eea;
-            background: #e8eaf6;
+        .info {
+            background: #f3f9ff;
+            border: 2px solid #667eea;
             color: #667eea;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
         }
     </style>
 </head>
@@ -331,45 +429,106 @@
         <div class="content">
             <!-- スタート画面 -->
             <div class="screen active" id="startScreen">
-                <div class="start-screen">
-                    <h2>ようこそ！</h2>
-                    
-                    <div class="input-group">
-                        <label>LINE 表示名</label>
-                        <input type="text" id="lineName" placeholder="山田太郎" value="テストユーザー">
-                    </div>
-                    
-                    <div class="input-group">
-                        <label>業界経験年数</label>
-                        <select id="expYears">
-                            <option value="">選択してください</option>
-                            <option value="未経験">未経験</option>
-                            <option value="1年未満">1年未満</option>
-                            <option value="1-3">1～3年</option>
-                            <option value="3-5">3～5年</option>
-                            <option value="5-10">5～10年</option>
-                            <option value="10以上">10年以上</option>
-                        </select>
-                    </div>
-                    
-                    <div class="input-group">
-                        <label>現在の給与（万円）</label>
-                        <input type="number" id="currentSalary" placeholder="400" value="400">
-                    </div>
-                    
-                    <div class="button-group">
-                        <button class="btn-primary" onclick="registerUser()">登録して開始</button>
-                    </div>
+                <h2>ようこそ！</h2>
+                
+                <div class="input-group">
+                    <label>LINE 表示名</label>
+                    <input type="text" id="lineName" placeholder="山田太郎" value="テストユーザー">
+                </div>
+                
+                <div class="input-group">
+                    <label>業界経験年数</label>
+                    <select id="expYears">
+                        <option value="">選択してください</option>
+                        <option value="未経験">未経験</option>
+                        <option value="1年未満">1年未満</option>
+                        <option value="1-3">1～3年</option>
+                        <option value="3-5">3～5年</option>
+                        <option value="5-10">5～10年</option>
+                        <option value="10以上">10年以上</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label>現在の給与（万円）</label>
+                    <input type="number" id="currentSalary" placeholder="400" value="400">
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn-primary" onclick="registerUser()">登録して開始</button>
                 </div>
             </div>
             
-            <!-- 年度選択画面 -->
-            <div class="screen" id="yearSelectScreen">
-                <h2>年度を選択</h2>
-                <div class="year-selector">
-                    <button class="year-btn active" onclick="selectYear('R6')">R6年度</button>
-                    <button class="year-btn" onclick="selectYear('R7')">R7年度</button>
+            <!-- 出題設定画面 -->
+            <div class="screen" id="settingScreen">
+                <h2>出題設定</h2>
+                
+                <div class="selector-group">
+                    <div class="selector-item">
+                        <label>年度を選択</label>
+                        <div class="radio-group">
+                            <div class="radio-item">
+                                <input type="radio" name="year" value="R6" id="yearR6" onchange="updateYear('R6')" checked>
+                                <label for="yearR6">R6年度</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" name="year" value="R7" id="yearR7" onchange="updateYear('R7')">
+                                <label for="yearR7">R7年度</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="selector-item">
+                        <label>分野を選択</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="cat-施工技術" value="施工技術" onchange="updateCategories()" checked>
+                                <label for="cat-施工技術">施工技術</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="cat-法令・制度" value="法令・制度" onchange="updateCategories()" checked>
+                                <label for="cat-法令・制度">法令・制度</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="cat-構造・材料" value="構造・材料" onchange="updateCategories()" checked>
+                                <label for="cat-構造・材料">構造・材料</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="cat-その他" value="その他" onchange="updateCategories()" checked>
+                                <label for="cat-その他">その他</label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                
+                <div class="input-group">
+                    <label>出題方式</label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" name="mode" value="sequential" id="modeSequential" onchange="updateMode()" checked>
+                            <label for="modeSequential">順番通りに出題</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" name="mode" value="random" id="modeRandom" onchange="updateMode()">
+                            <label for="modeRandom">ランダムに出題</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label>出題内容</label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" name="scope" value="all" id="scopeAll" onchange="updateScope()" checked>
+                            <label for="scopeAll">全問出題</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" name="scope" value="wrong" id="scopeWrong" onchange="updateScope()">
+                            <label for="scopeWrong">間違えた問題だけ</label>
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="button-group">
                     <button class="btn-primary" onclick="startQuiz()">クイズを開始</button>
                     <button class="btn-secondary" onclick="goBackToStart()">戻る</button>
@@ -384,6 +543,9 @@
                 
                 <div class="question-info">
                     <span id="questionCount"></span> / <span id="totalCount"></span>
+                    <div class="question-meta">
+                        <span id="categoryBadge"></span>
+                    </div>
                 </div>
                 
                 <div class="question-text" id="questionText"></div>
@@ -391,6 +553,8 @@
                 <img id="questionImage" class="question-image" style="display: none;">
                 
                 <div class="options" id="optionsContainer"></div>
+                
+                <div id="explanationContainer"></div>
                 
                 <div class="button-group">
                     <button class="btn-primary" id="nextBtn" onclick="nextQuestion()" style="display: none;">次へ</button>
@@ -408,54 +572,63 @@
                         <div class="label">正解数</div>
                     </div>
                     <div class="stat-box">
+                        <div class="number" id="totalQuestionsCount">0</div>
+                        <div class="label">総問題数</div>
+                    </div>
+                    <div class="stat-box">
                         <div class="number" id="correctRate">0%</div>
                         <div class="label">正解率</div>
                     </div>
                 </div>
                 
-                <div id="resultExplanation"></div>
+                <div class="category-stats" id="categoryStatsContainer" style="display: none;">
+                    <h3>分野別正解率</h3>
+                    <div id="categoryStatsList"></div>
+                </div>
                 
                 <div class="button-group">
-                    <button class="btn-primary" onclick="goBackToStart()">ホームに戻る</button>
+                    <button class="btn-primary" onclick="goBackToSetting()">もう一度チャレンジ</button>
+                    <button class="btn-secondary" onclick="goBackToStart()">ホームに戻る</button>
                 </div>
             </div>
         </div>
     </div>
     
     <script>
-        let questions = [];
+        // グローバル変数
+        let allQuestions = [];
+        let filteredQuestions = [];
         let currentQuestionIndex = 0;
         let selectedAnswer = null;
         let answered = false;
         let correctCount = 0;
-        let selectedYear = 'R6';
-        let userId = 'test_' + Date.now();
-        let userData = {
-            lineUserId: userId,
-            lineName: '',
-            expYears: '',
-            currentSalary: 0
+        let categoryStats = {};
+        let wrongQuestionIds = [];
+        
+        let settings = {
+            year: 'R6',
+            categories: ['施工技術', '法令・制度', '構造・材料', 'その他'],
+            mode: 'sequential',
+            scope: 'all'
         };
         
-        // リポジトリの基本パス
+        let userId = 'test_' + Date.now();
+        let userData = {};
+        
+        // リポジトリパス
         const REPO_BASE = window.location.pathname.includes('/shikaku-lab/') ? '/shikaku-lab/' : '/';
         
-        // JSON ファイルを読み込み
+        // JSON を読み込み
         async function loadQuestions(year) {
             try {
                 const url = REPO_BASE + `questions_${year}.json`;
                 console.log('Loading:', url);
                 const response = await axios.get(url);
-                questions = response.data.questions;
-                currentQuestionIndex = 0;
-                selectedAnswer = null;
-                answered = false;
-                correctCount = 0;
-                return true;
+                return response.data.questions;
             } catch (error) {
                 console.error('Error loading questions:', error);
-                showError(`問題データの読み込みに失敗しました: ${error.message}`);
-                return false;
+                showError(`問題データの読み込みに失敗しました`);
+                return [];
             }
         }
         
@@ -483,59 +656,104 @@
                 registeredDate: new Date().toISOString()
             };
             
-            // Webhook に送信（Make に連携）
+            // Webhook に送信
             await sendWebhook({
                 action: 'register_user',
                 ...userData
             });
             
-            // 年度選択画面に遷移
-            showScreen('yearSelectScreen');
+            // 出題設定画面に遷移
+            showScreen('settingScreen');
         }
         
-        // 年度を選択
-        function selectYear(year) {
-            selectedYear = year;
-            document.querySelectorAll('.year-btn').forEach(btn => {
-                btn.classList.remove('active');
+        // 年度更新
+        function updateYear(year) {
+            settings.year = year;
+        }
+        
+        // 分野更新
+        function updateCategories() {
+            settings.categories = [];
+            document.querySelectorAll('input[id^="cat-"]:checked').forEach(checkbox => {
+                settings.categories.push(checkbox.value);
             });
-            event.target.classList.add('active');
+        }
+        
+        // 出題方式更新
+        function updateMode() {
+            settings.mode = document.querySelector('input[name="mode"]:checked').value;
+        }
+        
+        // 出題内容更新
+        function updateScope() {
+            settings.scope = document.querySelector('input[name="scope"]:checked').value;
         }
         
         // クイズ開始
         async function startQuiz() {
-            const success = await loadQuestions(selectedYear);
-            if (!success) return;
+            if (settings.categories.length === 0) {
+                showError('少なくとも1つの分野を選択してください');
+                return;
+            }
             
-            if (questions.length === 0) {
+            // 問題を読み込み
+            allQuestions = await loadQuestions(settings.year);
+            
+            if (allQuestions.length === 0) {
                 showError('問題が見つかりませんでした');
                 return;
             }
             
+            // フィルタリング
+            filterQuestions();
+            
+            if (filteredQuestions.length === 0) {
+                showError('条件に合う問題が見つかりませんでした');
+                return;
+            }
+            
+            // ランダムに並び替え
+            if (settings.mode === 'random') {
+                shuffleArray(filteredQuestions);
+            }
+            
+            // 初期化
             currentQuestionIndex = 0;
             correctCount = 0;
+            categoryStats = {};
+            
             showScreen('quizScreen');
             displayQuestion();
         }
         
+        // 問題をフィルタリング
+        function filterQuestions() {
+            filteredQuestions = allQuestions.filter(q => {
+                const categoryMatch = settings.categories.includes(q.category);
+                const wrongMatch = settings.scope === 'all' || wrongQuestionIds.includes(q.id);
+                return categoryMatch && wrongMatch;
+            });
+        }
+        
         // 問題を表示
         function displayQuestion() {
-            if (currentQuestionIndex >= questions.length) {
+            if (currentQuestionIndex >= filteredQuestions.length) {
                 showResults();
                 return;
             }
             
-            const question = questions[currentQuestionIndex];
+            const question = filteredQuestions[currentQuestionIndex];
             selectedAnswer = null;
             answered = false;
             
             // 進捗バー
-            const progress = ((currentQuestionIndex) / questions.length) * 100;
+            const progress = ((currentQuestionIndex) / filteredQuestions.length) * 100;
             document.getElementById('progressFill').style.width = progress + '%';
             
             // 問題情報
             document.getElementById('questionCount').textContent = currentQuestionIndex + 1;
-            document.getElementById('totalCount').textContent = questions.length;
+            document.getElementById('totalCount').textContent = filteredQuestions.length;
+            document.getElementById('categoryBadge').textContent = question.category;
             
             // 問題文
             document.getElementById('questionText').textContent = question.question_text;
@@ -558,9 +776,12 @@
                 const optionDiv = document.createElement('div');
                 optionDiv.className = 'option';
                 optionDiv.textContent = `${i}. ${option.text}`;
-                optionDiv.onclick = () => selectOption(i.toString(), optionDiv);
+                optionDiv.onclick = () => selectOption(i.toString(), optionDiv, question);
                 optionsContainer.appendChild(optionDiv);
             }
+            
+            // 説明をクリア
+            document.getElementById('explanationContainer').innerHTML = '';
             
             // ボタン
             document.getElementById('nextBtn').style.display = 'none';
@@ -568,39 +789,56 @@
         }
         
         // 選択肢を選択
-        function selectOption(answerNum, element) {
+        function selectOption(answerNum, element, question) {
             if (answered) return;
             
             selectedAnswer = answerNum;
             document.querySelectorAll('.option').forEach(opt => {
-                opt.classList.remove('selected', 'correct', 'incorrect');
+                opt.classList.add('disabled');
+                opt.classList.remove('selected');
             });
             
-            const question = questions[currentQuestionIndex];
             const isCorrect = answerNum === question.correct_answer;
             
-            element.classList.add(isCorrect ? 'correct' : 'incorrect');
-            
-            // 正解を表示
+            // すべての選択肢を無効化
             document.querySelectorAll('.option').forEach((opt, idx) => {
-                if (question.correct_answer === (idx + 1).toString()) {
+                const optNum = (idx + 1).toString();
+                if (optNum === question.correct_answer) {
                     opt.classList.add('correct');
+                } else if (optNum === answerNum && !isCorrect) {
+                    opt.classList.add('incorrect');
                 }
             });
             
             answered = true;
             if (isCorrect) {
                 correctCount++;
+                if (wrongQuestionIds.includes(question.id)) {
+                    wrongQuestionIds = wrongQuestionIds.filter(id => id !== question.id);
+                }
+            } else {
+                if (!wrongQuestionIds.includes(question.id)) {
+                    wrongQuestionIds.push(question.id);
+                }
             }
             
-            // 結果を表示
-            const resultDiv = document.createElement('div');
-            resultDiv.className = 'explanation-section';
-            resultDiv.innerHTML = `
-                <div class="explanation-title">${isCorrect ? '✓ 正解' : '✗ 不正解'}</div>
-                <div class="explanation-text">${question.explanation}</div>
+            // カテゴリ統計を更新
+            if (!categoryStats[question.category]) {
+                categoryStats[question.category] = { total: 0, correct: 0 };
+            }
+            categoryStats[question.category].total++;
+            if (isCorrect) {
+                categoryStats[question.category].correct++;
+            }
+            
+            // 解説を表示
+            const explanationDiv = document.getElementById('explanationContainer');
+            explanationDiv.innerHTML = `
+                <div class="explanation-section">
+                    <div class="explanation-title">${isCorrect ? '✓ 正解' : '✗ 不正解'}</div>
+                    <div class="explanation-text">${question.explanation}</div>
+                </div>
             `;
-            document.getElementById('quizScreen').insertBefore(resultDiv, document.getElementById('nextBtn'));
             
             // Webhook に送信
             sendWebhook({
@@ -614,9 +852,9 @@
                 isCorrect: isCorrect,
                 quizMode: {
                     layer1: 'year',
-                    layer2: 'sequential',
-                    layer3: 'all',
-                    filterName: selectedYear + '年度'
+                    layer2: settings.mode,
+                    layer3: settings.scope,
+                    filterName: settings.year + '年度'
                 },
                 answeredDate: new Date().toISOString()
             });
@@ -625,38 +863,42 @@
             document.getElementById('nextBtn').style.display = 'block';
         }
         
-        // 次の問題へ
+        // 次の問題
         function nextQuestion() {
-            const resultDiv = document.querySelector('.explanation-section');
-            if (resultDiv) resultDiv.remove();
             currentQuestionIndex++;
             displayQuestion();
         }
         
         // スキップ
         function skipQuestion() {
-            const resultDiv = document.querySelector('.explanation-section');
-            if (resultDiv) resultDiv.remove();
             nextQuestion();
         }
         
         // 結果を表示
         function showResults() {
             document.getElementById('correctCount').textContent = correctCount;
-            const rate = Math.round((correctCount / questions.length) * 100);
+            document.getElementById('totalQuestionsCount').textContent = filteredQuestions.length;
+            const rate = filteredQuestions.length > 0 ? Math.round((correctCount / filteredQuestions.length) * 100) : 0;
             document.getElementById('correctRate').textContent = rate + '%';
             
-            const resultExplanation = document.getElementById('resultExplanation');
-            resultExplanation.innerHTML = `
-                <div class="stat-box">
-                    <p style="color: #333; font-weight: 600; margin-bottom: 10px;">学習内容</p>
-                    <p style="color: #666; font-size: 14px; line-height: 1.6;">
-                        ${selectedYear}年度の問題にチャレンジしていただきありがとうございます。<br>
-                        ${correctCount}問正解されました。<br>
-                        復習を通じて、さらに知識を深めていきましょう！
-                    </p>
-                </div>
-            `;
+            // 分野別統計
+            if (Object.keys(categoryStats).length > 0) {
+                const categoryList = document.getElementById('categoryStatsList');
+                categoryList.innerHTML = '';
+                
+                for (const [category, stats] of Object.entries(categoryStats)) {
+                    const categoryRate = Math.round((stats.correct / stats.total) * 100);
+                    const categoryDiv = document.createElement('div');
+                    categoryDiv.className = 'category-item';
+                    categoryDiv.innerHTML = `
+                        <span class="category-name">${category}</span>
+                        <span class="category-rate">${stats.correct}/${stats.total} (${categoryRate}%)</span>
+                    `;
+                    categoryList.appendChild(categoryDiv);
+                }
+                
+                document.getElementById('categoryStatsContainer').style.display = 'block';
+            }
             
             showScreen('resultScreen');
         }
@@ -672,7 +914,7 @@
             }
         }
         
-        // 画面を切り替え
+        // 画面切り替え
         function showScreen(screenId) {
             document.querySelectorAll('.screen').forEach(screen => {
                 screen.classList.remove('active');
@@ -680,7 +922,7 @@
             document.getElementById(screenId).classList.add('active');
         }
         
-        // エラーを表示
+        // エラー表示
         function showError(message) {
             const errorDiv = document.createElement('div');
             errorDiv.className = 'error';
@@ -689,16 +931,22 @@
             setTimeout(() => errorDiv.remove(), 5000);
         }
         
-        // ホームに戻る
+        // 戻る処理
+        function goBackToSetting() {
+            showScreen('settingScreen');
+        }
+        
         function goBackToStart() {
             showScreen('startScreen');
         }
         
-        // 初期化
-        window.addEventListener('DOMContentLoaded', () => {
-            console.log('Page loaded');
-            console.log('Repo base:', REPO_BASE);
-        });
+        // 配列をシャッフル
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
     </script>
 </body>
 </html>

@@ -903,16 +903,33 @@
             }
         };
         
-        // ローカルストレージからユーザーデータを読み込み
-        function loadUserData() {
+        // ローカルストレージからユーザーデータを読み込み、URLパラメータで画面を振り分け
+        async function loadUserData() {
             const stored = localStorage.getItem('shikakuLabUser');
+            
+            // URLのパラメータ (?page=...) を取得
+            const params = new URLSearchParams(window.location.search);
+            const page = params.get('page');
+
             if (stored) {
                 userData = JSON.parse(stored);
                 userId = userData.lineUserId;
                 isRegistered = true;
                 displayUserInfo();
-                showScreen('homeScreen');
+                
+                // パラメータに基づいた画面遷移の振り分け
+                if (page === 'quiz') {
+                    // 「クイズを開始」ボタンから来た場合：直接設定画面へ
+                    await goToSetting(); 
+                } else if (page === 'stats') {
+                    // 「学習記録」ボタンから来た場合：直接統計画面へ
+                    goToUserStats();
+                } else {
+                    // パラメータがない、またはそれ以外：いつものホーム画面
+                    showScreen('homeScreen');
+                }
             } else {
+                // 未登録なら登録画面へ
                 showScreen('registerScreen');
             }
         }

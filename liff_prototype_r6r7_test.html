@@ -893,7 +893,7 @@
                 }
                 
                 // ユーザーデータを読み込み
-                loadUserData();
+        await loadUserData();
             } catch (error) {
                 console.error('LIFF Error:', error);
                 // LIFF が利用できない場合（テスト環境など）はテスト ID を使用

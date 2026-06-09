@@ -1,0 +1,2397 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>建設シカクLAB - R6・R7完全版</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://liff.line.me/sdk/web/liff.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .header .user-info {
+            font-size: 12px;
+            margin-top: 10px;
+            opacity: 0.8;
+        }
+        
+        .content {
+            padding: 30px 20px;
+        }
+        
+        .screen {
+            display: none;
+        }
+        
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* 共通 */
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            flex: 1;
+            min-width: 120px;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        
+        .btn-danger {
+            background: #f44336;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #d32f2f;
+        }
+        
+        /* ホーム画面 */
+        .home-content {
+            text-align: center;
+        }
+        
+        .home-welcome {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        
+        .home-button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .home-button {
+            padding: 20px;
+            border-radius: 8px;
+            border: none;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .home-btn-start {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .home-btn-start:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        /* 年度・フィルタ選択 */
+        .selector-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .selector-item label {
+            display: block;
+            margin-bottom: 10px;
+            color: #555;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+        }
+        
+        .checkbox-item input[type="checkbox"] {
+            width: auto;
+            margin-right: 8px;
+            cursor: pointer;
+        }
+        
+        .checkbox-item label {
+            margin: 0;
+            font-weight: normal;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .radio-item {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .radio-item:hover {
+            border-color: #667eea;
+            background: #f9f9f9;
+        }
+        
+        .radio-item input[type="radio"] {
+            width: auto;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        
+        .radio-item label {
+            margin: 0;
+            font-weight: normal;
+            font-size: 14px;
+            cursor: pointer;
+            flex: 1;
+        }
+        
+        /* 出題画面 */
+        .progress-bar {
+            background: #f0f0f0;
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            height: 100%;
+            transition: width 0.3s;
+        }
+        
+        .question-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #999;
+        }
+        
+        .question-meta {
+            background: #f9f9f9;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #666;
+        }
+        
+        .question-text {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            color: #333;
+            line-height: 1.8;
+            font-size: 16px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .question-image {
+            width: 100%;
+            max-height: 400px;
+            object-fit: contain;
+            margin: 20px 0;
+            border-radius: 8px;
+            background: #f0f0f0;
+            border: 2px solid #eee;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .option {
+            padding: 16px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+            line-height: 1.6;
+        }
+        
+        .option:hover:not(.disabled) {
+            border-color: #667eea;
+            background: #f9f9f9;
+        }
+        
+        .option.selected {
+            border-color: #667eea;
+            background: #e8eaf6;
+        }
+        
+        .option.correct {
+            border-color: #4caf50;
+            background: #c8e6c9;
+            color: #2e7d32;
+            font-weight: 600;
+        }
+        
+        .option.incorrect {
+            border-color: #f44336;
+            background: #ffcdd2;
+            color: #c62828;
+            font-weight: 600;
+        }
+        
+        .option.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        
+        .explanation-section {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .explanation-title {
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .explanation-text {
+            color: #555;
+            line-height: 1.8;
+            font-size: 14px;
+            white-space: pre-wrap;
+        }
+        
+        /* 結果画面 */
+        .result-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-box {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #f0f0f0;
+        }
+        
+        .stat-box .number {
+            font-size: 36px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+        
+        .stat-box .label {
+            font-size: 13px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .category-stats {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .category-stats h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        .category-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 10px;
+            background: white;
+            border-radius: 6px;
+            border-left: 3px solid #667eea;
+        }
+        
+        .category-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+        
+        .category-rate {
+            color: #667eea;
+            font-weight: 700;
+            font-size: 14px;
+        }
+        
+        .error {
+            background: #fdf3f2;
+            border: 2px solid #f44336;
+            color: #f44336;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        /* ユーザー統計画面 */
+        .user-info-card {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .user-info-card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .info-value {
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .stats-card {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .stats-card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .stat-item {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+            border: 2px solid #f0f0f0;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #667eea;
+        }
+        
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+        
+        .stats-table thead {
+            background: #f0f0f0;
+        }
+        
+        .stats-table th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+            border-bottom: 2px solid #ddd;
+        }
+        
+        .stats-table td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .stats-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .stats-table tbody tr:hover {
+            background: #fafafa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>建設シカクLAB</h1>
+            <p>解体工事施工技士試験対策</p>
+            <div class="user-info" id="userInfoDisplay"></div>
+        </div>
+        
+        <div class="content">
+            <!-- 登録画面 -->
+            <div class="screen active" id="registerScreen">
+                <h2>ようこそ！</h2>
+                
+                <div class="input-group">
+                    <label>LINE 表示名</label>
+                    <input type="text" id="lineName" placeholder="山田太郎" value="">
+                </div>
+                
+                <div class="input-group">
+                    <label>業界経験年数</label>
+                    <select id="expYears">
+                        <option value="">選択してください</option>
+                        <option value="未経験">未経験</option>
+                        <option value="1年未満">1年未満</option>
+                        <option value="1-3">1～3年</option>
+                        <option value="3-5">3～5年</option>
+                        <option value="5-10">5～10年</option>
+                        <option value="10以上">10年以上</option>
+                    </select>
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn-primary" onclick="registerUser()">登録して開始</button>
+                </div>
+            </div>
+            
+            <!-- ホーム画面 -->
+            <div class="screen" id="homeScreen">
+                <div class="home-content">
+                    <div class="home-welcome">
+                        こんにちは！<br>
+                        <span id="userGreeting"></span>さん
+                    </div>
+                    
+                    <div class="home-button-group">
+                        <button class="home-button home-btn-start" onclick="goToSetting()">クイズを開始</button>
+                        <button class="home-button home-btn-start" style="background: #4caf50;" onclick="goToUserStats()">学習記録</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ゲスト5問診断画面 -->
+            <div class="screen" id="guestQuizScreen">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="guestProgressFill"></div>
+                </div>
+                
+                <div class="question-info">
+                    <span id="guestQuestionCount"></span> / <span id="guestTotalCount"></span>
+                </div>
+                
+                <div class="question-text" id="guestQuestionText"></div>
+                
+                <img id="guestQuestionImage" class="question-image" style="display: none;">
+                
+                <div class="options" id="guestOptionsContainer"></div>
+                
+                <div id="guestExplanationContainer"></div>
+                
+                <div class="button-group">
+                    <button class="btn-primary" id="guestNextBtn" onclick="guestNextQuestion()" style="display: none;">次へ</button>
+                </div>
+            </div>
+            
+            <!-- ゲスト診断結果画面 -->
+            <div class="screen" id="guestResultScreen">
+                <h2>5問診断の結果</h2>
+                
+                <div class="result-stats">
+                    <div class="stat-box">
+                        <div class="number" id="guestCorrectCount">0</div>
+                        <div class="label">正解数</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="number" id="guestTotalCount2">5</div>
+                        <div class="label">総問題数</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="number" id="guestCorrectRate">0%</div>
+                        <div class="label">正解率</div>
+                    </div>
+                </div>
+                
+                <div class="stats-card">
+                    <h3>弱点分野</h3>
+                    <div id="guestWeakCategory" style="font-size: 16px; color: #333; margin: 10px 0;"></div>
+                </div>
+                
+                <div class="stats-card" style="background: #e8f5e9; border-left-color: #4caf50;">
+                    <h3>LINEで学習を続ける</h3>
+                    <p style="font-size: 14px; color: #555; margin: 10px 0;">
+                        <strong>「LINEで学習記録を保存する」</strong><br/>
+                        LINE経由でアクセスすると、今後の成績を記録できます。
+                    </p>
+                    <p style="font-size: 14px; color: #666; margin-top: 15px;">
+                        <strong>「30問解くとキャリア診断が開きます」</strong><br/>
+                        さらに30問まで進むと、キャリアオプションを確認できます。
+                    </p>
+                    <button class="btn-primary" style="margin-top: 15px; width: 100%;" onclick="startLineLiff()">LINEで保存する</button>
+                </div>
+                
+                <div style="margin-top: 20px; text-align: center;">
+                    <button class="btn-secondary" onclick="startGuestQuizAgain()">もう5問解く</button>
+                    <button class="btn-secondary" style="background: #2196F3; margin-left: 10px;" onclick="shareGuestQuiz()">同僚に5問診断を送る</button>
+                </div>
+            </div>
+            
+            <!-- ユーザー統計画面 -->
+            <div class="screen" id="userStatsScreen">
+                <h2>学習記録</h2>
+                
+                <!-- ユーザー情報 -->
+                <div class="user-info-card">
+                    <h3>ユーザー情報</h3>
+                    <div class="info-row">
+                        <span class="info-label">名前:</span>
+                        <span class="info-value" id="statsUserName"></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">経験年数:</span>
+                        <span class="info-value" id="statsExpYears"></span>
+                    </div>
+                </div>
+                
+                <!-- 累計学習統計 -->
+                <div class="stats-card">
+                    <h3>累計学習統計</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-label">累計解答数</div>
+                            <div class="stat-value" id="totalAnswered">0</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">累計正解数</div>
+                            <div class="stat-value" id="totalCorrect">0</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">全体正解率</div>
+                            <div class="stat-value" id="overallRate">0%</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 分野別統計 -->
+                <div class="stats-card">
+                    <h3>分野別統計</h3>
+                    <table class="stats-table">
+                        <thead>
+                            <tr>
+                                <th>分野</th>
+                                <th>正解数/総数</th>
+                                <th>正解率</th>
+                            </tr>
+                        </thead>
+                        <tbody id="categoryStatsTable">
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- 年度別統計 -->
+                <div class="stats-card">
+                    <h3>年度別統計</h3>
+                    <table class="stats-table">
+                        <thead>
+                            <tr>
+                                <th>年度</th>
+                                <th>正解数/総数</th>
+                                <th>正解率</th>
+                            </tr>
+                        </thead>
+                        <tbody id="yearStatsTable">
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- 最終学習日時 -->
+                <div class="stats-card">
+                    <h3>最終学習日時</h3>
+                    <div class="info-value" id="lastStudyTime">記録なし</div>
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="goToHome()">ホームに戻る</button>
+                </div>
+            </div>
+            
+            <!-- 出題設定画面 -->
+            <div class="screen" id="settingScreen">
+                <h2>出題設定</h2>
+                
+                <div class="selector-group">
+                    <div class="selector-item">
+                        <label>年度を選択</label>
+                        <div class="radio-group">
+                            <div class="radio-item">
+                                <input type="radio" name="year" value="R6" id="yearR6" onchange="updateYear('R6')" checked>
+                                <label for="yearR6">R6年度</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" name="year" value="R7" id="yearR7" onchange="updateYear('R7')">
+                                <label for="yearR7">R7年度</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" name="year" value="R5" id="yearR5" onchange="updateYear('R5')">
+                                <label for="yearR5">R5年度</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="selector-item">
+                        <label>分野を選択</label>
+                        <div class="checkbox-group" id="categoryCheckboxes"></div>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label>出題方式</label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" name="mode" value="sequential" id="modeSequential" onchange="updateMode()" checked>
+                            <label for="modeSequential">順番通りに出題</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" name="mode" value="random" id="modeRandom" onchange="updateMode()">
+                            <label for="modeRandom">ランダムに出題</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label>出題内容</label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" name="scope" value="all" id="scopeAll" onchange="updateScope()" checked>
+                            <label for="scopeAll">全問出題</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" name="scope" value="wrong" id="scopeWrong" onchange="updateScope()">
+                            <label for="scopeWrong">間違えた問題だけ</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn-primary" onclick="startQuiz()">クイズを開始</button>
+                    <button class="btn-secondary" onclick="goToHome()">ホームに戻る</button>
+                </div>
+            </div>
+            
+            <!-- 出題画面 -->
+            <div class="screen" id="quizScreen">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                
+                <div class="question-info">
+                    <span id="questionCount"></span> / <span id="totalCount"></span>
+                    <div class="question-meta">
+                        <span id="categoryBadge"></span>
+                    </div>
+                </div>
+                
+                <div class="question-text" id="questionText"></div>
+                
+                <img id="questionImage" class="question-image" style="display: none;">
+                
+                <div class="options" id="optionsContainer"></div>
+                
+                <div id="explanationContainer"></div>
+                
+                <div class="button-group">
+                    <button class="btn-primary" id="nextBtn" onclick="nextQuestion()" style="display: none;">次へ</button>
+                    <button class="btn-secondary" onclick="skipQuestion()" style="display: none;" id="skipBtn">スキップ</button>
+                </div>
+                <div class="button-group">
+                    <button class="btn-danger" style="flex: 1;" onclick="confirmExitQuiz()">ホームに戻る</button>
+                </div>
+            </div>
+            
+            <!-- 結果画面 -->
+            <div class="screen" id="resultScreen">
+                <h2>クイズ完了！</h2>
+                
+                <div class="result-stats">
+                    <div class="stat-box">
+                        <div class="number" id="correctCount">0</div>
+                        <div class="label">正解数</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="number" id="totalQuestionsCount">0</div>
+                        <div class="label">総問題数</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="number" id="correctRate">0%</div>
+                        <div class="label">正解率</div>
+                    </div>
+                </div>
+                
+                <div class="category-stats" id="categoryStatsContainer" style="display: none;">
+                    <h3>分野別正解率</h3>
+                    <div id="categoryStatsList"></div>
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn-primary" onclick="goToSetting()">もう一度チャレンジ</button>
+                    <button class="btn-secondary" onclick="goToHome()">ホームに戻る</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // グローバル変数
+        let allQuestions = [];
+        let filteredQuestions = [];
+        let currentQuestionIndex = 0;
+        let selectedAnswer = null;
+        let answered = false;
+        let correctCount = 0;
+        let categoryStats = {};
+        let wrongQuestionIds = [];
+        let isRegistered = false;
+        let availableCategories = [];
+        
+        let settings = {
+            year: 'R6',
+            categories: [],
+            mode: 'sequential',
+            scope: 'all'
+        };
+        
+        let userId = 'test_' + Date.now();
+        let userData = {};
+        
+        // ==================== Phase 1 新機能用グローバル変数 ====================
+        
+        // ゲスト5問診断用
+        let guestQuestions = [];
+        let guestCurrentIndex = 0;
+        let guestCorrectCount = 0;
+        let guestCategoryStats = {};
+        let guestAnswered = false;
+        
+        // 広告計測用
+        let attributionData = null;
+        
+        // イベントキュー用
+        let eventQueue = [];
+        const ENABLE_EVENT_WEBHOOK = false;
+        
+        // マイルストーン用（first_10_completed, first_30_completed は一度だけ記録）
+        let milestones = {
+            first_10_completed: false,
+            first_30_completed: false
+        };
+        
+        // ==================== 既存変数 ====================
+        
+        // リポジトリパス
+        const REPO_BASE = window.location.pathname.includes('/shikaku-lab/') ? '/shikaku-lab/' : '/';
+        
+        // LINE LIFF ID（本番環境用）
+        const LIFF_ID = '2009300790-KQyzzbKl';
+        
+        // 初期化
+        window.addEventListener('DOMContentLoaded', async () => {
+            console.log('Page loaded');
+
+            // Phase 1 初期化（URLパラメータ解析、イベント記録）
+            initializePhase1Tracking();
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const flow = urlParams.get('flow');
+            const isLineSaveFlow = flow === 'line_save';
+            const isGuestMode =
+                !isLineSaveFlow &&
+                (urlParams.get('mode') === 'guest_quiz' || urlParams.has('src'));
+            const storedUser = localStorage.getItem('shikakuLabUser');
+
+            // flow=line_save が最優先：LINE保存後の登録フロー
+            if (isLineSaveFlow) {
+                recordEvent('line_save_landing');
+
+                if (isInLineClientSafely()) {
+                    initializeLiff();
+                    return;
+                }
+
+                // 外部ブラウザの場合は「LINEアプリで開く」画面を表示
+                showOpenInLineAppScreen();
+                return;
+            }
+
+            // 既存ユーザー + 広告URL の場合、外部ブラウザでは LIFF 初期化へ進めない
+            if (storedUser && isGuestMode) {
+                loadUserData();
+                recordEvent('returning_user_ad_landing');
+
+                let isLineClient = false;
+                try {
+                    isLineClient =
+                        typeof liff !== 'undefined' &&
+                        typeof liff.isInClient === 'function' &&
+                        liff.isInClient();
+                } catch (e) {
+                    isLineClient = false;
+                }
+
+                if (!isLineClient) {
+                    return;
+                }
+
+                initializeLiff();
+                return;
+            }
+
+            // ゲスト診断モード かつ 未登録の場合
+            if (isGuestMode && !storedUser) {
+                try {
+                    console.log('Starting guest quiz...');
+                    await startGuestQuiz();
+                    return;
+                } catch (error) {
+                    console.error('Guest quiz error:', error);
+                    showError('問題データを読み込めませんでした。通信環境を確認して再度お試しください。');
+                    return;
+                }
+            }
+
+            // 通常フロー：LIFF を初期化
+            initializeLiff();
+        });
+        
+        // LINE LIFF を初期化して LINE ユーザー ID を取得
+        async function initializeLiff() {
+            try {
+                // LIFF SDK を初期化
+                await liff.init({ liffId: LIFF_ID });
+                console.log('LIFF initialized');
+                
+                // ユーザーがログインしているか確認
+                if (liff.isLoggedIn()) {
+                    console.log('User is logged in');
+                    // LINE ユーザープロフィールを取得
+                    const profile = await liff.getProfile();
+                    console.log('Profile:', profile);
+                    
+                    // グローバル userId を LINE ユーザー ID に設定
+                    userId = profile.userId;
+                    console.log('LINE User ID:', userId);
+                } else {
+                    console.log('User is not logged in, redirecting to login');
+                    // ユーザーがログインしていない場合は LINE ログインにリダイレクト
+                    liff.login();
+                    return;
+                }
+                
+                // ユーザーデータを読み込み
+                loadUserData();
+            } catch (error) {
+                console.error('LIFF Error:', error);
+
+                // flow=line_save の場合は外部ブラウザチェック
+                const params = new URLSearchParams(window.location.search);
+                const isLineSaveFlow = params.get('flow') === 'line_save';
+
+                if (isLineSaveFlow && !isInLineClientSafely()) {
+                    showOpenInLineAppScreen();
+                    return;
+                }
+
+                // その他の場合はテスト ID を使用（開発環境用フォールバック）
+                console.log('Using test ID');
+                userId = 'test_' + Date.now();
+                loadUserData();
+            }
+        };
+        
+        // ローカルストレージからユーザーデータを読み込み
+        function loadUserData() {
+            const stored = localStorage.getItem('shikakuLabUser');
+            if (stored) {
+                userData = JSON.parse(stored);
+                userId = userData.lineUserId;
+                isRegistered = true;
+                displayUserInfo();
+                showScreen('homeScreen');
+            } else {
+                showScreen('registerScreen');
+            }
+        }
+        
+        // ユーザー情報を表示
+        function displayUserInfo() {
+            document.getElementById('userGreeting').textContent = userData.lineName;
+            document.getElementById('userInfoDisplay').textContent = `ユーザー: ${userData.lineName}`;
+        }
+        
+        // JSON を読み込み
+        async function loadQuestions(year, options = {}) {
+            const { silent = false } = options;
+            try {
+                const url = REPO_BASE + `questions_${year}.json`;
+                console.log('Loading:', url);
+                const response = await axios.get(url);
+                return response.data.questions || [];
+            } catch (error) {
+                console.error('Error loading questions:', error);
+                if (!silent) {
+                    showError(`問題データの読み込みに失敗しました`);
+                }
+                return [];
+            }
+        }
+        
+        // ユーザー登録
+        async function registerUser() {
+            recordEvent('signup_start');  // イベント記録：登録開始
+            
+            const lineName = document.getElementById('lineName').value.trim();
+            const expYears = document.getElementById('expYears').value;
+            
+            if (!lineName) {
+                showError('LINE 表示名を入力してください');
+                return;
+            }
+            
+            if (!expYears) {
+                showError('業界経験年数を選択してください');
+                return;
+            }
+            
+            // 広告パラメータを取得
+            let attribution = null;
+            try {
+                attribution = JSON.parse(localStorage.getItem('shikakuLabAttribution'));
+            } catch (e) {
+                attribution = null;
+            }
+            
+            const firstTouch = attribution && attribution.firstTouch ? attribution.firstTouch : {};
+            const lastTouch = attribution && attribution.lastTouch ? attribution.lastTouch : {};
+            
+            userData = {
+                lineUserId: userId,
+                lineName: lineName,
+                expYears: expYears,
+                registeredDate: new Date().toISOString(),
+                
+                // 広告パラメータ（オブジェクト形式）
+                attribution: attribution,
+                
+                // 広告パラメータ（フラット形式 - Make対応用）
+                firstTouchSrc: firstTouch.src || '',
+                firstTouchUtmSource: firstTouch.utm_source || '',
+                firstTouchUtmMedium: firstTouch.utm_medium || '',
+                firstTouchUtmCampaign: firstTouch.utm_campaign || '',
+                firstTouchUtmContent: firstTouch.utm_content || '',
+                firstTouchCreativeId: firstTouch.creative_id || '',
+                firstTouchRef: firstTouch.ref || '',
+                lastTouchSrc: lastTouch.src || '',
+                lastTouchUtmSource: lastTouch.utm_source || '',
+                lastTouchUtmMedium: lastTouch.utm_medium || '',
+                lastTouchUtmCampaign: lastTouch.utm_campaign || '',
+                lastTouchUtmContent: lastTouch.utm_content || '',
+                lastTouchCreativeId: lastTouch.creative_id || '',
+                lastTouchRef: lastTouch.ref || ''
+            };
+            
+            // ローカルストレージに保存
+            localStorage.setItem('shikakuLabUser', JSON.stringify(userData));
+            isRegistered = true;
+            
+            // Webhook に送信（既存 형식 유지）
+            await sendWebhook({
+                action: 'register_user',
+                ...userData
+            });
+            
+            recordEvent('signup_complete', { hasAttribution: attribution ? true : false });  // イベント記録：登録完了
+            
+            // ホーム画面に遷移
+            displayUserInfo();
+            showScreen('homeScreen');
+        }
+        
+        // 年度更新
+        async function updateYear(year) {
+            settings.year = year;
+            // 年度が変更されたとき、カテゴリーチェックボックスを動的に生成
+            const questions = await loadQuestions(year);
+            availableCategories = [...new Set(questions.map(q => q.category))];
+            generateCategoryCheckboxes();
+        }
+        
+        // カテゴリーチェックボックスを動的生成
+        function generateCategoryCheckboxes() {
+            const container = document.getElementById('categoryCheckboxes');
+            container.innerHTML = '';
+            availableCategories.forEach((category, index) => {
+                const checkboxDiv = document.createElement('div');
+                checkboxDiv.className = 'checkbox-item';
+                checkboxDiv.innerHTML = `
+                    <input type="checkbox" id="cat-${index}" value="${category}" onchange="updateCategories()" checked>
+                    <label for="cat-${index}">${category}</label>
+                `;
+                container.appendChild(checkboxDiv);
+            });
+            // カテゴリーの初期化
+            settings.categories = availableCategories.slice();
+        }
+        
+        // 分野更新
+        function updateCategories() {
+            settings.categories = [];
+            document.querySelectorAll('input[id^="cat-"]:checked').forEach(checkbox => {
+                settings.categories.push(checkbox.value);
+            });
+        }
+        
+        // 出題方式更新
+        function updateMode() {
+            settings.mode = document.querySelector('input[name="mode"]:checked').value;
+        }
+        
+        // 出題内容更新
+        function updateScope() {
+            settings.scope = document.querySelector('input[name="scope"]:checked').value;
+        }
+        
+        // クイズ開始
+        async function startQuiz() {
+            recordEvent('quiz_start');  // イベント記録：クイズ開始
+            
+            if (settings.categories.length === 0) {
+                showError('少なくとも1つの分野を選択してください');
+                return;
+            }
+            
+            // 問題を読み込み
+            allQuestions = await loadQuestions(settings.year);
+            
+            if (allQuestions.length === 0) {
+                showError('問題が見つかりませんでした');
+                return;
+            }
+            
+            // フィルタリング
+            filterQuestions();
+            
+            if (filteredQuestions.length === 0) {
+                showError('条件に合う問題が見つかりませんでした');
+                return;
+            }
+            
+            // ランダムに並び替え
+            if (settings.mode === 'random') {
+                shuffleArray(filteredQuestions);
+            }
+            
+            // 初期化
+            currentQuestionIndex = 0;
+            correctCount = 0;
+            categoryStats = {};
+            
+            showScreen('quizScreen');
+            displayQuestion();
+        }
+        
+        // 問題をフィルタリング
+        function filterQuestions() {
+            filteredQuestions = allQuestions.filter(q => {
+                const categoryMatch = settings.categories.includes(q.category);
+                const wrongMatch = settings.scope === 'all' || wrongQuestionIds.includes(q.id);
+                return categoryMatch && wrongMatch;
+            });
+        }
+        
+        // 問題を表示
+        function displayQuestion() {
+            if (currentQuestionIndex >= filteredQuestions.length) {
+                showResults();
+                return;
+            }
+            
+            const question = filteredQuestions[currentQuestionIndex];
+            selectedAnswer = null;
+            answered = false;
+            
+            // 進捗バー
+            const progress = ((currentQuestionIndex) / filteredQuestions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            
+            // 問題情報
+            document.getElementById('questionCount').textContent = currentQuestionIndex + 1;
+            document.getElementById('totalCount').textContent = filteredQuestions.length;
+            document.getElementById('categoryBadge').textContent = question.category;
+            
+            // 問題文
+            document.getElementById('questionText').textContent = question.question_text;
+            
+            // 画像
+            const imgElement = document.getElementById('questionImage');
+            if (question.has_image && question.image) {
+                imgElement.src = `data:image/png;base64,${question.image}`;
+                imgElement.style.display = 'block';
+            } else {
+                imgElement.style.display = 'none';
+            }
+            
+            // 選択肢
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+            
+            for (let i = 1; i <= 4; i++) {
+                const option = question.options[i.toString()];
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.textContent = `${i}. ${option.text}`;
+                optionDiv.onclick = () => selectOption(i.toString(), optionDiv, question);
+                optionsContainer.appendChild(optionDiv);
+            }
+            
+            // 説明をクリア
+            document.getElementById('explanationContainer').innerHTML = '';
+            
+            // ボタン
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('skipBtn').style.display = 'block';
+        }
+        
+        // 選択肢を選択
+        function selectOption(answerNum, element, question) {
+            if (answered) return;
+            
+            selectedAnswer = answerNum;
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.classList.add('disabled');
+                opt.classList.remove('selected');
+            });
+            
+            const isCorrect = answerNum === question.correct_answer;
+            
+            // すべての選択肢を無効化
+            document.querySelectorAll('.option').forEach((opt, idx) => {
+                const optNum = (idx + 1).toString();
+                if (optNum === question.correct_answer) {
+                    opt.classList.add('correct');
+                } else if (optNum === answerNum && !isCorrect) {
+                    opt.classList.add('incorrect');
+                }
+            });
+            
+            answered = true;
+            if (isCorrect) {
+                correctCount++;
+                if (wrongQuestionIds.includes(question.id)) {
+                    wrongQuestionIds = wrongQuestionIds.filter(id => id !== question.id);
+                }
+            } else {
+                if (!wrongQuestionIds.includes(question.id)) {
+                    wrongQuestionIds.push(question.id);
+                }
+            }
+            
+            // カテゴリ統計を更新
+            if (!categoryStats[question.category]) {
+                categoryStats[question.category] = { total: 0, correct: 0 };
+            }
+            categoryStats[question.category].total++;
+            if (isCorrect) {
+                categoryStats[question.category].correct++;
+            }
+            
+            // 解説を表示
+            const explanationDiv = document.getElementById('explanationContainer');
+            const explanationBgColor = isCorrect ? '#c8e6c9' : '#ffcdd2';
+            const explanationBorderColor = isCorrect ? '#4caf50' : '#f44336';
+            const explanationTextColor = isCorrect ? '#2e7d32' : '#c62828';
+            
+            explanationDiv.innerHTML = `
+                <div class="explanation-section" style="background-color: ${explanationBgColor}; border-left-color: ${explanationBorderColor};">
+                    <div class="explanation-title" style="color: ${explanationTextColor};">${isCorrect ? '✓ 正解' : '✗ 不正解'}</div>
+                    <div class="explanation-text" style="color: ${explanationTextColor};">${question.explanation}</div>
+                </div>
+            `;
+            
+            // Webhook に送信
+            sendWebhook({
+                action: 'answer_question',
+                lineUserId: userId,
+                questionId: question.id,
+                year: question.year,
+                category: question.category,
+                questionNumber: question.question_number,
+                userAnswer: parseInt(answerNum),
+                isCorrect: isCorrect,
+                quizMode: {
+                    layer1: 'year',
+                    layer2: settings.mode,
+                    layer3: settings.scope,
+                    filterName: settings.year + '年度'
+                },
+                answeredDate: new Date().toISOString()
+            });
+            
+            document.getElementById('skipBtn').style.display = 'none';
+            document.getElementById('nextBtn').style.display = 'block';
+        }
+        
+        // 次の問題
+        function nextQuestion() {
+            currentQuestionIndex++;
+            displayQuestion();
+        }
+        
+        // スキップ
+        function skipQuestion() {
+            nextQuestion();
+        }
+        
+        // クイズを途中で終了（結果画面に遷移）
+        function confirmExitQuiz() {
+            if (confirm('クイズを中断して結果を確認しますか？')) {
+                showResults();
+            }
+        }
+        
+        // 結果を表示
+        function showResults() {
+            document.getElementById('correctCount').textContent = correctCount;
+            document.getElementById('totalQuestionsCount').textContent = filteredQuestions.length;
+            const rate = filteredQuestions.length > 0 ? Math.round((correctCount / filteredQuestions.length) * 100) : 0;
+            document.getElementById('correctRate').textContent = rate + '%';
+            
+            // 統計データを保存
+            saveStatistics();
+            
+            // 分野別統計
+            if (Object.keys(categoryStats).length > 0) {
+                const categoryList = document.getElementById('categoryStatsList');
+                categoryList.innerHTML = '';
+                
+                for (const [category, stats] of Object.entries(categoryStats)) {
+                    const categoryRate = Math.round((stats.correct / stats.total) * 100);
+                    const categoryDiv = document.createElement('div');
+                    categoryDiv.className = 'category-item';
+                    categoryDiv.innerHTML = `
+                        <span class="category-name">${category}</span>
+                        <span class="category-rate">${stats.correct}/${stats.total} (${categoryRate}%)</span>
+                    `;
+                    categoryList.appendChild(categoryDiv);
+                }
+                
+                document.getElementById('categoryStatsContainer').style.display = 'block';
+            }
+            
+            showScreen('resultScreen');
+        }
+        
+        // 統計データを保存
+        function saveStatistics() {
+            const statsKey = `shikakuLabStats_${userId}`;
+            let stats = {
+                totalAnswers: 0,
+                totalCorrect: 0,
+                categoryStats: {},
+                yearStats: {},
+                lastStudyDate: new Date().toISOString()
+            };
+            
+            // 既存の統計データを取得
+            const stored = localStorage.getItem(statsKey);
+            if (stored) {
+                stats = JSON.parse(stored);
+            }
+            
+            // 統計を更新
+            stats.totalAnswers += filteredQuestions.length;
+            stats.totalCorrect += correctCount;
+            stats.lastStudyDate = new Date().toISOString();
+            
+            // 分野別統計を更新
+            for (const [category, catStats] of Object.entries(categoryStats)) {
+                if (!stats.categoryStats[category]) {
+                    stats.categoryStats[category] = { correct: 0, total: 0 };
+                }
+                stats.categoryStats[category].correct += catStats.correct;
+                stats.categoryStats[category].total += catStats.total;
+            }
+            
+            // 年度別統計を更新
+            if (!stats.yearStats[settings.year]) {
+                stats.yearStats[settings.year] = { correct: 0, total: 0 };
+            }
+            stats.yearStats[settings.year].correct += correctCount;
+            stats.yearStats[settings.year].total += filteredQuestions.length;
+            
+            // マイルストーン記録（first_10_completed, first_30_completed は一度だけ）
+            try {
+                const storedMilestones = localStorage.getItem('shikakuLabMilestones');
+                if (storedMilestones) {
+                    const m = JSON.parse(storedMilestones);
+                    milestones = m;
+                }
+                
+                if (stats.totalAnswers >= 10 && !milestones.first_10_completed) {
+                    recordEvent('first_10_completed', { totalAnswers: stats.totalAnswers });
+                    milestones.first_10_completed = true;
+                    localStorage.setItem('shikakuLabMilestones', JSON.stringify(milestones));
+                }
+                
+                if (stats.totalAnswers >= 30 && !milestones.first_30_completed) {
+                    recordEvent('first_30_completed', { totalAnswers: stats.totalAnswers });
+                    milestones.first_30_completed = true;
+                    localStorage.setItem('shikakuLabMilestones', JSON.stringify(milestones));
+                }
+            } catch (error) {
+                console.error('Milestone recording error:', error);
+            }
+            
+            // ローカルストレージに保存
+            localStorage.setItem(statsKey, JSON.stringify(stats));
+            console.log('Statistics saved:', stats);
+        }
+        
+        // Webhook に送信
+        async function sendWebhook(data) {
+            try {
+                const webhookUrl = 'https://hook.eu1.make.com/4i8ovi6kunvugp2w4u59kgjgr1quq2is';
+                await axios.post(webhookUrl, data);
+                console.log('Webhook sent:', data);
+            } catch (error) {
+                console.error('Webhook error:', error);
+            }
+        }
+        
+        // ==================== Phase 1 計測・イベント関数 ====================
+        
+        function initializePhase1Tracking() {
+            try {
+                // URLパラメータを解析して保存
+                parseAttributionParams();
+                
+                // page_view イベントを記録
+                recordEvent('page_view', {
+                    url: window.location.href,
+                    timestamp: new Date().toISOString()
+                });
+                
+                // DEBUG: コンソール出力
+                console.log('Phase 1 Tracking Initialized');
+            } catch (error) {
+                console.error('Phase 1 Tracking Error:', error);
+            }
+        }
+        
+        function parseAttributionParams() {
+            try {
+                const params = new URLSearchParams(window.location.search);
+                const allowedParams = ['src', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'creative_id', 'ref'];
+                
+                const paramObj = {};
+                let hasParam = false;
+                
+                for (const key of allowedParams) {
+                    if (params.has(key)) {
+                        paramObj[key] = sanitizeAttributionValue(params.get(key));
+                        hasParam = true;
+                    }
+                }
+                
+                if (hasParam) {
+                    paramObj.timestamp = new Date().toISOString();
+                    saveAttribution(paramObj);
+                    
+                    // ref があれば referral_landing イベント
+                    if (paramObj.ref) {
+                        recordEvent('referral_landing', {
+                            ref: paramObj.ref,
+                            source: paramObj.src || null
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error('Parse Attribution Error:', error);
+            }
+        }
+        
+        function sanitizeAttributionValue(value) {
+            // XSS 対策：危険な文字を除去
+            if (!value) return '';
+            return value.toString()
+                .replace(/[<>"'&]/g, function(match) {
+                    const escape = {'<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#x27;', '&': '&amp;'};
+                    return escape[match] || match;
+                })
+                .substring(0, 100);  // 長さ制限
+        }
+        
+        function saveAttribution(params) {
+            try {
+                const stored = localStorage.getItem('shikakuLabAttribution');
+                let attribution = { firstTouch: null, lastTouch: null };
+                
+                if (stored) {
+                    attribution = JSON.parse(stored);
+                }
+                
+                // firstTouch は初回のみ
+                if (!attribution.firstTouch) {
+                    attribution.firstTouch = params;
+                }
+                
+                // lastTouch は毎回更新
+                attribution.lastTouch = params;
+                
+                localStorage.setItem('shikakuLabAttribution', JSON.stringify(attribution));
+                attributionData = attribution;
+                console.log('Attribution saved:', attribution);
+            } catch (error) {
+                console.error('Save Attribution Error:', error);
+            }
+        }
+        
+        function getAttribution() {
+            try {
+                const stored = localStorage.getItem('shikakuLabAttribution');
+                return stored ? JSON.parse(stored) : null;
+            } catch (error) {
+                console.error('Get Attribution Error:', error);
+                return null;
+            }
+        }
+        
+        function generateEventId() {
+            // crypto.randomUUID を優先（古い WebView 対応）
+            if (window.crypto && typeof window.crypto.randomUUID === 'function') {
+                return window.crypto.randomUUID();
+            }
+            
+            // フォールバック：簡易UUID
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                const r = Math.random() * 16 | 0;
+                const v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+        
+        function recordEvent(eventType, payload = {}) {
+            try {
+                const event = {
+                    eventId: generateEventId(),
+                    eventType: eventType,
+                    payload: payload,
+                    timestamp: new Date().toISOString()
+                };
+                
+                eventQueue.push(event);
+                
+                // localStorage に保存（最大100件）
+                const stored = localStorage.getItem('shikakuLabEventQueue') || '[]';
+                let queue = JSON.parse(stored);
+                queue.push(event);
+                
+                if (queue.length > 100) {
+                    queue = queue.slice(-100);
+                }
+                
+                localStorage.setItem('shikakuLabEventQueue', JSON.stringify(queue));
+                console.log('Event recorded:', eventType);
+            } catch (error) {
+                console.error('Record Event Error:', error);
+                // イベント記録失敗時も UI を止めない
+            }
+        }
+        
+        function getEventQueue() {
+            try {
+                const stored = localStorage.getItem('shikakuLabEventQueue') || '[]';
+                return JSON.parse(stored);
+            } catch (error) {
+                console.error('Get Event Queue Error:', error);
+                return [];
+            }
+        }
+        
+        // ==================== ゲスト5問診断関数 ====================
+        
+        async function startGuestQuiz() {
+            try {
+                guestQuestions = [];
+                guestCurrentIndex = 0;
+                guestCorrectCount = 0;
+                guestCategoryStats = {};
+                guestAnswered = false;
+
+                recordEvent('guest_quiz_start');
+
+                // R7 → R6 → R5 フォールバック。途中の失敗エラーは表示しない。
+                let questions = await loadQuestions('R7', { silent: true });
+
+                if (!questions || questions.length === 0) {
+                    questions = await loadQuestions('R6', { silent: true });
+                }
+
+                if (!questions || questions.length === 0) {
+                    questions = await loadQuestions('R5', { silent: true });
+                }
+
+                if (!questions || questions.length === 0) {
+                    showError('問題データを読み込めませんでした。通信環境を確認して再度お試しください。');
+                    return;
+                }
+
+                const shuffled = [...questions].sort(() => 0.5 - Math.random()).slice(0, 5);
+                guestQuestions = shuffled;
+
+                showScreen('guestQuizScreen');
+                displayGuestQuestion();
+            } catch (error) {
+                console.error('Start Guest Quiz Error:', error);
+                showError('問題データを読み込めませんでした。通信環境を確認して再度お試しください。');
+            }
+        }
+        
+        function displayGuestQuestion() {
+            try {
+                if (guestCurrentIndex >= guestQuestions.length) {
+                    showGuestResults();
+                    return;
+                }
+                
+                const question = guestQuestions[guestCurrentIndex];
+                guestAnswered = false;
+                
+                const progress = (guestCurrentIndex / guestQuestions.length) * 100;
+                const progressEl = document.getElementById('guestProgressFill');
+                if (progressEl) progressEl.style.width = progress + '%';
+                
+                document.getElementById('guestQuestionCount').textContent = guestCurrentIndex + 1;
+                document.getElementById('guestTotalCount').textContent = guestQuestions.length;
+                
+                const questionEl = document.getElementById('guestQuestionText');
+                if (questionEl) questionEl.textContent = question.question_text;
+                
+                const imgEl = document.getElementById('guestQuestionImage');
+                if (imgEl) {
+                    if (question.has_image && question.image) {
+                        imgEl.src = 'data:image/png;base64,' + question.image;
+                        imgEl.style.display = 'block';
+                    } else {
+                        imgEl.style.display = 'none';
+                    }
+                }
+                
+                const optionsContainer = document.getElementById('guestOptionsContainer');
+                if (optionsContainer) {
+                    optionsContainer.innerHTML = '';
+                    for (let i = 1; i <= 4; i++) {
+                        const option = question.options[i.toString()];
+                        if (option) {
+                            const optDiv = document.createElement('div');
+                            optDiv.className = 'option';
+                            optDiv.textContent = i + '. ' + option.text;
+                            optDiv.onclick = () => guestSelectOption(i.toString(), optDiv, question);
+                            optionsContainer.appendChild(optDiv);
+                        }
+                    }
+                }
+                
+                const explanationEl = document.getElementById('guestExplanationContainer');
+                if (explanationEl) explanationEl.innerHTML = '';
+                
+                const nextBtn = document.getElementById('guestNextBtn');
+                if (nextBtn) nextBtn.style.display = 'none';
+            } catch (error) {
+                console.error('Display Guest Question Error:', error);
+            }
+        }
+        
+        function guestSelectOption(answerNum, element, question) {
+            if (guestAnswered) return;
+            guestAnswered = true;
+            
+            try {
+                const isCorrect = answerNum === question.correct_answer;
+                if (isCorrect) guestCorrectCount++;
+                
+                if (!guestCategoryStats[question.category]) {
+                    guestCategoryStats[question.category] = { correct: 0, total: 0 };
+                }
+                guestCategoryStats[question.category].total++;
+                if (isCorrect) guestCategoryStats[question.category].correct++;
+                
+                const options = document.querySelectorAll('#guestOptionsContainer .option');
+                options.forEach((opt, idx) => {
+                    const optNum = (idx + 1).toString();
+                    if (optNum === question.correct_answer) {
+                        opt.classList.add('correct');
+                    } else if (optNum === answerNum && !isCorrect) {
+                        opt.classList.add('incorrect');
+                    }
+                    opt.classList.add('disabled');
+                });
+                
+                const explanationEl = document.getElementById('guestExplanationContainer');
+                if (explanationEl) {
+                    const bgColor = isCorrect ? '#c8e6c9' : '#ffcdd2';
+                    const textColor = isCorrect ? '#2e7d32' : '#c62828';
+                    const title = isCorrect ? '✓ 正解' : '✗ 不正解';
+                    
+                    // createElement で安全に作成
+                    const wrapper = document.createElement('div');
+                    wrapper.style.backgroundColor = bgColor;
+                    wrapper.style.padding = '12px';
+                    wrapper.style.borderRadius = '4px';
+                    wrapper.style.borderLeft = `4px solid ${textColor}`;
+                    wrapper.style.lineHeight = '1.6';
+                    
+                    const titleEl = document.createElement('strong');
+                    titleEl.style.color = textColor;
+                    titleEl.textContent = title;
+                    
+                    const explanationTextEl = document.createElement('div');
+                    explanationTextEl.style.color = '#333';
+                    explanationTextEl.style.marginTop = '8px';
+                    explanationTextEl.textContent = question.explanation || '';
+                    
+                    wrapper.appendChild(titleEl);
+                    wrapper.appendChild(explanationTextEl);
+                    explanationEl.replaceChildren(wrapper);
+                }
+                
+                const nextBtn = document.getElementById('guestNextBtn');
+                if (nextBtn) nextBtn.style.display = 'block';
+            } catch (error) {
+                console.error('Guest Select Error:', error);
+            }
+        }
+        
+        function guestNextQuestion() {
+            guestCurrentIndex++;
+            displayGuestQuestion();
+        }
+        
+        function showGuestResults() {
+            try {
+                recordEvent('guest_quiz_complete', {
+                    correct: guestCorrectCount,
+                    total: guestQuestions.length
+                });
+                
+                const rate = Math.round((guestCorrectCount / guestQuestions.length) * 100);
+                const weakCategory = getWeakCategory(guestCategoryStats);
+                
+                const result = {
+                    correct: guestCorrectCount,
+                    total: guestQuestions.length,
+                    correctRate: rate,
+                    weakCategory: weakCategory,
+                    categories: guestCategoryStats,
+                    createdAt: new Date().toISOString()
+                };
+                
+                saveGuestQuizResult(result);
+                
+                document.getElementById('guestCorrectCount').textContent = guestCorrectCount;
+                document.getElementById('guestTotalCount2').textContent = guestQuestions.length;
+                document.getElementById('guestCorrectRate').textContent = rate + '%';
+                
+                const weakEl = document.getElementById('guestWeakCategory');
+                if (weakEl) weakEl.textContent = weakCategory || '弱点分野なし';
+                
+                showScreen('guestResultScreen');
+            } catch (error) {
+                console.error('Show Results Error:', error);
+            }
+        }
+        
+        function startGuestQuizAgain() {
+            guestQuestions = [];
+            guestCurrentIndex = 0;
+            guestCorrectCount = 0;
+            guestCategoryStats = {};
+            guestAnswered = false;
+            startGuestQuiz();
+        }
+        
+        // ==================== 紹介導線 ====================
+        
+        function generateReferralToken() {
+            // UUID を短縮形で返す（個人情報を含めない）
+            const eventId = generateEventId();
+            return eventId.replace(/-/g, '').substring(0, 16);  // 16文字の短いトークン
+        }
+        
+        function buildReferralUrl() {
+            const token = generateReferralToken();
+            const baseUrl = window.location.origin + window.location.pathname;
+            return `${baseUrl}?mode=guest_quiz&src=share_result_card&ref=${token}`;
+        }
+        
+        function shareGuestQuiz() {
+            try {
+                recordEvent('share_button_click');
+                
+                const referralUrl = buildReferralUrl();
+                
+                // LIFF 内で shareTargetPicker が使える場合
+                if (typeof liff !== 'undefined' && liff.isInClient && liff.isInClient()) {
+                    if (liff.isApiAvailable && liff.isApiAvailable('shareTargetPicker')) {
+                        liff.shareTargetPicker([
+                            {
+                                type: 'text',
+                                text: `5問診断を試してみませんか？\n${referralUrl}`
+                            }
+                        ]).catch(error => {
+                            console.log('shareTargetPicker failed:', error);
+                            copyReferralUrl(referralUrl);
+                        });
+                        return;
+                    }
+                }
+                
+                // shareTargetPicker が使えない場合はリンクコピー
+                copyReferralUrl(referralUrl);
+            } catch (error) {
+                console.error('Share error:', error);
+                const referralUrl = buildReferralUrl();
+                copyReferralUrl(referralUrl);
+            }
+        }
+        
+        function copyReferralUrl(url) {
+            try {
+                // Clipboard API が使える場合
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(url).then(() => {
+                        showError('紹介URLをコピーしました。同僚に送ってください。');
+                    }).catch(err => {
+                        // コピー失敗時は手動コピー UI を表示
+                        showReferralUrlModal(url);
+                    });
+                } else {
+                    // Clipboard API が使えない場合は手動コピー UI
+                    showReferralUrlModal(url);
+                }
+            } catch (error) {
+                console.error('Copy error:', error);
+                showReferralUrlModal(url);
+            }
+        }
+        
+        function showReferralUrlModal(url) {
+            // 手動コピー用のモーダルを表示。URLはinnerHTMLへ入れず、textarea.valueで扱う。
+            const modal = document.createElement('div');
+            modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 10000;';
+
+            const box = document.createElement('div');
+            box.style.cssText = 'background: white; padding: 20px; border-radius: 8px; max-width: 90%; text-align: center;';
+
+            const title = document.createElement('h3');
+            title.textContent = '紹介URLをコピー';
+
+            const desc = document.createElement('p');
+            desc.style.cssText = 'font-size: 14px; margin: 15px 0;';
+            desc.textContent = '以下のURLを同僚に送ってください。';
+
+            const textarea = document.createElement('textarea');
+            textarea.readOnly = true;
+            textarea.value = url;
+            textarea.style.cssText = 'width: 100%; height: 60px; padding: 10px; font-size: 12px; border: 1px solid #ddd; border-radius: 4px; resize: none; word-break: break-all; box-sizing: border-box; font-family: monospace;';
+
+            const btnGroup = document.createElement('div');
+            btnGroup.style.cssText = 'margin-top: 15px;';
+
+            const copyBtn = document.createElement('button');
+            copyBtn.textContent = 'コピー';
+            copyBtn.style.cssText = 'padding: 10px 20px; background: #2196F3; color: white; border: none; border-radius: 4px; cursor: pointer; margin-right: 10px;';
+            copyBtn.addEventListener('click', async () => {
+                const success = await copyTextSafely(url, textarea);
+                alert(success ? 'URLをコピーしました' : '手動でコピーしてください');
+                if (success) modal.remove();
+            });
+
+            const closeBtn = document.createElement('button');
+            closeBtn.textContent = '閉じる';
+            closeBtn.style.cssText = 'padding: 10px 20px; background: #999; color: white; border: none; border-radius: 4px; cursor: pointer;';
+            closeBtn.addEventListener('click', () => modal.remove());
+
+            btnGroup.appendChild(copyBtn);
+            btnGroup.appendChild(closeBtn);
+            box.appendChild(title);
+            box.appendChild(desc);
+            box.appendChild(textarea);
+            box.appendChild(btnGroup);
+            modal.appendChild(box);
+            document.body.appendChild(modal);
+        }
+        
+        // ==================== 既存関数 ====================
+        
+        function getWeakCategory(categoryStats) {
+            let weakCategory = '';
+            let lowestRate = 100;
+            for (const [category, stats] of Object.entries(categoryStats)) {
+                if (stats.total > 0) {
+                    const rate = (stats.correct / stats.total) * 100;
+                    if (rate < lowestRate) {
+                        lowestRate = rate;
+                        weakCategory = category;
+                    }
+                }
+            }
+            return weakCategory;
+        }
+        
+        function saveGuestQuizResult(result) {
+            try {
+                localStorage.setItem('shikakuLabGuestQuizResult', JSON.stringify(result));
+            } catch (error) {
+                console.error('Save Result Error:', error);
+            }
+        }
+        
+        function buildLiffEntryUrl() {
+            return `https://liff.line.me/${LIFF_ID}`;
+        }
+
+        async function startLineLiff() {
+            try {
+                const liffEntryUrl = buildLineSaveUrl();
+
+                // line_save_click イベント記録
+                const lastTouch = (() => {
+                    try {
+                        const attr = JSON.parse(localStorage.getItem('shikakuLabAttribution'));
+                        return attr && attr.lastTouch ? attr.lastTouch : {};
+                    } catch (e) {
+                        return {};
+                    }
+                })();
+                
+                recordEvent('line_save_click', {
+                    hasAttribution: Object.keys(lastTouch).length > 0,
+                    src: lastTouch.src || '',
+                    utm_source: lastTouch.utm_source || '',
+                    utm_medium: lastTouch.utm_medium || '',
+                    utm_campaign: lastTouch.utm_campaign || ''
+                });
+
+                // LINE内ブラウザを先に判定
+                if (isInLineClientSafely()) {
+                    initializeLiff();
+                    return;
+                }
+
+                // 外部ブラウザでは buildLineSaveUrl() で生成したURLに遷移
+                window.location.href = liffEntryUrl;
+            } catch (error) {
+                console.error('Start LIFF Error:', error);
+                showOpenInLineAppScreen();
+            }
+        }
+        
+        // ==================== コピー処理の共通関数 ====================
+        
+        // ==================== LINE保存時のURL生成 ====================
+        
+        function buildLineSaveUrl() {
+            const baseUrl = `https://liff.line.me/${LIFF_ID}/`;
+            const params = new URLSearchParams();
+            
+            // flow=line_save を必ず付与
+            params.set('flow', 'line_save');
+            
+            // shikakuLabAttribution から lastTouch を取得
+            let attribution = null;
+            try {
+                attribution = JSON.parse(localStorage.getItem('shikakuLabAttribution'));
+            } catch (e) {
+                attribution = null;
+            }
+            
+            const lastTouch = attribution && attribution.lastTouch ? attribution.lastTouch : null;
+            
+            // 許可されたパラメータキー
+            const allowedKeys = [
+                'src',
+                'utm_source',
+                'utm_medium',
+                'utm_campaign',
+                'utm_content',
+                'creative_id',
+                'ref'
+            ];
+            
+            // lastTouch からパラメータを取得して追加
+            if (lastTouch) {
+                allowedKeys.forEach((key) => {
+                    if (lastTouch[key]) {
+                        params.set(key, String(lastTouch[key]));
+                    }
+                });
+            }
+            
+            return `${baseUrl}?${params.toString()}`;
+        }
+        
+        // ==================== コピー処理の共通関数 ====================
+        
+        // ==================== LINE内ブラウザ判定 ====================
+        
+        function isInLineClientSafely() {
+            try {
+                return (
+                    typeof liff !== 'undefined' &&
+                    typeof liff.isInClient === 'function' &&
+                    liff.isInClient()
+                );
+            } catch (e) {
+                return false;
+            }
+        }
+        
+        // ==================== LINE外部ブラウザ用案内画面 ====================
+        
+        function showOpenInLineAppScreen() {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+
+            const content = document.querySelector('.content');
+
+            let screen = document.getElementById('openInLineScreen');
+            if (!screen) {
+                screen = document.createElement('div');
+                screen.className = 'screen active';
+                screen.id = 'openInLineScreen';
+
+                const title = document.createElement('h2');
+                title.textContent = 'LINEアプリで開いてください';
+
+                const desc = document.createElement('p');
+                desc.style.cssText = 'font-size: 14px; color: #555; line-height: 1.8; margin-bottom: 20px;';
+                desc.textContent = '学習記録の保存にはLINEアプリで開く必要があります。下のボタンからLINEアプリで開いてください。';
+
+                const openBtn = document.createElement('button');
+                openBtn.className = 'btn-primary';
+                openBtn.textContent = 'LINEアプリで開く';
+                openBtn.style.cssText = 'width: 100%; margin-bottom: 15px;';
+                openBtn.addEventListener('click', () => {
+                    window.location.href = buildLineSaveUrl();
+                });
+
+                const helpText = document.createElement('p');
+                helpText.style.cssText = 'font-size: 12px; color: #777; line-height: 1.6; margin-top: 15px;';
+                helpText.textContent = 'LINEが開かない場合は、下のURLをコピーしてLINEのトークに貼り付けて開いてください。';
+
+                const textarea = document.createElement('textarea');
+                textarea.readOnly = true;
+                textarea.value = buildLineSaveUrl();
+                textarea.style.cssText = 'width: 100%; height: 70px; padding: 10px; font-size: 12px; border: 1px solid #ddd; border-radius: 4px; resize: none; box-sizing: border-box; font-family: monospace;';
+
+                const copyBtn = document.createElement('button');
+                copyBtn.className = 'btn-secondary';
+                copyBtn.textContent = 'URLをコピー';
+                copyBtn.style.cssText = 'width: 100%; margin-top: 10px;';
+                copyBtn.addEventListener('click', async () => {
+                    const success = await copyTextSafely(textarea.value, textarea);
+                    alert(success ? 'URLをコピーしました' : '手動でコピーしてください');
+                });
+
+                screen.appendChild(title);
+                screen.appendChild(desc);
+                screen.appendChild(openBtn);
+                screen.appendChild(helpText);
+                screen.appendChild(textarea);
+                screen.appendChild(copyBtn);
+
+                content.appendChild(screen);
+            } else {
+                screen.classList.add('active');
+            }
+        }
+        
+        // ==================== コピー処理の共通関数 ====================
+        
+                async function copyTextSafely(text, textareaEl) {
+            try {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    await navigator.clipboard.writeText(text);
+                    return true;
+                }
+            } catch (e) {
+                console.log('Clipboard API failed:', e);
+            }
+
+            try {
+                if (textareaEl) {
+                    textareaEl.focus();
+                    textareaEl.select();
+                    const success = document.execCommand('copy');
+                    if (success) return true;
+                }
+            } catch (e) {
+                console.log('execCommand copy failed:', e);
+            }
+
+            return false;
+        }
+        
+        // ==================== ゲスト診断結果画面での処理 ====================
+        
+        function showLineOpenGuide() {
+            // LINE で開く案内を表示。ゲスト診断URLではなくLIFF入口を使う。
+            const url = buildLineSaveUrl();
+
+            const modal = document.createElement('div');
+            modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 10000;';
+
+            const box = document.createElement('div');
+            box.style.cssText = 'background: white; padding: 20px; border-radius: 8px; max-width: 90%; text-align: center;';
+
+            const title = document.createElement('h3');
+            title.textContent = 'LINEで学習記録を保存';
+
+            const desc = document.createElement('p');
+            desc.style.cssText = 'font-size: 14px; margin: 15px 0; white-space: pre-line;';
+            desc.textContent = 'LINEが自動で開かない場合は、下のボタンから開いてください。';
+
+            const textarea = document.createElement('textarea');
+            textarea.readOnly = true;
+            textarea.value = url;
+            textarea.style.cssText = 'width: 100%; height: 80px; padding: 10px; font-size: 12px; border: 1px solid #ddd; border-radius: 4px; resize: none; word-break: break-all; box-sizing: border-box; font-family: monospace; display: none;';
+
+            const btnGroup = document.createElement('div');
+            btnGroup.style.cssText = 'margin-top: 15px;';
+
+            const openBtn = document.createElement('button');
+            openBtn.textContent = 'LINEを開く';
+            openBtn.style.cssText = 'padding: 10px 20px; background: #00b900; color: white; border: none; border-radius: 4px; cursor: pointer; margin-right: 10px;';
+            openBtn.addEventListener('click', () => {
+                window.location.href = url;
+            });
+
+            const copyBtn = document.createElement('button');
+            copyBtn.textContent = 'URLをコピー';
+            copyBtn.style.cssText = 'padding: 10px 20px; background: #666; color: white; border: none; border-radius: 4px; cursor: pointer; margin-right: 10px;';
+            copyBtn.addEventListener('click', async () => {
+                const success = await copyTextSafely(url, textarea);
+                alert(success ? 'URLをコピーしました' : '手動でコピーしてください');
+            });
+
+            const closeBtn = document.createElement('button');
+            closeBtn.textContent = '閉じる';
+            closeBtn.style.cssText = 'padding: 10px 20px; background: #999; color: white; border: none; border-radius: 4px; cursor: pointer;';
+            closeBtn.addEventListener('click', () => modal.remove());
+
+            btnGroup.appendChild(openBtn);
+            btnGroup.appendChild(copyBtn);
+            btnGroup.appendChild(closeBtn);
+            box.appendChild(title);
+            box.appendChild(desc);
+            box.appendChild(textarea);
+            box.appendChild(btnGroup);
+            modal.appendChild(box);
+            document.body.appendChild(modal);
+        }
+        
+        // ==================== 既存関数 ====================
+        
+        // 画面切り替え
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+        }
+        
+        // ナビゲーション
+        function goToHome() {
+            showScreen('homeScreen');
+        }
+        
+        async function goToSetting() {
+            // 出題設定画面に移る前に、R6 のカテゴリーを初期化
+            const questions = await loadQuestions('R6');
+            availableCategories = [...new Set(questions.map(q => q.category))];
+            generateCategoryCheckboxes();
+            showScreen('settingScreen');
+        }
+        
+        // ユーザー統計画面を表示
+        function goToUserStats() {
+            loadUserStats();
+            showScreen('userStatsScreen');
+        }
+        
+        // ユーザー統計を読み込み
+        function loadUserStats() {
+            // ユーザー情報を表示
+            document.getElementById('statsUserName').textContent = userData.lineName || '-';
+            document.getElementById('statsExpYears').textContent = userData.expYears || '-';
+            
+            // ローカルストレージから統計データを取得
+            const statsKey = `shikakuLabStats_${userId}`;
+            const statsData = localStorage.getItem(statsKey);
+            
+            if (statsData) {
+                const stats = JSON.parse(statsData);
+                
+                // 累計学習統計
+                document.getElementById('totalAnswered').textContent = stats.totalAnswers || 0;
+                document.getElementById('totalCorrect').textContent = stats.totalCorrect || 0;
+                const rate = stats.totalAnswers > 0 ? Math.round((stats.totalCorrect / stats.totalAnswers) * 100) : 0;
+                document.getElementById('overallRate').textContent = rate + '%';
+                
+                // 分野別統計
+                const categoryTable = document.getElementById('categoryStatsTable');
+                categoryTable.innerHTML = '';
+                
+                const categoryStats = stats.categoryStats || {};
+                for (const [category, catData] of Object.entries(categoryStats)) {
+                    const catRate = catData.total > 0 ? Math.round((catData.correct / catData.total) * 100) : 0;
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${category}</td>
+                        <td>${catData.correct}/${catData.total}</td>
+                        <td>${catRate}%</td>
+                    `;
+                    categoryTable.appendChild(row);
+                }
+                
+                // 年度別統計
+                const yearTable = document.getElementById('yearStatsTable');
+                yearTable.innerHTML = '';
+                
+                const yearStats = stats.yearStats || {};
+                for (const [year, yearData] of Object.entries(yearStats)) {
+                    const yearRate = yearData.total > 0 ? Math.round((yearData.correct / yearData.total) * 100) : 0;
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${year}年度</td>
+                        <td>${yearData.correct}/${yearData.total}</td>
+                        <td>${yearRate}%</td>
+                    `;
+                    yearTable.appendChild(row);
+                }
+                
+                // 最終学習日時
+                if (stats.lastStudyDate) {
+                    const lastDate = new Date(stats.lastStudyDate);
+                    const formattedDate = lastDate.toLocaleString('ja-JP');
+                    document.getElementById('lastStudyTime').textContent = formattedDate;
+                }
+            } else {
+                // 統計データが存在しない場合
+                document.getElementById('totalAnswered').textContent = 0;
+                document.getElementById('totalCorrect').textContent = 0;
+                document.getElementById('overallRate').textContent = '0%';
+                document.getElementById('categoryStatsTable').innerHTML = '<tr><td colspan="3" style="text-align: center; color: #999;">まだ学習記録がありません</td></tr>';
+                document.getElementById('yearStatsTable').innerHTML = '<tr><td colspan="3" style="text-align: center; color: #999;">まだ学習記録がありません</td></tr>';
+            }
+        }
+        
+        // エラー表示
+        function showError(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error';
+            errorDiv.textContent = message;
+            document.querySelector('.content').insertBefore(errorDiv, document.querySelector('.content').firstChild);
+            setTimeout(() => errorDiv.remove(), 5000);
+        }
+        
+        // 配列をシャッフル
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+        
+        // ==================== DEBUG: デバッグ出力用（開発確認用）====================
+        // 本番広告配信前は false にするか削除してください
+        const ENABLE_DEBUG_TOOLS = false;  // 開発時は true に戻す
+        
+        if (ENABLE_DEBUG_TOOLS) {
+            window.ShikakuLabDebug = {
+                getAttribution: getAttribution,
+                getEventQueue: getEventQueue,
+                startGuestQuiz: startGuestQuiz,
+                clearEventQueue: () => {
+                    localStorage.removeItem('shikakuLabEventQueue');
+                    console.log('Event queue cleared');
+                },
+                getMilestones: () => JSON.parse(localStorage.getItem('shikakuLabMilestones') || '{}'),
+                getGuestResult: () => JSON.parse(localStorage.getItem('shikakuLabGuestQuizResult') || '{}'),
+                getAttribution: getAttribution
+            };
+            console.log('DEBUG MODE: ShikakuLabDebug is available');
+            console.log('本番配信前に ENABLE_DEBUG_TOOLS を false にしてください');
+        }
+        // ==================== DEBUG END ====================
+    </script>
+</body>
+</html>

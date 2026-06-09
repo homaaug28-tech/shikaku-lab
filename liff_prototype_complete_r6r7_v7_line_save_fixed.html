@@ -608,16 +608,6 @@
                     </select>
                 </div>
                 
-                <div class="input-group">
-                    <label>受験予定年度</label>
-                    <select id="targetYear">
-                        <option value="">選択してください</option>
-                        <option value="R6">R6年度</option>
-                        <option value="R7">R7年度</option>
-                        <option value="R8">R8年度</option>
-                    </select>
-                </div>
-                
                 <div class="button-group">
                     <button class="btn-primary" onclick="registerUser()">登録して開始</button>
                 </div>
@@ -965,8 +955,19 @@
             initializePhase1Tracking();
 
             const urlParams = new URLSearchParams(window.location.search);
-            const isGuestMode = urlParams.get('mode') === 'guest_quiz' || urlParams.has('src');
+            const flow = urlParams.get('flow');
+            const isLineSaveFlow = flow === 'line_save';
+            const isGuestMode =
+                !isLineSaveFlow &&
+                (urlParams.get('mode') === 'guest_quiz' || urlParams.has('src'));
             const storedUser = localStorage.getItem('shikakuLabUser');
+
+            // flow=line_save が最優先：LINE保存後の登録フロー
+            if (isLineSaveFlow) {
+                recordEvent('line_save_landing');
+                initializeLiff();
+                return;
+            }
 
             // 既存ユーザー + 広告URL の場合、外部ブラウザでは LIFF 初期化へ進めない
             if (storedUser && isGuestMode) {
@@ -1086,7 +1087,6 @@
             
             const lineName = document.getElementById('lineName').value.trim();
             const expYears = document.getElementById('expYears').value;
-            const targetYear = document.getElementById('targetYear').value;
             
             if (!lineName) {
                 showError('LINE 表示名を入力してください');
@@ -1098,17 +1098,41 @@
                 return;
             }
             
-            if (!targetYear) {
-                showError('受験予定年度を選択してください');
-                return;
+            // 広告パラメータを取得
+            let attribution = null;
+            try {
+                attribution = JSON.parse(localStorage.getItem('shikakuLabAttribution'));
+            } catch (e) {
+                attribution = null;
             }
+            
+            const firstTouch = attribution && attribution.firstTouch ? attribution.firstTouch : {};
+            const lastTouch = attribution && attribution.lastTouch ? attribution.lastTouch : {};
             
             userData = {
                 lineUserId: userId,
                 lineName: lineName,
                 expYears: expYears,
-                targetYear: targetYear,
-                registeredDate: new Date().toISOString()
+                registeredDate: new Date().toISOString(),
+                
+                // 広告パラメータ（オブジェクト形式）
+                attribution: attribution,
+                
+                // 広告パラメータ（フラット形式 - Make対応用）
+                firstTouchSrc: firstTouch.src || '',
+                firstTouchUtmSource: firstTouch.utm_source || '',
+                firstTouchUtmMedium: firstTouch.utm_medium || '',
+                firstTouchUtmCampaign: firstTouch.utm_campaign || '',
+                firstTouchUtmContent: firstTouch.utm_content || '',
+                firstTouchCreativeId: firstTouch.creative_id || '',
+                firstTouchRef: firstTouch.ref || '',
+                lastTouchSrc: lastTouch.src || '',
+                lastTouchUtmSource: lastTouch.utm_source || '',
+                lastTouchUtmMedium: lastTouch.utm_medium || '',
+                lastTouchUtmCampaign: lastTouch.utm_campaign || '',
+                lastTouchUtmContent: lastTouch.utm_content || '',
+                lastTouchCreativeId: lastTouch.creative_id || '',
+                lastTouchRef: lastTouch.ref || ''
             };
             
             // ローカルストレージに保存
@@ -1121,7 +1145,7 @@
                 ...userData
             });
             
-            recordEvent('signup_complete');  // イベント記録：登録完了
+            recordEvent('signup_complete', { hasAttribution: attribution ? true : false });  // イベント記録：登録完了
             
             // ホーム画面に遷移
             displayUserInfo();
@@ -1970,7 +1994,25 @@
 
         async function startLineLiff() {
             try {
-                const liffEntryUrl = buildLiffEntryUrl();
+                const liffEntryUrl = buildLineSaveUrl();
+
+                // line_save_click イベント記録
+                const lastTouch = (() => {
+                    try {
+                        const attr = JSON.parse(localStorage.getItem('shikakuLabAttribution'));
+                        return attr && attr.lastTouch ? attr.lastTouch : {};
+                    } catch (e) {
+                        return {};
+                    }
+                })();
+                
+                recordEvent('line_save_click', {
+                    hasAttribution: Object.keys(lastTouch).length > 0,
+                    src: lastTouch.src || '',
+                    utm_source: lastTouch.utm_source || '',
+                    utm_medium: lastTouch.utm_medium || '',
+                    utm_campaign: lastTouch.utm_campaign || ''
+                });
 
                 if (typeof liff === 'undefined') {
                     window.location.href = liffEntryUrl;
@@ -1991,12 +2033,56 @@
                     return;
                 }
 
-                // 外部ブラウザでは、ゲスト診断URLではなく通常LIFF入口を開く。
+                // 外部ブラウザでは、buildLineSaveUrl() で生成したURLを開く
                 window.location.href = liffEntryUrl;
             } catch (error) {
                 console.error('Start LIFF Error:', error);
                 showLineOpenGuide();
             }
+        }
+        
+        // ==================== コピー処理の共通関数 ====================
+        
+        // ==================== LINE保存時のURL生成 ====================
+        
+        function buildLineSaveUrl() {
+            const baseUrl = `https://liff.line.me/${LIFF_ID}/`;
+            const params = new URLSearchParams();
+            
+            // flow=line_save を必ず付与
+            params.set('flow', 'line_save');
+            
+            // shikakuLabAttribution から lastTouch を取得
+            let attribution = null;
+            try {
+                attribution = JSON.parse(localStorage.getItem('shikakuLabAttribution'));
+            } catch (e) {
+                attribution = null;
+            }
+            
+            const lastTouch = attribution && attribution.lastTouch ? attribution.lastTouch : null;
+            
+            // 許可されたパラメータキー
+            const allowedKeys = [
+                'src',
+                'utm_source',
+                'utm_medium',
+                'utm_campaign',
+                'utm_content',
+                'creative_id',
+                'ref'
+            ];
+            
+            // lastTouch からパラメータを取得して追加
+            if (lastTouch) {
+                allowedKeys.forEach((key) => {
+                    if (lastTouch[key]) {
+                        params.set(key, String(lastTouch[key]));
+                    }
+                });
+            }
+            
+            return `${baseUrl}?${params.toString()}`;
         }
         
         // ==================== コピー処理の共通関数 ====================
@@ -2029,7 +2115,7 @@
         
         function showLineOpenGuide() {
             // LINE で開く案内を表示。ゲスト診断URLではなくLIFF入口を使う。
-            const url = buildLiffEntryUrl();
+            const url = buildLineSaveUrl();
 
             const modal = document.createElement('div');
             modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 10000;';

@@ -1333,7 +1333,11 @@
             // すべての選択肢を無効化
             document.querySelectorAll('.option').forEach((opt, idx) => {
                 const optNum = idx + 1;
-                if (optNum === question.correct_answer) {
+                const correctAns = typeof question.correct_answer === 'string' 
+                    ? parseInt(question.correct_answer) 
+                    : question.correct_answer;
+                
+                if (optNum === correctAns) {
                     opt.classList.add('correct');
                 } else if (optNum === answerNum && !isCorrect) {
                     opt.classList.add('incorrect');

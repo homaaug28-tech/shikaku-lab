@@ -1322,22 +1322,27 @@
         function selectOption(answerNum, element, question) {
             if (answered) return;
             
+            // answerNum を数値に変換（R5・R6・R7 対応）
+            answerNum = parseInt(answerNum);
+            
             selectedAnswer = answerNum;
             document.querySelectorAll('.option').forEach(opt => {
                 opt.classList.add('disabled');
                 opt.classList.remove('selected');
             });
             
-            const isCorrect = answerNum === question.correct_answer;
+            // correct_answer を数値に統一
+            const correctAnswer = typeof question.correct_answer === 'string' 
+                ? parseInt(question.correct_answer) 
+                : question.correct_answer;
+            
+            const isCorrect = answerNum === correctAnswer;
             
             // すべての選択肢を無効化
             document.querySelectorAll('.option').forEach((opt, idx) => {
                 const optNum = idx + 1;
-                const correctAns = typeof question.correct_answer === 'string' 
-                    ? parseInt(question.correct_answer) 
-                    : question.correct_answer;
                 
-                if (optNum === correctAns) {
+                if (optNum === correctAnswer) {
                     opt.classList.add('correct');
                 } else if (optNum === answerNum && !isCorrect) {
                     opt.classList.add('incorrect');
@@ -1374,6 +1379,7 @@
             explanationDiv.innerHTML = `
                 <div class="explanation-section" style="background-color: ${explanationBgColor}; border-left-color: ${explanationBorderColor};">
                     <div class="explanation-title" style="color: ${explanationTextColor};">${isCorrect ? '✓ 正解' : '✗ 不正解'}</div>
+                    <div style="margin: 8px 0; font-weight: bold; font-size: 14px; color: ${explanationTextColor};">正解：${correctAnswer}</div>
                     <div class="explanation-text" style="color: ${explanationTextColor};">${question.explanation}</div>
                 </div>
             `;
@@ -1776,8 +1782,16 @@
             if (guestAnswered) return;
             guestAnswered = true;
             
+            // answerNum を数値に変換（R5・R6・R7 対応）
+            answerNum = parseInt(answerNum);
+            
+            // correct_answer を数値に統一
+            const correctAnswer = typeof question.correct_answer === 'string' 
+                ? parseInt(question.correct_answer) 
+                : question.correct_answer;
+            
             try {
-                const isCorrect = answerNum === question.correct_answer;
+                const isCorrect = answerNum === correctAnswer;
                 if (isCorrect) guestCorrectCount++;
                 
                 if (!guestCategoryStats[question.category]) {
@@ -1788,8 +1802,8 @@
                 
                 const options = document.querySelectorAll('#guestOptionsContainer .option');
                 options.forEach((opt, idx) => {
-                    const optNum = (idx + 1).toString();
-                    if (optNum === question.correct_answer) {
+                    const optNum = idx + 1;
+                    if (optNum === correctAnswer) {
                         opt.classList.add('correct');
                     } else if (optNum === answerNum && !isCorrect) {
                         opt.classList.add('incorrect');
@@ -1815,12 +1829,21 @@
                     titleEl.style.color = textColor;
                     titleEl.textContent = title;
                     
+                    // 正解番号を表示
+                    const correctAnswerEl = document.createElement('div');
+                    correctAnswerEl.style.color = textColor;
+                    correctAnswerEl.style.fontWeight = 'bold';
+                    correctAnswerEl.style.fontSize = '14px';
+                    correctAnswerEl.style.margin = '8px 0';
+                    correctAnswerEl.textContent = `正解：${correctAnswer}`;
+                    
                     const explanationTextEl = document.createElement('div');
                     explanationTextEl.style.color = '#333';
                     explanationTextEl.style.marginTop = '8px';
                     explanationTextEl.textContent = question.explanation || '';
                     
                     wrapper.appendChild(titleEl);
+                    wrapper.appendChild(correctAnswerEl);
                     wrapper.appendChild(explanationTextEl);
                     explanationEl.replaceChildren(wrapper);
                 }
